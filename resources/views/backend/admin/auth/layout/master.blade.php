@@ -11,6 +11,7 @@
 	<meta name="robots" content="noindex, nofollow">
     <title>@yield('title') | {{ config('app.name') }}</title>
 
+	
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/faviclogo.jpg') }}">
 	<!-- Apple Touch Icon -->

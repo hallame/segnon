@@ -12,7 +12,7 @@ use Spatie\Permission\PermissionRegistrar;
 use App\Support\CurrentAccount;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
-
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider {
     public function register(): void {
@@ -38,9 +38,8 @@ class AppServiceProvider extends ServiceProvider {
         });
 
 
-        // Ton composer existant
         View::composer('backend.admin.*', function ($view) {
-            $view->with('admin', session('admin'));
+            $view->with('admin', Auth::user());
         });
 
 

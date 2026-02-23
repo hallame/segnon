@@ -90,8 +90,6 @@ class User extends Authenticatable implements MustVerifyEmail {
     }
 
 
-
-
     public function scopeNotStaff($q) {
         // rôles internes à exclure du listing partenaires
         $staff = ['super_admin','moderator','finance_admin','support','developer'];

@@ -22,7 +22,7 @@
 									</a>
 								</li>
 
-                                <li class="submenu">
+                                {{-- <li class="submenu">
 									<a href="#" class="{{ request()->routeIs('admin.users.*') ? 'active subdrop' : '' }}">
 										<i class="ti ti-users-group"></i><span>Utilisateurs</span>
 										<span class="menu-arrow"></span>
@@ -31,27 +31,12 @@
                                         <li><a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Tous les utilisateurs</a></li>
                                         <li><a href="{{ route('admin.users.customers') }}" class="{{ request()->routeIs('admin.users.customers') ? 'active' : '' }}">Clients</a></li>
                                         <li><a href="{{ route('admin.users.partners') }}" class="{{ request()->routeIs('admin.users.partners') ? 'active' : '' }}">Partenaires Marchands</a></li>
-                                        {{-- <li><a href="#" data-bs-toggle="modal" data-bs-target="#add_user">Ajouter un utilisateur</a></li> --}}
-                                        {{-- <li><a href="#" data-bs-toggle="modal" data-bs-target="#add_partner2">Ajouter un partenaire</a></li> --}}
+                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#add_user">Ajouter un utilisateur</a></li>
+                                        <li><a href="#" data-bs-toggle="modal" data-bs-target="#add_partner2">Ajouter un partenaire</a></li>
 									</ul>
-								</li>
+								</li> --}}
 
 
-
-
-                                {{-- <li class="submenu">
-                                    <a href="{{ route('admin.bookings.index') }}" class="{{ request()->routeIs('admin.bookings.*') ? 'active subdrop' : '' }}">
-                                        <i class="fa fa-calendar-check"></i><span>Réservations</span>
-                                        <span class="badge badge-success fs-10 fw-medium text-white p-1">Nouveau</span>
-                                        <span class="menu-arrow"></span>
-                                    </a>
-                                    <ul>
-                                        <li><a href="{{ route('admin.bookings.index') }}" class="{{ request()->routeIs('admin.bookings.index') ? 'active' : '' }}">Toutes</a></li>
-                                        <li><a href="{{ route('admin.bookings.index',['status'=>\App\Models\Booking::STATUS_PENDING]) }}">En attente</a></li>
-                                        <li><a href="{{ route('admin.bookings.index',['status'=>\App\Models\Booking::STATUS_CONFIRMED]) }}">Confirmées</a></li>
-                                        <li><a href="{{ route('admin.bookings.index',['status'=>\App\Models\Booking::STATUS_CANCELLED]) }}">Annulées</a></li>
-                                    </ul>
-                                </li> --}}
 
                                  <li class="{{ request()->routeIs('admin.categories') ? 'active' : '' }}">
                                     <a href="{{ route('admin.categories') }}">
@@ -60,21 +45,16 @@
                                 </li>
 
 
-                               <li class="{{ request()->routeIs('admin.submissions.*') ? 'active' : '' }}">
+                               {{-- <li class="{{ request()->routeIs('admin.submissions.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.submissions.index') }}">
                                         <i class="ti ti-inbox"></i>
                                         <span>Soumissions</span>
                                         <span class="badge badge-primary fs-10 fw-medium text-white p-1">SaaS</span>
 
                                     </a>
-                                </li>
-
-                                {{-- <li class="{{ request()->routeIs('admin.galleries') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.galleries') }}">
-                                        <i class="ti ti-photo"></i><span>Galeries</span>
-                                    </a>
                                 </li> --}}
 
+        
 
                                  <li class="menu-title mt-4"><span>GESTION ECOMMERCE</span></li>
                                 <li class="submenu">
