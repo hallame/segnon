@@ -207,7 +207,7 @@
 
 <!-- Add category -->
 <div class="modal fade" id="add_category">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Ajouter une Catégorie</h4>
@@ -219,40 +219,20 @@
                 @csrf
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="basic-info" role="tabpanel" aria-labelledby="info-tab" tabindex="0">
-                        <div class="modal-body pb-0">
+                        <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Nom de la Catégorie <span class="text-danger">*</span></label>
-                                        <input type="text" id="name" name="name" class="form-control" placeholder="Ex : Moyenne Guinée" required>
+                                        <input type="text" id="name" name="name" class="form-control" required>
                                     </div>
                                 </div>
-
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="type" class="form-label">Type</label>
-                                        <input type="text" id="type" name="type" class="form-control" placeholder="Ex : culturel, luxe, historique...">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="model" class="form-label">Modèle concerné <span class="text-danger">*</span></label>
-                                        <select id="model" name="model" class="form-select" required>
-                                            <option value="">-- Sélectionner --</option>
-                                            <option value="Product">Produit/Article</option>
-                                            <option value="Room">Chambre</option>
-                                            <option value="Hotel">Hôtel</option>
-                                            <option value="Site">Site</option>
-                                            <option value="Event">Événement</option>
-                                            
-                                            <option value="Circuit">Circuit</option>
-                                        </select>
-                                    </div>
-                                </div>
+                              
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
-                                        <input type="text" id="description" name="description" class="form-control" placeholder="Ex : description....." required>
+                                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+
                                     </div>
                                 </div>
                             </div>

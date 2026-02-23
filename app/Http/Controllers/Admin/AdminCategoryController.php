@@ -39,7 +39,6 @@ class AdminCategoryController extends Controller {
         $request = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'model' => 'required|string|max:100',
         ], [
             'name.required' => 'Le nom est obligatoire.',
             'name.string' => 'Le nom doit être une chaîne de caractères.',
@@ -49,15 +48,12 @@ class AdminCategoryController extends Controller {
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.max' => 'La description ne doit pas dépasser 255 caractères.',
 
-            'model.required' => 'L\'entité associée est requise.',
-            'model.string' => 'L\'entité doit être une chaîne de caractères.',
         ]);
 
         Category::create([
             'name' => $request['name'],
             'description' => $request['description'],
             'slug' => Str::slug($request['name']),
-            'model' => $request['model'],
             'status' => 1,
         ]);
 
@@ -69,7 +65,6 @@ class AdminCategoryController extends Controller {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'model' => 'nullable|string|max:100',
         ], [
             'name.required' => 'Le nom est obligatoire.',
             'description.required' => 'La description est obligatoire.',
@@ -79,7 +74,6 @@ class AdminCategoryController extends Controller {
         $category->update([
             'name' => $validated['name'],
             'description' => $validated['description'],
-            'model' => $validated['model'] ?? null,
             'slug' => Str::slug($validated['name']),
         ]);
 

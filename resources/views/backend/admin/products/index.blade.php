@@ -132,11 +132,14 @@
             <td>
                 <div class="d-flex align-items-center">
                     <a href="{{ route('admin.products.edit',$p) }}" class="avatar flex-shrink-0">
-                        <img src="{{ $p->featured_image }}" class="rounded-circle border border-2" alt="{{ $p->name }}">
+                        <img src="{{ asset('storage/'.$p->image) }}" class="rounded-circle border border-2" alt="{{ $p->name }}">
                     </a>
                     <div class="ms-1">
                         <div class="fw-semibold">{{ Str::limit($p->name, 30) }}</div>
-                        <div class="text-muted small">{{ $p->category->name ?? '—' }} <span class="badge bg-light text-dark">{{ $p->type === 'variable' ? '#Variable' : '#Simple' }}</span></div>
+                        <div class="text-muted small">
+                          {{ $p->category->name ?? '—' }} 
+                          {{-- <span class="badge bg-light text-dark">{{ $p->type === 'variable' ? '#Variable' : '#Simple' }}</span> --}}
+                        </div>
                     </div>
                 </div>
             </td>

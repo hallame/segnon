@@ -32,7 +32,7 @@
     <!-- /Welcome Wrap -->
     <div class="row">
 
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-6 col-md-6">
             <div class="card position-relative">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-md-6">
+        {{-- <div class="col-xl-3 col-md-6">
             <div class="card position-relative">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -68,9 +68,7 @@
                             <h5>{{ $totalSubs }}</h5>
                         </div>
                     </div>
-                    {{-- <div class="progress progress-xs mb-2">
-                        <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ $totalBookingsPercent }}%"></div>
-                    </div> --}}
+                   
                     <span class="position-absolute top-0 end-0"><img src="{{ asset('assets/back/img/bg/card-bg-04.png') }}" alt="Img"></span>
                 </div>
             </div>
@@ -88,15 +86,13 @@
                             <h5>{{ $totalUsers }}</h5>
                         </div>
                     </div>
-                    {{-- <div class="progress progress-xs mb-2">
-                        <div class="progress-bar bg-pink" role="progressbar" style="width: {{ $totalClientsPercent }}%"></div>
-                    </div> --}}
+                   
                     <span class="position-absolute top-0 end-0"><img src="{{ asset('assets/back/img/bg/card-bg-04.png') }}" alt="Img"></span>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-6 col-md-6">
             <div class="card position-relative">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">

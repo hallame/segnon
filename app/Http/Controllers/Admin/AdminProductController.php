@@ -212,7 +212,7 @@ class AdminProductController extends Controller {
 
     public function edit(Product $product) {
         $product->load(['skus','media','category']);
-        $categories = Category::where('model', 'Product')->orderBy('name')->get(['id','name']);
+        $categories = Category::orderBy('name')->get(['id','name']);
         return view('backend.admin.products.edit', compact('product','categories'));
     }
 

@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Museum;
 use App\Models\Social;
 use App\Models\Contact;
-use App\Models\Page;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
@@ -77,7 +75,6 @@ class ViewServiceProvider extends ServiceProvider{
             } else {
                 $view->with('footerContacts', collect());
             }
-
 
 
             // currency

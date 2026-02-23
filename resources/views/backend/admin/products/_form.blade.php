@@ -32,6 +32,8 @@
            placeholder="Ex : TS-PR-001">
   </div> --}}
 
+  <input type="hidden" name="type" id="type" value="simple">
+
   {{-- <div class="col-md-3">
     <label class="form-label">Type</label>
     <select name="type" id="type" class="form-select" required>
@@ -79,7 +81,7 @@
            value="{{ old('unit', $product->unit ?? '') }}" placeholder="Ex : kg">
   </div>
 
-  
+
   <div class="col-md-4 d-flex align-items-end simple-only">
     <div class="form-check form-switch">
         <input type="hidden" name="status" value="0">
