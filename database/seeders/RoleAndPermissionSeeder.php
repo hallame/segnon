@@ -17,8 +17,7 @@ use Spatie\Permission\PermissionRegistrar;
  * Seeder unique : structure (modules, rôles, permissions) + compte plateforme + optionnel démo.
  * Source de vérité : config/modules.php
  */
-class RoleAndPermissionSeeder extends Seeder
-{
+class RoleAndPermissionSeeder extends Seeder {
     private const GUARD = 'web';
 
     public function run(): void {

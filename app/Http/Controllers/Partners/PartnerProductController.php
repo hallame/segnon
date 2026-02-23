@@ -18,8 +18,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\PermissionRegistrar;
 use App\Models\ContentSubmission;
-use App\Models\Country;
-use App\Models\Language;
 use App\Models\Order;
 
 
@@ -229,6 +227,7 @@ class PartnerProductController extends Controller {
                 'meta_description' => $data['meta_description'] ?? null,
                 'status'           => 0,
             ]);
+            
 
             // 🔹 Image principale → via Spatie (cover)
             if ($request->hasFile('image')) {
@@ -678,13 +677,8 @@ class PartnerProductController extends Controller {
             ->when($request->filled('type'), function ($q) use ($request) {
 
                 $map = [
-                    'hotel'    => \App\Models\Hotel::class,
-                    'room'     => \App\Models\Room::class,
                     'product'  => \App\Models\Product::class,
                     'order'    => \App\Models\Order::class,
-                    'booking'  => \App\Models\Booking::class,
-                    'site'     => \App\Models\Site::class,
-                    'event'    => \App\Models\Event::class,
 
                 ];
 

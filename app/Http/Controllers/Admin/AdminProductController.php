@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use App\HasFilters;
 use App\Models\Account;
 use App\Models\Category;
+use App\Support\CurrentAccount;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -65,6 +66,7 @@ class AdminProductController extends Controller {
     }
 
     public function store(Request $request) {
+        $accountId = (int) app(CurrentAccount::class)->id();
         $data = $request->validate([
             'category_id'      => ['nullable','exists:categories,id'],
             'sku'              => ['nullable','string','max:64','unique:products,sku'],
@@ -84,13 +86,7 @@ class AdminProductController extends Controller {
             'account_id'        => 'nullable','integer',
             'video' => 'nullable|file|mimes:mp4,mov,avi,wmv|max:51200',
             'video_url' => 'nullable|url|max:255',
-            // 'account_id' => [
-            //     'required','integer',
-            //     Rule::exists('accounts','id')->where(function($q){
-            //     $q->where('status',1)
-            //         ->whereHas('modules', fn($m)=>$m->where('slug','hotel'));
-            //     }),
-            // ],
+           
             // Galerie
             'gallery.*'        => ['nullable','file','mimes:jpg,jpeg,png,webp','max:5120'],
 
@@ -135,8 +131,9 @@ class AdminProductController extends Controller {
             : $this->generateUniqueSku($data['name'], $data['category_id'] ?? null);
 
 
-        DB::transaction(function () use ($request, $data, $slug, $sku, $currency) {
+        DB::transaction(function () use ($request, $data, $slug, $sku, $currency, $accountId) {
             $product = Product::create([
+                'account_id'       => $accountId ?: null,
                 'category_id'      => $data['category_id'] ?? null,
                 'sku'              => $sku,
                 'name'             => $data['name'],
@@ -217,6 +214,7 @@ class AdminProductController extends Controller {
     }
 
     public function update(Request $request, Product $product) {
+        $accountId = (int) app(CurrentAccount::class)->id();
         $data = $request->validate([
             'category_id'      => ['nullable','exists:categories,id'],
             'account_id' => 'nullable','integer',
@@ -250,7 +248,6 @@ class AdminProductController extends Controller {
             'skus.*.unit'              => ['nullable','string','max:20'],
             'skus.*.status'            => ['nullable','boolean'],
         ]);
-        // $validated['account_id'] = $this->resolveAccountId(null, false);
 
 
         if (($data['type'] ?? 'simple') === 'variable') {
@@ -280,8 +277,9 @@ class AdminProductController extends Controller {
 
 
 
-        DB::transaction(function () use ($request, $data, $product, $slug, $currency, $sku) {
+        DB::transaction(function () use ($request, $data, $product, $slug, $currency, $sku, $accountId) {
             $product->update([
+                'account_id'       => $accountId ?: null,
                 'category_id'      => $data['category_id'] ?? null,
                 'name'             => $data['name'],
                 'sku'               => $sku,

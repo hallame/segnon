@@ -4,6 +4,18 @@
 @endsection
 @section('content')
 
+@if(session('confirm_delete'))
+    <div class="alert alert-warning">
+        {{ session('warning') }}
+        <form method="POST" action="{{ route('admin.categories.force-destroy', session('confirm_delete')) }}">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-warning">Oui, supprimer quand même</button>
+            <a href="{{ route('admin.categories') }}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+@endif
+
 <div class="modal-body">
     <div class="card bg-light-500 shadow-none">
         <div class="card-body d-flex align-items-center justify-content-between flex-wrap row-gap-3">

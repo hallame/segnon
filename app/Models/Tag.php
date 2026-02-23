@@ -9,5 +9,6 @@ class Tag extends Model {
     protected $fillable = [
         'name', 'slug', 'description', 'status'
     ];
+    
 
 }

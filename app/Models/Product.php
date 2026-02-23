@@ -61,6 +61,7 @@ class Product extends Model implements HasMedia {
     public function skus() {
         return $this->hasMany(ProductSku::class);
     }
+    
 
     public function account(){
         return $this->belongsTo(Account::class)->withDefault();

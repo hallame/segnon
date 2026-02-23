@@ -50,38 +50,6 @@ class AdminController extends Controller{
         ];
 
 
-        //  Statistiques Réservations (Bookings)
-        $bookings = tap(Booking::latest()->get(), function ($bookings) {
-            $bookings->display = $bookings->take(5);
-        });
-
-        $totalBookings = $bookings->count();
-
-        if ($totalBookings > 0) {
-            $pendingBookings   = $bookings->where('status', Booking::STATUS_PENDING)->count();
-            $confirmedBookings = $bookings->where('status', Booking::STATUS_CONFIRMED)->count();
-            $canceledBookings  = $bookings->where('status', Booking::STATUS_CANCELLED)->count();
-
-            $pendingBookingsPercent   = round(($pendingBookings / $totalBookings) * 100);
-            $confirmedBookingsPercent = round(($confirmedBookings / $totalBookings) * 100);
-            $canceledBookingsPercent  = round(($canceledBookings / $totalBookings) * 100);
-        } else {
-            $pendingBookings = $confirmedBookings = $canceledBookings = 0;
-            $pendingBookingsPercent = $confirmedBookingsPercent = $canceledBookingsPercent = 0;
-        }
-
-        $bookingsData = [
-            'bookings' => $bookings,
-            'totalBookings' => $totalBookings,
-            'pendingBookings' => $pendingBookings,
-            'confirmedBookings' => $confirmedBookings,
-            'canceledBookings' => $canceledBookings,
-            'pendingBookingsPercent' => $pendingBookingsPercent,
-            'confirmedBookingsPercent' => $confirmedBookingsPercent,
-            'canceledBookingsPercent' => $canceledBookingsPercent,
-        ];
-
-
         //  Statistiques produits
         $products = tap(Product::latest()->get(), function ($products) {
             $products->display = $products->take(6);
@@ -93,17 +61,6 @@ class AdminController extends Controller{
             'totalProducts' => $totalProducts,
         ];
 
-        // Statistiques Guides
-        $guides = tap(Guide::latest()->get(), function ($guides) {
-            $guides->display = $guides->take(5);
-        });
-        $totalGuides = $guides->count();
-        $activeGuides = $guides->where('status', 0)->count();
-        $guidesData = [
-            'guides' => $guides,
-            'totalGuides' => $totalGuides,
-            'activeGuides' => $activeGuides,
-        ];
 
         // Statistiques Partners
         $partners = tap(Partner::latest()->get(), function ($partners) {
@@ -116,17 +73,7 @@ class AdminController extends Controller{
             'totalPartners' => $totalPartners,
             'activePartners' => $activePartners,
         ];
-
-
-        // Events
-        $events = tap(Event::latest()->get(), function ($events) {
-            $events->display = $events->take(5);
-        });
-        $totalEvents = $events->count();
-        $eventsData = [
-            'events' => $events,
-            'totalEvents' => $totalEvents
-        ];
+ 
 
         // Orders
         $orders = tap(Order::latest()->get(), function ($orders) {
@@ -157,84 +104,11 @@ class AdminController extends Controller{
         /// Return ///////////////
         return view('backend.admin.dashboard', array_merge(
             $clientsData,
-            $guidesData,
             $partnersData,
-            $bookingsData,
-            $eventsData,
             $data,
             $productsData,
             $ordersData,
         ));
-    }
-
-      // LOCATIONS
-    public function locations(){
-        $locations = Location::orderBy('name')->get();
-        $totalLocations = $locations->count();
-        $openedLocations = $locations->where('status', true)->count();
-        $closedLocations = $locations->where('status', false)->count();
-        return view('backend.admin.locations', compact('locations', 'totalLocations', 'openedLocations', 'closedLocations'));
-    }
-
-    public function deleteLocation($id){
-        $location = Location::find($id);
-        if (!$location) {
-            return back()->with('error', 'Emplacement introuvable.');
-        }
-        $location->delete();
-        return back()->with('success', 'Emplacement supprimé avec succès.');
-    }
-
-    public function updateStatusLocation($id, Request $request){
-        $location = Location::find($id);
-        if (!$location) {
-            return redirect()->route('admin.domains')->with('error', 'Emplacement introuvable.');
-        }
-        // Met à jour le statut
-        $location->status = $request->input('status');
-        $location->save();
-        return redirect()->route('admin.domains')->with('success', 'Emplacement mis à jour avec succès.');
-    }
-
-    public function addLocation(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255',         // Nom de l'emplacement (obligatoire)
-            'address' => 'required|string|max:255',      // Adresse (obligatoire)
-            'phone' => 'nullable|string|max:20',         // Numéro de téléphone (optionnel)
-            'email' => 'nullable|email|max:255',         // Email (optionnel)
-            'details' => 'nullable|string',              // Détails supplémentaires (optionnel)
-            'map_link' => 'nullable|string',              // Détails supplémentaires (optionnel)
-        ], [
-            'name.required' => 'Le nom de l\'emplacement est obligatoire.',
-            'name.string' => 'Le nom de l\'emplacement doit être une chaîne de caractères.',
-            'name.max' => 'Le nom de l\'emplacement ne peut pas dépasser 255 caractères.',
-
-            'address.required' => 'L\'adresse est obligatoire.',
-            'address.string' => 'L\'adresse doit être une chaîne de caractères.',
-            'address.max' => 'L\'adresse ne peut pas dépasser 255 caractères.',
-
-            'phone.string' => 'Le numéro de téléphone doit être une chaîne de caractères.',
-            'phone.max' => 'Le numéro de téléphone ne peut pas dépasser 20 caractères.',
-
-            'email.email' => 'Veuillez entrer une adresse email valide.',
-            'email.max' => 'L\'adresse email ne peut pas dépasser 255 caractères.',
-            'details.string' => 'Les détails doivent être une chaîne de caractères.',
-            'map_link.string' => 'Le lien map doit être une chaîne de caractères.',
-
-        ]);
-
-
-        // Création d'un nouvel emplacement avec les données validées
-        $location = new Location();
-        $location->name = $request->input('name');
-        $location->address = $request->input('address');
-        $location->phone = $request->input('phone');
-        $location->email = $request->input('email');
-        $location->details = $request->input('details');
-        $location->status = true; // Par défaut, l'emplacement est actif
-        $location->save();
-        // Retourner une réponse avec un message de succès
-        return redirect()->route('admin.locations')->with('success', 'Emplacement ajouté avec succès!');
     }
 
 

@@ -2,16 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FrontendController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\AdminPartnerController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\HotelController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\SubmissionController;
@@ -23,11 +19,9 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\MonerooWebhookController;
 
 use App\Http\Controllers\Admin\AdminCategoryController;
-use App\Http\Controllers\Admin\AdminTicketController;
-use App\Http\Controllers\Admin\AdminTicketTypeController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminProductController;
-use App\Http\Controllers\Admin\AdminTicketOrderController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminImpersonationController;
 use App\Http\Controllers\Admin\AdminSocialController;
@@ -52,7 +46,6 @@ use App\Http\Controllers\Partners\PartnerProductController;
 use App\Http\Controllers\Partners\PartnerRoomController;
 use App\Http\Controllers\Partners\PartnerSubscriptionController;
 
-    Route::get( '/payments/moneroo/return/{orderTicket:reference}', [TicketController::class, 'handleMonerooReturn'])->name('payments.moneroo.return');
     Route::post('/payments/moneroo/webhook', [MonerooWebhookController::class, 'handle'])->name('payments.moneroo.webhook');
 
     // ==========================
@@ -97,7 +90,6 @@ use App\Http\Controllers\Partners\PartnerSubscriptionController;
 
         Route::post('/checkout', [ShopCheckoutController::class,'store'])->name('checkout.store');
         Route::get('/vendors/{account:slug}', [ShopController::class, 'showVendor'])->name('vendors.show');
-        Route::get('/partners/{account:slug}', [ShopController::class, 'showVendor'])->name('vendors.show');
 
         Route::get('/payment/{order:reference}', [ShopPaymentController::class,'show'])->name('payment.show');
         Route::post('/payment/{order:reference}', [ShopPaymentController::class,'pay'])->name('payment.store');
@@ -315,33 +307,6 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // Billetterie / Événements
-    // -------------------------
-    Route::prefix('tickets')->group(function () {
-        // Ticket Types
-        Route::get('/types', [AdminTicketTypeController::class, 'index'])->name('ticket_types.index');
-        Route::get('/types/create', [AdminTicketTypeController::class, 'create'])->name('ticket_types.create');
-        Route::post('/types/store', [AdminTicketTypeController::class, 'store'])->name('ticket_types.store');
-        Route::get('/types/{id}/edit', [AdminTicketTypeController::class, 'edit'])->name('ticket_types.edit');
-        Route::put('/types/{id}', [AdminTicketTypeController::class, 'update'])->name('ticket_types.update');
-        Route::delete('/types/{id}', [AdminTicketTypeController::class, 'destroy'])->name('ticket_types.destroy');
-        Route::get('/types/{id}/generate', [AdminTicketTypeController::class, 'generateTickets'])->name('ticket_types.generate');
-
-        // Tickets
-        Route::get('/', [AdminTicketController::class, 'index'])->name('tickets.index');
-        Route::get('/create', [AdminTicketController::class, 'create'])->name('tickets.create');
-        Route::post('/store', [AdminTicketController::class, 'store'])->name('tickets.store');
-        Route::get('/{id}/show', [AdminTicketController::class, 'show'])->name('tickets.show');
-        Route::delete('/{id}', [AdminTicketController::class, 'destroy'])->name('tickets.destroy');
-        Route::get('/events/{event}/ticket-types', [AdminTicketController::class, 'getTicketTypes'])->name('events.ticket_types');
-
-        // Orders Tickets
-        Route::get('/orders', [AdminTicketOrderController::class, 'index'])->name('tickets.orders.index');
-        Route::get('/orders/{orderTicket}', [AdminTicketOrderController::class, 'show'])->name('tickets.orders.show');
-        Route::post('/orders/payments/{payment}/verify', [AdminTicketOrderController::class, 'verifyPayment'])->name('tickets.orders.payments.verify');
-        Route::post('/orders/payments/{payment}/reject', [AdminTicketOrderController::class, 'rejectPayment'])->name('tickets.orders.payments.reject');
-
-    });
 
     Route::get('/users',        [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/customers',  [AdminUserController::class, 'customers'])->name('users.customers');
@@ -362,19 +327,6 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
     Route::post('/location/status/{id}', [AdminController::class, 'updateStatusLocation'])->name('location.status');
     Route::delete('/delete/location/{id}', [AdminController::class, 'deleteLocation'])->name('location.delete');
 
-    ////////// BOOKING ADMIN Controller ////////////
-    Route::get   ('/bookings',                    [BookingController::class,'index'])->name('bookings.index');
-    Route::get   ('/bookings/{booking}',          [BookingController::class,'show'])->name('bookings.show');
-    Route::post  ('/bookings/{booking}/status',   [BookingController::class,'updateStatus'])->name('bookings.status');
-    Route::post  ('/bookings/{booking}/payment',  [BookingController::class,'updatePayment'])->name('bookings.payment');
-    Route::post  ('/bookings/{booking}/receipt',  [BookingController::class,'uploadReceipt'])->name('bookings.receipt.upload');
-    Route::delete('/bookings/{booking}/receipt',  [BookingController::class,'deleteReceipt'])->name('bookings.receipt.delete');
-    Route::delete('/bookings/{booking}',          [BookingController::class,'destroy'])->name('bookings.destroy');
-
-
-    // routes/web.php (groupe admin déjà existant)
-    Route::post  ('/bookings/{booking}/assign-guide', [BookingController::class,'assignGuide'])->name('bookings.assign-guide');
-    Route::delete('/bookings/{booking}/assign-guide', [BookingController::class,'unassignGuide'])->name('bookings.unassign-guide');
 
     ////////// ORDER ADMIN Controller ////////////
     Route::get ('/orders',                [AdminOrderController::class,'index'])->name('orders.index');
@@ -392,10 +344,11 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
     //////////Category Controller////////////
     Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories');
     Route::post('/categories/store', [AdminCategoryController::class, 'store'])->name('category.store');
-    Route::delete('/categories/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('category.delete');
     Route::post('/categories-status/{id}', [AdminCategoryController::class, 'updateStatus'])->name('categories.config');
     Route::post('/categories/status/{id}', [AdminCategoryController::class, 'updateStatus'])->name('categories.config');
     Route::put('/category/update/{id}', [AdminCategoryController::class, 'update'])->name('category.update');
+    Route::delete('/categories/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('category.delete');
+    Route::delete('/categories/force-delete/{id}', [AdminCategoryController::class, 'forceDestroy'])->name('category.force-destroy');
 
     // ////// Partners CONTROLLER /////////
     Route::get('/partners', [AdminPartnerController::class, 'partners'])->name('partners');
@@ -415,25 +368,6 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
     Route::post('/myprofile/update', [AdminController::class, 'updateMyProfile'])->name('myprofile.update');
 
 
-    ////////// Hotels Controller////////////
-    Route::get('/hotels', [HotelController::class, 'index'])->name('hotels');
-    Route::post('/hotel/status-update/{id}', [HotelController::class, 'updateStatus']);
-    Route::get('/hotels/add', [HotelController::class, 'add'])->name('hotel.add');
-    Route::post('/hotels/store', [HotelController::class, 'store'])->name('hotel.store');
-    Route::delete('/hotels/delete/{id}', [HotelController::class, 'destroy'])->name('hotel.delete');
-    Route::get('/hotels/edit/{hotel:slug}', [HotelController::class, 'edit'])->name('hotel.edit');
-    Route::put('/hotels/update/{hotel:slug}', [HotelController::class, 'update'])->name('hotel.update');
-    Route::post('/hotels/{hotel}/status', [HotelController::class,'status'])->name('hotels.status');
-
-    //////////Pages Controller////////////
-    Route::get('/pages', [PageController::class, 'index'])->name('pages');
-    Route::get('/pages/create', [PageController::class, 'create'])->name('page.create');
-    Route::post('/pages/store', [PageController::class, 'store'])->name('page.store');
-    Route::post('/page/status-update/{id}', [PageController::class, 'updateStatus']);
-    Route::delete('/page-delete/{id}', [PageController::class, 'delete'])->name('page.delete');
-    Route::get('/page/edit/{id}', [PageController::class, 'edit'])->name('page.edit');
-    Route::put('/page-update/{id}', [PageController::class, 'update'])->name('page.update');
-
     ////////// Social Controller////////////
     Route::get('/socials', [AdminSocialController::class, 'socials'])->name('socials');
     Route::post('/social-add', [AdminSocialController::class, 'add'])->name('social.add');
@@ -447,14 +381,14 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
     Route::delete('/contact-delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
 
     // FAQs
-    Route::get('faqs',            [FaqController::class, 'index'])->name('faqs.index');
-    Route::get('faqs/create',     [FaqController::class, 'create'])->name('faqs.create');
-    Route::post('faqs',           [FaqController::class, 'store'])->name('faqs.store');
-    Route::get('faqs/{faq}/edit', [FaqController::class, 'edit'])->name('faqs.edit');
-    Route::put('faqs/{faq}',      [FaqController::class, 'update'])->name('faqs.update');
-    Route::delete('faqs/{faq}',   [FaqController::class, 'destroy'])->name('faqs.destroy');
-    Route::patch('faqs/{faq}/toggle', [FaqController::class, 'toggle'])->name('faqs.toggle');
-    Route::post('faqs/reorder', [FaqController::class, 'reorder'])->name('faqs.reorder');
+    Route::get('faqs',            [AdminFaqController::class, 'index'])->name('faqs.index');
+    Route::get('faqs/create',     [AdminFaqController::class, 'create'])->name('faqs.create');
+    Route::post('faqs',           [AdminFaqController::class, 'store'])->name('faqs.store');
+    Route::get('faqs/{faq}/edit', [AdminFaqController::class, 'edit'])->name('faqs.edit');
+    Route::put('faqs/{faq}',      [AdminFaqController::class, 'update'])->name('faqs.update');
+    Route::delete('faqs/{faq}',   [AdminFaqController::class, 'destroy'])->name('faqs.destroy');
+    Route::patch('faqs/{faq}/toggle', [AdminFaqController::class, 'toggle'])->name('faqs.toggle');
+    Route::post('faqs/reorder', [AdminFaqController::class, 'reorder'])->name('faqs.reorder');
 
 
     ////////// Sections Controller////////////

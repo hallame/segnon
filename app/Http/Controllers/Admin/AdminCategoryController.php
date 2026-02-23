@@ -34,6 +34,7 @@ class AdminCategoryController extends Controller {
         return response()->json(['success' => true]);
     }
 
+
     public function store(Request $request){
 
         $request = $request->validate([
@@ -47,19 +48,55 @@ class AdminCategoryController extends Controller {
             'description.required' => 'La description est obligatoire.',
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.max' => 'La description ne doit pas dépasser 255 caractères.',
-
         ]);
+
+        // Générer le slug de base
+        $slug = Str::slug($request['name']);
+        
+        // Vérifier si le slug existe déjà
+        $originalSlug = $slug;
+        $count = 1;
+        
+        while (Category::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
 
         Category::create([
             'name' => $request['name'],
             'description' => $request['description'],
-            'slug' => Str::slug($request['name']),
+            'slug' => $slug,
             'status' => 1,
         ]);
 
-        // Retourner vers la liste des pays avec un message de succès
         return redirect()->route('admin.categories')->with('success', 'Catégorie ajoutée avec succès.');
     }
+
+    // public function store(Request $request){
+
+    //     $request = $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'description' => 'required|string|max:255',
+    //     ], [
+    //         'name.required' => 'Le nom est obligatoire.',
+    //         'name.string' => 'Le nom doit être une chaîne de caractères.',
+    //         'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+
+    //         'description.required' => 'La description est obligatoire.',
+    //         'description.string' => 'La description doit être une chaîne de caractères.',
+    //         'description.max' => 'La description ne doit pas dépasser 255 caractères.',
+
+    //     ]);
+
+    //     Category::create([
+    //         'name' => $request['name'],
+    //         'description' => $request['description'],
+    //         'slug' => Str::slug($request['name']),
+    //         'status' => 1,
+    //     ]);
+
+    //     // Retourner vers la liste des pays avec un message de succès
+    //     return redirect()->route('admin.categories')->with('success', 'Catégorie ajoutée avec succès.');
+    // }
 
     public function update(Request $request, $id) {
         $validated = $request->validate([
@@ -81,28 +118,64 @@ class AdminCategoryController extends Controller {
     }
 
     public function destroy($id) {
-
         $category = Category::find($id);
-
+    
         if (!$category) {
             return back()->with('error', 'Cette catégorie n\'existe pas.');
         }
-
-        $relations = [
-            'hotels' => 'des hôtels',
-            'objects' => 'des objets',
-            'sites' => 'des sites',
-            'events' => 'des événements',
-        ];
-
-        foreach ($relations as $relation => $label) {
-            if ($category->$relation()->exists()) {
-                return back()->with('error', "Impossible de supprimer cette catégorie : elle est liée à $label.");
-            }
+    
+        // Vérifier s'il y a des produits
+        $productsCount = $category->products()->count();
+        
+        if ($productsCount > 0) {
+            // Demander confirmation ou proposer une option
+            return back()->with('error', 
+                "Cette catégorie contient $productsCount produit(s). 
+                 Que voulez-vous faire ?",
+                ['products_exist' => true, 'category' => $category]
+            );
         }
-
+    
         $category->delete();
-
         return back()->with('success', 'La catégorie a été supprimée avec succès.');
     }
+    
+    // Méthode supplémentaire pour forcer la suppression
+    public function forceDestroy($id) {
+        $category = Category::find($id);
+        
+        if (!$category) {
+            return back()->with('error', 'Cette catégorie n\'existe pas.');
+        }
+        
+        // Mettre à null les produits avant (optionnel car nullOnDelete le fait)
+        $category->products()->update(['category_id' => null]);
+        
+        $category->delete();
+        return back()->with('success', 'Catégorie supprimée, les produits ont été décatégorisés.');
+    }
+
+    // public function destroy($id) {
+
+    //     $category = Category::find($id);
+
+    //     if (!$category) {
+    //         return back()->with('error', 'Cette catégorie n\'existe pas.');
+    //     }
+
+    //     $relations = [
+    //         'products' => 'des produits',
+
+    //     ];
+
+    //     foreach ($relations as $relation => $label) {
+    //         if ($category->$relation()->exists()) {
+    //             return back()->with('error', "Impossible de supprimer cette catégorie : elle est liée à $label.");
+    //         }
+    //     }
+
+    //     $category->delete();
+
+    //     return back()->with('success', 'La catégorie a été supprimée avec succès.');
+    // }
 }

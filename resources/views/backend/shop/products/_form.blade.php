@@ -6,6 +6,7 @@
   $isEdit = isset($product) && $product && $product->exists;
 @endphp
 
+
 <div class="row g-3">
   {{-- Nom & Catégorie --}}
   <div class="col-md-6">

@@ -2,7 +2,7 @@
 		<div class="sidebar" id="sidebar">
 			<!-- Logo -->
             <div class="sidebar-logo">
-                <a href="{{ route('admin.dashboard') }}" class="logo-text dark-logo1">MYLMARK</a>
+                <a href="{{ route('admin.dashboard') }}" class="logo-text dark-logo1">{{ config('app.name') }}</a>
                 <a href="{{ route('admin.dashboard') }}" class="logo-small">
 					<img src="{{ asset('assets/images/favicon.png') }}" alt="Logo">
 				</a>
@@ -327,11 +327,11 @@
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
+                                {{-- <li class="{{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.faqs.index') }}">
                                         <i class="ti ti-help-circle"></i><span>FAQs</span>
                                     </a>
-                                </li>
+                                </li> --}}
 
 
                                 <li class="menu-title mt-4" ><span>PARAMÈTRES DU SYSTÈME</span></li>

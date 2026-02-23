@@ -16,6 +16,7 @@ use App\Support\CurrentAccount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+
 class PartnerSubmissionController extends Controller {
 
     public function index(Request $request) {
@@ -34,7 +35,6 @@ class PartnerSubmissionController extends Controller {
 
                     'product'  => \App\Models\Product::class,
                     'order'    => \App\Models\Order::class,
-                    'event'    => \App\Models\Event::class,
 
                 ];
 
@@ -57,14 +57,7 @@ class PartnerSubmissionController extends Controller {
         return view('backend.partners.submissions.show', compact('submission'));
     }
 
-    // Wrappers fins, routes distinctes, logique partagée :
-    public function hotelRequest(Request $request, Hotel $hotel, SubmissionService $sub) {
-        return $this->handle($request, $hotel, $sub);
-    }
 
-    public function roomRequest(Request $request, Room $room, SubmissionService $sub) {
-        return $this->handle($request, $room, $sub);
-    }
 
     public function orderRequest(Request $request, Order $order, SubmissionService $sub) {
         return $this->handle($request, $order, $sub);
