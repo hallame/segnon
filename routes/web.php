@@ -22,10 +22,7 @@ use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\MonerooWebhookController;
 
-
 use App\Http\Controllers\Admin\AdminCategoryController;
-use App\Http\Controllers\Admin\AdminEventController;
-use App\Http\Controllers\Admin\AdminRoomController;
 use App\Http\Controllers\Admin\AdminTicketController;
 use App\Http\Controllers\Admin\AdminTicketTypeController;
 use App\Http\Controllers\Admin\AdminController;
@@ -41,10 +38,6 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ClientRegisterController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\PartnerRegisterController;
-
-
-use App\Http\Controllers\Client\ClientController;
-
 
 use App\Http\Controllers\Partners\PartnerController;
 use App\Http\Controllers\Partners\PartnerHotelController;
@@ -70,6 +63,7 @@ use App\Http\Controllers\Partners\PartnerSubscriptionController;
     Route::middleware(['web', 'throttle:20,1'])->group(function () {
         Route::view('/bot', 'frontend.bot')->name('bot');
     });
+
 
     Route::view('/mbot', 'frontend.bot')->name('mbot');
     ////// FRONTEND CONTROLLER
@@ -119,7 +113,7 @@ use App\Http\Controllers\Partners\PartnerSubscriptionController;
     Route::middleware('guest')->group(function () {
         Route::get('/login', fn () => view('auth.login'))->name('login');
         Route::post('/login', [AuthenticatedSessionController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
-        Route::get('/mpanel/login', fn () => view('backend.admin.auth.login'))->name('admin.login');
+        Route::get('/spanel/login', fn () => view('backend.admin.auth.login'))->name('admin.login');
     });
 
     Route::middleware(['throttle:3,10'])->group(function () {
@@ -314,10 +308,10 @@ Route::middleware(['auth', 'user.active', 'current.account', 'partner.access',
 
 
 // ==========================
-// MPANEL (admin) – sécurisé
+// spanel (admin) – sécurisé
 // ==========================
 Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:platform.view'])
-        ->prefix('mpanel')->name('admin.')->group(function () {
+        ->prefix('spanel')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -348,16 +342,6 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
         Route::post('/orders/payments/{payment}/reject', [AdminTicketOrderController::class, 'rejectPayment'])->name('tickets.orders.payments.reject');
 
     });
-
-    /////// Event Controller/////////
-    Route::get('/events', [AdminEventController::class, 'index'])->name('events.index');
-    Route::post('/events/status/{id}', [AdminEventController::class, 'updateStatus']);
-    Route::get('/events/create', [AdminEventController::class, 'create'])->name('events.create');
-    Route::post('/events/store', [AdminEventController::class, 'store'])->name('events.store');
-    Route::delete('/events/delete/{id}', [AdminEventController::class, 'delete'])->name('events.delete');
-    Route::get('/events/edit/{id}', [AdminEventController::class, 'edit'])->name('events.edit');
-    Route::put('/events/update/{id}', [AdminEventController::class, 'update'])->name('events.update');
-
 
     Route::get('/users',        [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/customers',  [AdminUserController::class, 'customers'])->name('users.customers');
@@ -440,16 +424,6 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
     Route::get('/hotels/edit/{hotel:slug}', [HotelController::class, 'edit'])->name('hotel.edit');
     Route::put('/hotels/update/{hotel:slug}', [HotelController::class, 'update'])->name('hotel.update');
     Route::post('/hotels/{hotel}/status', [HotelController::class,'status'])->name('hotels.status');
-
-    ////////// ROOMS Controller////////////
-    Route::get('/rooms', [AdminRoomController::class, 'index'])->name('rooms');
-    Route::post('/rooms/status/{id}', [AdminRoomController::class, 'updateStatus']);
-    Route::get('/rooms/create', [AdminRoomController::class, 'create'])->name('rooms.create');
-    Route::post('/rooms/store', [AdminRoomController::class, 'store'])->name('rooms.store');
-    Route::delete('/rooms/delete/{id}', [AdminRoomController::class, 'destroy'])->name('rooms.delete');
-    Route::get('/rooms/edit/{room:slug}', [AdminRoomController::class, 'edit'])->name('rooms.edit');
-    Route::put('/rooms/update/{room:slug}', [AdminRoomController::class, 'update'])->name('rooms.update');
-    Route::post('/rooms/{room:slug}/duplicate', [AdminRoomController::class, 'duplicate'])->name('rooms.duplicate');
 
     //////////Pages Controller////////////
     Route::get('/pages', [PageController::class, 'index'])->name('pages');

@@ -13,7 +13,7 @@ use App\HasFilters;
 class AdminCategoryController extends Controller {
 
 
-use HasFilters;
+    use HasFilters;
 
     public function index(){
         $categories = Category::orderBy('name')->get();
@@ -39,7 +39,6 @@ use HasFilters;
         $request = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'type' => 'nullable|string|max:100',
             'model' => 'required|string|max:100',
         ], [
             'name.required' => 'Le nom est obligatoire.',
@@ -58,7 +57,6 @@ use HasFilters;
             'name' => $request['name'],
             'description' => $request['description'],
             'slug' => Str::slug($request['name']),
-            'type' => $request['type'],
             'model' => $request['model'],
             'status' => 1,
         ]);
@@ -71,7 +69,6 @@ use HasFilters;
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'type' => 'nullable|string|max:100',
             'model' => 'nullable|string|max:100',
         ], [
             'name.required' => 'Le nom est obligatoire.',
@@ -82,7 +79,6 @@ use HasFilters;
         $category->update([
             'name' => $validated['name'],
             'description' => $validated['description'],
-            'type' => $validated['type'] ?? null,
             'model' => $validated['model'] ?? null,
             'slug' => Str::slug($validated['name']),
         ]);
@@ -97,8 +93,6 @@ use HasFilters;
         if (!$category) {
             return back()->with('error', 'Cette catégorie n\'existe pas.');
         }
-
-        // Vérification d'utilisation
 
         $relations = [
             'hotels' => 'des hôtels',

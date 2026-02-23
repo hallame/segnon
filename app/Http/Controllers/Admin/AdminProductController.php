@@ -50,7 +50,7 @@ class AdminProductController extends Controller {
                 'out_of_stock' => Product::where('stock','<=',0)->count(),
             ];
 
-        $categories = Category::where('model', 'Product')->orderBy('name')->get(['id','name']);
+        $categories = Category::orderBy('name')->get(['id','name']);
         return view('backend.admin.products.index', compact('products','categories','q','status','type','category', 'stats'));
     }
 
@@ -60,7 +60,7 @@ class AdminProductController extends Controller {
             ->whereHas('modules', fn($m)=>$m->where('slug','artisan'))
             ->orderBy('name')
             ->get(['id','name','is_verified']);
-        $categories = Category::where('model', 'Product')->orderBy('name')->get(['id','name']);
+        $categories = Category::orderBy('name')->get(['id','name']);
         return view('backend.admin.products.create', compact('categories', 'accounts'));
     }
 

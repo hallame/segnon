@@ -15,7 +15,7 @@
            placeholder="Ex : T-shirt Premium 100% coton" required>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-6">
     <label class="form-label">Catégorie</label>
     <select name="category_id" class="form-select">
       <option value="">Sélectionner</option>
@@ -32,13 +32,13 @@
            placeholder="Ex : TS-PR-001">
   </div> --}}
 
-  <div class="col-md-3">
+  {{-- <div class="col-md-3">
     <label class="form-label">Type</label>
     <select name="type" id="type" class="form-select" required>
       <option value="simple"   @selected(old('type', $product->type ?? 'simple')=='simple')>Simple</option>
       <option value="variable" @selected(old('type', $product->type ?? '')=='variable')>Variable</option>
     </select>
-  </div>
+  </div> --}}
 
   {{-- Description --}}
   <div class="col-md-12">
@@ -79,6 +79,7 @@
            value="{{ old('unit', $product->unit ?? '') }}" placeholder="Ex : kg">
   </div>
 
+  
   <div class="col-md-4 d-flex align-items-end simple-only">
     <div class="form-check form-switch">
         <input type="hidden" name="status" value="0">

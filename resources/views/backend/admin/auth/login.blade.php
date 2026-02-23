@@ -71,7 +71,7 @@
 
 										</div>
                                         <div class="mt-5 pb-4 text-center">
-											<p class="mb-0 text-white">Copyright &copy; 2025 | <a class="text-white" href="{{ route('home') }}">{{ config('app.name') }}</a></p>
+											<p class="mb-0 text-white">Copyright &copy; 2026 | <a class="text-white" href="{{ route('home') }}">{{ config('app.name') }}</a></p>
 										</div>
 									</div>
 								</form>

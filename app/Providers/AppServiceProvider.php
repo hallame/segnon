@@ -37,7 +37,6 @@ class AppServiceProvider extends ServiceProvider {
                 ->salutation('— Équipe ' . $appName);
         });
 
-
         View::composer('backend.admin.*', function ($view) {
             $view->with('admin', Auth::user());
         });

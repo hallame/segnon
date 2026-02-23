@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="Découvrez Zaly Merveille, la plateforme dédiée à la valorisation du patrimoine culturel et naturel de la Guinée Forestière. Explorez des sites uniques, réservez vos visites et plongez dans l'histoire et les traditions locales.">
+    <meta name="description" content="Connectez-vous à votre espace.">
 
     <meta property="og:image" content="{{ asset('assets/back/images/logo.jpg') }}">
     <meta property="og:image:width" content="1200">
@@ -11,7 +11,7 @@
 	<meta name="robots" content="noindex, nofollow">
     <title>@yield('title') | {{ config('app.name') }}</title>
 
-	
+
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/faviclogo.jpg') }}">
 	<!-- Apple Touch Icon -->

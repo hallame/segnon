@@ -28,7 +28,6 @@
                 <tr>
                     <th>Nom</th>
                     <th>Description</th>
-                    <th>Entité</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -37,8 +36,6 @@
                     <tr>
                         <td>{{ $category->name }}</td>
                         <td>{{ Str::limit($category->description, 60) }}</td>
-                        {{-- <td>{{ $category->type ?? '-' }}</td> --}}
-                        <td>{{ $category->model ? __('models.' . strtolower($category->model) . 's') : '-' }}</td>
                         <td>
                             <div class="form-check form-switch">
                                 <input type="checkbox" class="form-check-input me-2" role="switch"
@@ -84,26 +81,6 @@
                         <label for="edit_description" class="form-label">Description</label>
                         <textarea class="form-control" id="edit_description" name="description" rows="3" required></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="edit_type" class="form-label">Type</label>
-                        <input type="text" class="form-control" id="edit_type" name="type">
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_model" class="form-label">Module concerné</label>
-                        <select class="form-select" id="edit_model" name="model" required>
-                            <option value="">-- Sélectionner --</option>
-                            <option value="Product">Produit:Zaly Shop</option>
-                            <option value="Room">Chambre</option>
-                            <option value="Hotel">Hôtel</option>
-                            <option value="Site">Site</option>
-                            <option value="Event">Événement</option>
-                            <option value="Monument">Monument</option>
-                            <option value="Museum">Musée</option>
-                            <option value="Circuit">Circuit</option>
-                            <option value="Faq">Circuit</option>
-                            <option value="Other">Autre</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
@@ -113,7 +90,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="delete_modal">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -168,7 +144,7 @@
 
     // Met à jour un statut par requête AJAX
     function updateCategoryStatus(categoryId, isChecked) {
-        fetch(`/zpanel/categories/status/${categoryId}`, {
+        fetch(`/spanel/categories/status/${categoryId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

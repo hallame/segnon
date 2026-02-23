@@ -79,14 +79,40 @@
     <!-- CSS de Tagify -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
 
+
+
+	<style>
+		/* Force tous les inputs en blanc avec bordure visible */
+		input, select, textarea, .select2-selection {
+			border: 1px solid #ced4da !important;
+			color: #212529 !important;
+		}
+		
+		/* Labels visibles */
+		label {
+			color: #212529 !important;
+			font-weight: 500 !important;
+		}
+		
+		/* Cards avec fond blanc */
+		.card, .modal-content {
+			background-color: #ffffff !important;
+			border: 1px solid #e9ecef !important;
+		}
+		
+		/* Placeholders visibles */
+		::placeholder {
+			color: #6c757d !important;
+			opacity: 1 !important;
+		}
+	</style>
+
 </head>
 <body>
-
 
     <div id="global-loader" style="display: none;">
 		<div class="page-loader"></div>
 	</div>
-
 
 	<!-- Main Wrapper -->
 	<div class="main-wrapper">
