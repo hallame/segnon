@@ -65,11 +65,11 @@
                 <a href="{{ route('shop.cart.index') }}"
                     class="relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-brand-green/60 hover:text-brand-green transition">
                     <i class="ri-shopping-cart-2-line text-[18px]"></i>
-                    @if($cartCount > 0)
+                    {{-- @if($cartCount > 0)
                         <span class="cart-badge absolute -top-0.5 -right-0.5 text-[11px] px-1.5 py-0.5 rounded-full bg-brand-green text-white font-bold">
                             {{ $cartCount }}
                         </span>
-                    @endif
+                    @endif --}}
                 </a>
 
 
@@ -209,12 +209,12 @@
                     <div class="relative inline-flex items-center justify-center">
                         <i class="ri-shopping-cart-2-line text-lg"></i>
 
-                        @if($cartCount > 0)
+                        {{-- @if($cartCount > 0)
                             <span class="cart-badge absolute -top-1 -right-2 text-[11px] px-1.5 py-0.5
                                         rounded-full bg-brand-green text-white font-bold leading-none">
                                 {{ $cartCount }}
                             </span>
-                        @endif
+                        @endif --}}
                     </div>
 
                     <span>Panier</span>

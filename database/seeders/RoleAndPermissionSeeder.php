@@ -169,8 +169,9 @@ class RoleAndPermissionSeeder extends Seeder
             ['slug' => 'platform', 'is_verified' => true, 'status' => Account::STATUS_ACTIVE]
         );
 
+
         $this->createPlatformUser(
-            env('ADMIN_EMAIL', env('PLATFORM_OWNER_EMAIL', 'admin@example.com')),
+            env('ADMIN_EMAIL', 'admin@example.com'),
             env('ADMIN_FIRSTNAME', 'Super'),
             env('ADMIN_LASTNAME', 'Admin'),
             env('ADMIN_PASSWORD', 'password'),
@@ -195,7 +196,7 @@ class RoleAndPermissionSeeder extends Seeder
         $ownerRoleNames = Module::getOwnerRoleNamesForModuleIds($moduleIds);
         if (!empty($ownerRoleNames)) {
             app(PermissionRegistrar::class)->setPermissionsTeamId($platform->id);
-            $platformUser = User::where('email', env('ADMIN_EMAIL', env('PLATFORM_OWNER_EMAIL', 'admin@example.com')))->first();
+            $platformUser = User::where('email', env('ADMIN_EMAIL', 'admin@example.com'))->first();
             if ($platformUser) {
                 $platformUser->assignRole($ownerRoleNames);
             }

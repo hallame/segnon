@@ -13,6 +13,8 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Support\Platform;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Log;
+
  /**
   * @method bool hasRole(string|array ...$roles)
   * @method bool hasAnyRole(...$roles)
@@ -40,6 +42,8 @@ class User extends Authenticatable implements MustVerifyEmail {
         'last_login_at' => 'datetime',
     ];
 
+
+
     protected $hidden = ['password','remember_token'];
 
     public const STATUS_PENDING = 0;
@@ -49,18 +53,22 @@ class User extends Authenticatable implements MustVerifyEmail {
     public function isActive(): bool { return $this->status === self::STATUS_ACTIVE; }
     public function isBanned(): bool { return $this->status === self::STATUS_BLOCKED; }
 
-    // IMPORTANT pour Spatie si tu gardes un seul guard:
+
+
+    // IMPORTANT pour Spatie si un seul guard:
     protected string $guard_name = 'web';
 
     protected static function booted() {
         static::saving(function ($user) {
-            \Log::info("User saving  {$user->email}", [
+            Log::info("User saving  {$user->email}", [
                 'id' => $user->id,
                 'last_login_at' => $user->last_login_at,
                 'dirty' => $user->getDirty(),
             ]);
         });
     }
+
+
 
     public function accounts(): BelongsToMany {
         return $this->belongsToMany(Account::class, 'account_users')
@@ -81,15 +89,16 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $q->whereHas('accounts');
     }
 
-    public function getFullNameAttribute(): string {
-        return trim($this->lastname . ' ' . $this->firstname) ?: 'Utilisateur inconnu';
-    }
+
+
 
     public function scopeNotStaff($q) {
         // rôles internes à exclure du listing partenaires
         $staff = ['super_admin','moderator','finance_admin','support','developer'];
         return $q->whereDoesntHave('roles', fn($r) => $r->whereIn('name', $staff));
     }
+
+
 
     /** Optionnel : exclure l’account “équipe principale” si vous en avez un */
     public function scopeWithoutMainAccount($q, ?int $mainAccountId) {
@@ -109,10 +118,24 @@ class User extends Authenticatable implements MustVerifyEmail {
             ->exists();
     }
 
+
     public function isMega(): bool {
         // bypass dev (voir Gate::before)
         return $this->hasRole('developer') || in_array($this->email, config('mega.emails', []));
     }
+
+
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
+
+
+    public function getFullNameAttribute(): string {
+        return trim($this->lastname . ' ' . $this->firstname) ?: 'Anonyme';
+    }
+
+
 
    public function getAvatarUrlAttribute(): string {
         $path = $this->avatar;
@@ -125,6 +148,7 @@ class User extends Authenticatable implements MustVerifyEmail {
     }
 
 
+
     public function bookings(){
         return $this->hasMany(Booking::class);
     }
@@ -133,9 +157,7 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $this->hasMany(Order::class);
     }
 
-    public function reviews(){
-        return $this->hasMany(Review::class);
-    }
+
 
     public function payments() {
         return $this->morphMany(Payment::class, 'payable');

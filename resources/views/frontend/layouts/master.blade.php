@@ -11,6 +11,7 @@
                 "Marché digital dédié aux artisans, créateurs et vendeurs : objets d'art, déco, mode, cadeaux et pièces uniques."
             )
         );
+
         $metaImage = $__env->yieldContent('meta_image', asset('assets/images/mk.png'));
         $metaUrl   = url()->current();
         $metaType  = trim($__env->yieldContent('meta_type', 'website'));
@@ -97,7 +98,6 @@
         </main>
         @include('frontend.layouts.footer')
         @include('frontend.layouts.scripts')
-        @include('frontend.layouts.bot')
     </div>
 </body>
 </html>

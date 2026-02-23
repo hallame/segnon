@@ -14,7 +14,6 @@ use App\Models\Event;
 use App\Models\Guide;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Language;
-use App\Models\Site;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\HasFilters;
@@ -119,17 +118,6 @@ class AdminController extends Controller{
         ];
 
 
-        // Statistiques Sites Touristiques
-        $sites = tap(Site::latest()->get(), function ($sites) {
-            $sites->display = $sites->take(5);
-        });
-        $totalSites = $sites->count();
-        $sitesData = [
-            'sites' => $sites,
-            'totalSites' => $totalSites,
-
-        ];
-
         // Events
         $events = tap(Event::latest()->get(), function ($events) {
             $events->display = $events->take(5);
@@ -172,7 +160,6 @@ class AdminController extends Controller{
             $guidesData,
             $partnersData,
             $bookingsData,
-            $sitesData,
             $eventsData,
             $data,
             $productsData,
