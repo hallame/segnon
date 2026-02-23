@@ -236,13 +236,11 @@ class RoleAndPermissionSeeder extends Seeder {
         }
     }
 
-    private function demoEnabled(): bool
-    {
+    private function demoEnabled(): bool {
         return filter_var(env('SEED_DEMO_ACCOUNT', false), FILTER_VALIDATE_BOOLEAN);
     }
 
-    private function seedDemoAccount(): void
-    {
+    private function seedDemoAccount(): void {
         $account = Account::firstOrCreate(
             ['name' => env('DEMO_ACCOUNT_NAME', 'Demo Partner')],
             ['is_verified' => true, 'status' => Account::STATUS_ACTIVE]

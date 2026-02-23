@@ -13,6 +13,7 @@ class ModerationStatusSeeder extends Seeder {
             ['slug' => 'approved', 'status' => 'Approuvé',   'is_final' => true,  'sort' => 20],
             ['slug' => 'rejected', 'status' => 'Rejeté',     'is_final' => true,  'sort' => 30],
         ];
+        
         foreach ($rows as $r) {
             ModerationStatus::updateOrCreate(['slug' => $r['slug']], $r);
         }

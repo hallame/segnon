@@ -38,7 +38,6 @@ class TagSeeder extends Seeder {
             ['name' => 'En stock', 'slug' => 'en-stock'],
             ['name' => 'Pré-commande', 'slug' => 'pre-commande'],
         ];
-        
 
         foreach ($tags as $tag) {
             Tag::create($tag);

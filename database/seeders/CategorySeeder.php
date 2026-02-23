@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder {
     public function run(): void {
+        
         $categories = [
             // Électronique et High-Tech
             ['name' => 'Smartphones', 'slug' => 'smartphones', 'description' => 'Téléphones mobiles et accessoires', 'position' => 1],

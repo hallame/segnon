@@ -12,7 +12,6 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\ContextController;
-use App\Http\Controllers\TicketController;
 use App\Http\Controllers\ShopCheckoutController;
 use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopController;
@@ -46,257 +45,108 @@ use App\Http\Controllers\Partners\PartnerProductController;
 use App\Http\Controllers\Partners\PartnerRoomController;
 use App\Http\Controllers\Partners\PartnerSubscriptionController;
 
-    Route::post('/payments/moneroo/webhook', [MonerooWebhookController::class, 'handle'])->name('payments.moneroo.webhook');
+Route::post('/payments/moneroo/webhook', [MonerooWebhookController::class, 'handle'])->name('payments.moneroo.webhook');
 
-    // ==========================
-    // AUTH (VISITEURS / guest)
-    // ==========================
+// ==========================
+// AUTH (VISITEURS / guest)
+// ==========================
 
-    // Bot
-    Route::middleware(['web', 'throttle:20,1'])->group(function () {
-        Route::view('/bot', 'frontend.bot')->name('bot');
-    });
-
-
-    Route::view('/mbot', 'frontend.bot')->name('mbot');
-    ////// FRONTEND CONTROLLER
-    Route::get('/', [FrontendController::class, 'home'])->name('home');
-    Route::get('/pricing', [FrontendController::class, 'pricing'])->name('shop.pricing');
-    Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
-    Route::post('/contact/send', [FrontendController::class, 'sendContact'])->name('contact.send');
-    Route::post('/newsletter/subscribe', [FrontendController::class, 'subscribe'])->name('newsletter.subscribe');
-    Route::get('/faqs', [FrontendController::class, 'faqs'])->name('faqs.index');
-    Route::get('/about', [FrontendController::class, 'about'])->name('about');
-    Route::get('/sales/guide', [FrontendController::class, 'sellerGuide'])->name('sales.guide');
-
-    Route::get('/terms', [FrontendController::class, 'terms'])->name('terms');
-    Route::get('/policy', [FrontendController::class, 'policy'])->name('policy');
-
-
-
-    ////// USERS SHOPPING CONTROLLERs
-    Route::prefix('shop')->name('shop.')->group(function () {
-        Route::get('/', [ShopController::class,'index'])->name('products.index');
-        Route::get('/products', [ShopController::class,'index'])->name('products.index');
-        Route::get('/products/{product:slug}', [ShopController::class,'show'])->name('products.show');
-        Route::get('/products/category/{slug}', [ShopController::class,'category'])->name('products.category');
-
-        Route::get('/cart', [ShopController::class,'cartIndex'])->name('cart.index');
-        Route::post('/cart/add', [ShopController::class,'cartAdd'])->name('cart.add');
-        Route::patch('/cart/items/{item}', [ShopController::class,'cartUpdate'])->name('cart.items.update');
-        Route::delete('/cart/items/{item}', [ShopController::class,'cartRemove'])->name('cart.items.remove');
-
-        Route::get('/checkout', [ShopCheckoutController::class,'index'])->name('checkout.index');
-
-        Route::post('/checkout', [ShopCheckoutController::class,'store'])->name('checkout.store');
-        Route::get('/vendors/{account:slug}', [ShopController::class, 'showVendor'])->name('vendors.show');
-
-        Route::get('/payment/{order:reference}', [ShopPaymentController::class,'show'])->name('payment.show');
-        Route::post('/payment/{order:reference}', [ShopPaymentController::class,'pay'])->name('payment.store');
-        Route::get('/orders/success/{reference}', [ShopPaymentController::class,'success'])->name('orders.success');
-        Route::get('/orders/{reference}/receipt', [ShopPaymentController::class, 'receipt'])->name('orders.receipt');
-
-        Route::post('/orders/{order:reference}/pay/moneroo', [ShopPaymentController::class, 'payOnline'])->name('orders.pay.moneroo');
-        Route::get('/orders/{order:reference}/moneroo/return', [ShopPaymentController::class, 'handleMonerooReturn'])->name('orders.moneroo.return');
-
-    });
-
-
-    Route::middleware('guest')->group(function () {
-        Route::get('/login', fn () => view('auth.login'))->name('login');
-        Route::post('/login', [AuthenticatedSessionController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
-        Route::get('/spanel/login', fn () => view('backend.admin.auth.login'))->name('admin.login');
-    });
-
-    Route::middleware(['throttle:3,10'])->group(function () {
-        Route::get('/partners/register',  [PartnerRegisterController::class, 'create'])->name('partners.register');
-        Route::post('/partners/register', [PartnerRegisterController::class, 'store'])->name('partners.register.store');
-
-        Route::get('/register', fn () => view('auth.register'))->name('register');
-        Route::post('/register', [ClientRegisterController::class, 'store'])->name('register.store');
-    });
-
-    Route::get('/forgot-password', fn () => view('auth.forgot-password'))->name('password.request');
-
-    Route::post('/forgot-password', [AuthenticatedSessionController::class, 'passwordResetLink'])->middleware('throttle:6,1')->name('password.email');
-
-    // Réinitialisation (form avec token + enregistrement)
-    Route::get('/reset-password/{token}', fn ($token) => view('auth.reset-password', ['token' => $token]))->name('password.reset');
-    Route::post('/reset-password', [AuthenticatedSessionController::class, 'storeNewPassword'])->name('password.store');
-
-
-    // ==========================
-    // AUTHENTIFIE (auth)
-    // ==========================
-    Route::middleware('auth')->group(function () {
-        Route::post('/impersonate/stop', [AdminImpersonationController::class, 'stop'])->name('impersonate.stop');
-
-        // Accessible connecté uniquement
-        Route::get('/user/pending', fn () => view('auth.status'))->name('user.pending');
-        Route::get('/user/resume', [AuthenticatedSessionController::class, 'resume'])->name('auth.resume');
-
-        // Vérification email (notice + renvoi du lien)
-        Route::get('/email/verify', fn () => view('auth.verify-email'))->name('verification.notice');
-        Route::post('/email/verification-notification', [AuthenticatedSessionController::class, 'verify'])->middleware('throttle:6,1')->name('verification.send');
-        // Lien de vérif reçu par email
-        Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-            $request->fulfill();
-            return redirect()->intended('/'); // destination après vérif
-        })->middleware(['signed','throttle:6,1'])->name('verification.verify');
-
-        // Déconnexion
-        Route::post('/logout', [AuthenticatedSessionController::class, 'logout'])->name('logout');
-        Route::get('/logout', [AuthenticatedSessionController::class, 'logout'])->name('logout');
-    });
-
-
-// ================================
-// Partners – sécurisé (zone + rôles)
-// ================================
-
-// Switch
-Route::middleware(['auth','verified','current.account'])->prefix('partners')->name('partners.')->group(function () {
-    Route::post('/switch', [ContextController::class, 'switch'])->name('switch');
-    Route::get('account/pending', [PartnerRegisterController::class, 'pending'])->name('account.pending');
-    Route::get('/resume', [PartnerRegisterController::class,'resume'])->name('resume');
+// Bot
+Route::middleware(['web', 'throttle:20,1'])->group(function () {
+    Route::view('/bot', 'frontend.bot')->name('bot');
 });
 
-Route::middleware(['auth', 'user.active', 'current.account', 'partner.access',
-        // 'account.verified', 'verified',
-        ])->prefix('partners')->name('partners.')->group(function () {
 
-    // ===== Tableau de bord & état "en attente" =====
-    Route::get('/dashboard/{account:slug?}', [PartnerController::class, 'dashboard'])->name('dashboard');
+Route::view('/mbot', 'frontend.bot')->name('mbot');
+////// FRONTEND CONTROLLER
+Route::get('/', [FrontendController::class, 'home'])->name('home');
+Route::get('/pricing', [FrontendController::class, 'pricing'])->name('shop.pricing');
+Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+Route::post('/contact/send', [FrontendController::class, 'sendContact'])->name('contact.send');
+Route::post('/newsletter/subscribe', [FrontendController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/faqs', [FrontendController::class, 'faqs'])->name('faqs.index');
+Route::get('/about', [FrontendController::class, 'about'])->name('about');
+Route::get('/sales/guide', [FrontendController::class, 'sellerGuide'])->name('sales.guide');
 
-    // ===================== ESPACE PARTENAIRE =====================
-    // settings and profile
-    Route::get('/profile',  [PartnerProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile',  [PartnerProfileController::class, 'update'])->name('profile.update');
-
-    Route::get('/settings', [PartnerSettingController::class, 'edit'])->name('settings.edit');
-    Route::put('/settings', [PartnerSettingController::class, 'update'])->name('settings.update');
-
-    // Requests
-    Route::get('/submissions', [PartnerSubmissionController::class, 'index'])->name('submissions.index');
-    Route::get('/submissions/{submission}', [PartnerSubmissionController::class, 'show'])->name('submissions.show');
-
-    Route::post('/hotels/{hotel:slug}/submissions', [PartnerSubmissionController::class, 'hotelRequest'])
-        ->name('submissions.hotels.request');
-
-    Route::post('/rooms/{room:slug}/submissions', [PartnerSubmissionController::class, 'roomRequest'])
-        ->name('submissions.rooms.request');
-
-    Route::post('/products/{product}/submissions', [PartnerSubmissionController::class, 'productRequest'])
-        ->name('submissions.products.request');
+Route::get('/terms', [FrontendController::class, 'terms'])->name('terms');
+Route::get('/policy', [FrontendController::class, 'policy'])->name('policy');
 
 
-     // ===================== ÉVÉNEMENTIEL =====================
-    Route::middleware('module:event')->prefix('event')->as('event.')->group(function () {
-        // Dashboard
-        Route::get('/dashboard', [PartnerEventController::class, 'dashboard'])->name('dashboard');
-        Route::get('/', [PartnerEventController::class, 'dashboard'])->name('dashboard');
 
-        // ----------------- Événements -----------------
-        Route::get   ('/events',                   [PartnerEventController::class,'index'])->name('events.index');
-        Route::get   ('/events/create',            [PartnerEventController::class,'create'])->name('events.create');
-        Route::post  ('/events',                   [PartnerEventController::class,'store'])->name('events.store');
-        Route::get   ('/events/{event}/edit',      [PartnerEventController::class,'edit'])->name('events.edit')->whereNumber('event');
-        Route::put   ('/events/{event}',           [PartnerEventController::class,'update'])->name('events.update')->whereNumber('event');
-        Route::delete('/events/{event}',           [PartnerEventController::class,'destroy'])->name('events.destroy')->whereNumber('event');
+////// USERS SHOPPING CONTROLLERs
+Route::prefix('shop')->name('shop.')->group(function () {
+    Route::get('/', [ShopController::class,'index'])->name('products.index');
+    Route::get('/products', [ShopController::class,'index'])->name('products.index');
+    Route::get('/products/{product:slug}', [ShopController::class,'show'])->name('products.show');
+    Route::get('/products/category/{slug}', [ShopController::class,'category'])->name('products.category');
 
-        // Transitions & utilitaires
-        Route::post  ('/events/{event}/publish',   [PartnerEventController::class,'publish'])->name('events.publish')->whereNumber('event');
-        Route::post  ('/events/{event}/unpublish', [PartnerEventController::class,'unpublish'])->name('events.unpublish')->whereNumber('event');
-        Route::post  ('/events/{event}/archive',   [PartnerEventController::class,'archive'])->name('events.archive')->whereNumber('event');
-        Route::post  ('/events/{event}/unarchive', [PartnerEventController::class,'unarchive'])->name('events.unarchive')->whereNumber('event');
-        Route::post  ('/events/{event}/duplicate', [PartnerEventController::class,'duplicate'])->name('events.duplicate')->whereNumber('event');
-        Route::post  ('/events/{event}/cancel',    [PartnerEventController::class,'cancel'])->name('events.cancel')->whereNumber('event');
-        Route::get   ('/events/calendar',          [PartnerEventController::class,'calendar'])->name('events.calendar');
-        Route::get   ('/events/export',            [PartnerEventController::class,'export'])->name('events.export');
+    Route::get('/cart', [ShopController::class,'cartIndex'])->name('cart.index');
+    Route::post('/cart/add', [ShopController::class,'cartAdd'])->name('cart.add');
+    Route::patch('/cart/items/{item}', [ShopController::class,'cartUpdate'])->name('cart.items.update');
+    Route::delete('/cart/items/{item}', [ShopController::class,'cartRemove'])->name('cart.items.remove');
 
-        // ----------------- Rapports -----------------
-        Route::get('/reports',        [PartnerEventReportController::class,'index'])->name('reports.index');
-        Route::get('/reports/export', [PartnerEventReportController::class,'export'])->name('reports.export');
+    Route::get('/checkout', [ShopCheckoutController::class,'index'])->name('checkout.index');
 
-        // ----------------- Réglages & Profil -----------------
-        Route::get('/settings', [PartnerEventController::class, 'editSettings'])->name('settings.edit');
-        Route::put('/settings', [PartnerEventController::class, 'updateSettings'])->name('settings.update');
+    Route::post('/checkout', [ShopCheckoutController::class,'store'])->name('checkout.store');
+    Route::get('/vendors/{account:slug}', [ShopController::class, 'showVendor'])->name('vendors.show');
 
-        Route::get('/profile',  [PartnerEventController::class, 'editProfile'])->name('profile.edit');
-        Route::put('/profile',  [PartnerEventController::class, 'updateProfile'])->name('profile.update');
-    });
+    Route::get('/payment/{order:reference}', [ShopPaymentController::class,'show'])->name('payment.show');
+    Route::post('/payment/{order:reference}', [ShopPaymentController::class,'pay'])->name('payment.store');
+    Route::get('/orders/success/{reference}', [ShopPaymentController::class,'success'])->name('orders.success');
+    Route::get('/orders/{reference}/receipt', [ShopPaymentController::class, 'receipt'])->name('orders.receipt');
 
-    // ===================== HÔTELLERIE =====================
-    Route::middleware('module:hotel')->group(function () {
-        ////////// Partners  Hotels CRUD + actions métier   Partners Hotels Controller////////////
-        Route::get('/hotels', [PartnerHotelController::class,'index'])->name('hotels.index');
-        Route::get('/hotels/create', [PartnerHotelController::class,'create'])->name('hotels.create');
-        Route::post('/hotels/store', [PartnerHotelController::class,'store'])->name('hotels.store');
-        Route::get('/hotels/{hotel:slug}/edit', [PartnerHotelController::class,'edit'])->name('hotels.edit');
-        Route::put('/hotels/update/{hotel}', [PartnerHotelController::class,'update'])->name('hotels.update');
-        Route::post  ('/hotels/{hotel}/toggle', [PartnerHotelController::class,'toggleStatus'])->name('hotels.toggle');
-
-         ////////// Partners ROOMS Controller////////////
-        Route::get('/rooms',                [PartnerRoomController::class, 'index'])->name('rooms.index');
-        Route::get('/rooms/create',         [PartnerRoomController::class, 'create'])->name('rooms.create');
-        Route::post('/rooms',               [PartnerRoomController::class, 'store'])->name('rooms.store');
-        Route::get('/rooms/{room}/edit',    [PartnerRoomController::class, 'edit'])->name('rooms.edit');
-        Route::put('/rooms/{room}',[PartnerRoomController::class, 'update'])->name('rooms.update');
-        Route::post ('/rooms/{room}/toggle', [PartnerRoomController::class,'toggleStatus'])->name('rooms.toggle');
-
-
-        ////////// Partners Bookings Controller////////////
-        Route::get('/bookings',                       [PartnerBookingController::class, 'index'])->name('bookings.index');
-        Route::get('/bookings/{booking}',             [PartnerBookingController::class, 'show'])->name('bookings.show');
-        Route::post('/bookings/{booking}/status',     [PartnerBookingController::class, 'updateStatus'])->name('bookings.status');
-        Route::post('/bookings/{booking}/payment',    [PartnerBookingController::class, 'updatePayment'])->name('bookings.payment');
-        Route::post('/bookings/{booking}/receipt',    [PartnerBookingController::class, 'uploadReceipt'])->name('bookings.receipt.upload');
-        Route::delete('/bookings/{booking}/receipt',  [PartnerBookingController::class, 'deleteReceipt'])->name('bookings.receipt.delete');
-
-    });
-
-    // ===================== BOUTIQUE D'ART =====================
-    Route::middleware('module:shop')->prefix('shop')->as('shop.')->group(function () {
-         // Dashboard
-        Route::get('/dashboard', [PartnerProductController::class, 'dashboard'])->name('dashboard');
-        Route::get('/', [PartnerProductController::class, 'dashboard'])->name('dashboard');
-
-        // Products (Partners)
-        Route::get   ('/products',                  [PartnerProductController::class,'index'])->name('products.index');
-        Route::get   ('/products/create',           [PartnerProductController::class,'create'])->name('products.create');
-        Route::post  ('/products',                  [PartnerProductController::class,'store'])->name('products.store');
-        Route::get   ('/products/{product}/edit',   [PartnerProductController::class,'edit'])->name('products.edit');
-        Route::put   ('/products/{product}',        [PartnerProductController::class,'update'])->name('products.update');
-        Route::delete('/products/{product}',        [PartnerProductController::class,'destroy'])->name('products.destroy');
-        Route::post  ('/products/{product}/toggle', [PartnerProductController::class,'toggleStatus'])->name('products.toggle');
-        Route::delete('/products/{product}/media/{media}', [PartnerProductController::class,'destroyMedia'])->name('products.media.destroy');
-        // Orders Partners Controller
-        Route::get('/orders', [PartnerOrderController::class, 'index'])->name('orders.index');
-        Route::get('/orders/{order}', [PartnerOrderController::class, 'show'])->name('orders.show');
-        Route::post('/orders/{order}/status', [PartnerOrderController::class, 'updateStatus'])->name('orders.status');
-
-        // Requests
-        Route::get('/submissions', [PartnerProductController::class, 'submissions'])->name('submissions.index');
-        Route::get('/submissions/{submission}', [PartnerProductController::class, 'submissionShow'])->name('submissions.show');
-        Route::post('/products/{product}/submissions', [PartnerSubmissionController::class, 'productRequest'])->name('submissions.products.request');
-
-        // Settings and profile
-        Route::get('/profile',  [PartnerProductController::class, 'editProfile'])->name('profile.edit');
-        Route::put('/profile',  [PartnerProductController::class, 'updateProfile'])->name('profile.update');
-        Route::get('/settings', [PartnerProductController::class, 'editSettings'])->name('settings.edit');
-        Route::put('/settings', [PartnerProductController::class, 'updateSettings'])->name('settings.update');
-
-
-        // subscription
-        Route::get('/subscription',  [PartnerSubscriptionController::class, 'index'])->name('subscription.index');
-        Route::get('/subscription/start',  [PartnerSubscriptionController::class, 'startSubscription'])
-            ->name('subscription.start');
-        Route::get('/subscription/moneroo/return', [PartnerSubscriptionController::class, 'handleMonerooReturn'])
-            ->name('subscription.moneroo.return');
-    });
+    Route::post('/orders/{order:reference}/pay/moneroo', [ShopPaymentController::class, 'payOnline'])->name('orders.pay.moneroo');
+    Route::get('/orders/{order:reference}/moneroo/return', [ShopPaymentController::class, 'handleMonerooReturn'])->name('orders.moneroo.return');
 
 });
 
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', fn () => view('auth.login'))->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'login'])->middleware('throttle:10,1')->name('login.store');
+    Route::get('/spanel/login', fn () => view('backend.admin.auth.login'))->name('admin.login');
+});
+
+Route::middleware(['throttle:3,10'])->group(function () {
+    Route::get('/partners/register',  [PartnerRegisterController::class, 'create'])->name('partners.register');
+    Route::post('/partners/register', [PartnerRegisterController::class, 'store'])->name('partners.register.store');
+
+    Route::get('/register', fn () => view('auth.register'))->name('register');
+    Route::post('/register', [ClientRegisterController::class, 'store'])->name('register.store');
+});
+
+Route::get('/forgot-password', fn () => view('auth.forgot-password'))->name('password.request');
+
+Route::post('/forgot-password', [AuthenticatedSessionController::class, 'passwordResetLink'])->middleware('throttle:6,1')->name('password.email');
+
+// Réinitialisation (form avec token + enregistrement)
+Route::get('/reset-password/{token}', fn ($token) => view('auth.reset-password', ['token' => $token]))->name('password.reset');
+Route::post('/reset-password', [AuthenticatedSessionController::class, 'storeNewPassword'])->name('password.store');
+
+
+// ==========================
+// AUTHENTIFIE (auth)
+// ==========================
+Route::middleware('auth')->group(function () {
+    Route::post('/impersonate/stop', [AdminImpersonationController::class, 'stop'])->name('impersonate.stop');
+
+    // Accessible connecté uniquement
+    Route::get('/user/pending', fn () => view('auth.status'))->name('user.pending');
+    Route::get('/user/resume', [AuthenticatedSessionController::class, 'resume'])->name('auth.resume');
+
+    // Vérification email (notice + renvoi du lien)
+    Route::get('/email/verify', fn () => view('auth.verify-email'))->name('verification.notice');
+    Route::post('/email/verification-notification', [AuthenticatedSessionController::class, 'verify'])->middleware('throttle:6,1')->name('verification.send');
+    // Lien de vérif reçu par email
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect()->intended('/'); // destination après vérif
+    })->middleware(['signed','throttle:6,1'])->name('verification.verify');
+
+    // Déconnexion
+    Route::post('/logout', [AuthenticatedSessionController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthenticatedSessionController::class, 'logout'])->name('logout');
+});
 
 
 // ==========================
@@ -440,3 +290,87 @@ Route::middleware(['auth','verified',
     Route::delete('/{media:uuid}', [MediaController::class, 'destroy'])->name('destroy');
 });
 
+
+
+// ================================
+// Partners – sécurisé (zone + rôles)
+// ================================
+
+// Switch
+Route::middleware(['auth','verified','current.account'])->prefix('partners')->name('partners.')->group(function () {
+    Route::post('/switch', [ContextController::class, 'switch'])->name('switch');
+    Route::get('account/pending', [PartnerRegisterController::class, 'pending'])->name('account.pending');
+    Route::get('/resume', [PartnerRegisterController::class,'resume'])->name('resume');
+});
+
+Route::middleware(['auth', 'user.active', 'current.account', 'partner.access',
+        // 'account.verified', 'verified',
+        ])->prefix('partners')->name('partners.')->group(function () {
+
+    // ===== Tableau de bord & état "en attente" =====
+    Route::get('/dashboard/{account:slug?}', [PartnerController::class, 'dashboard'])->name('dashboard');
+
+    // ===================== ESPACE PARTENAIRE =====================
+    // settings and profile
+    Route::get('/profile',  [PartnerProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile',  [PartnerProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('/settings', [PartnerSettingController::class, 'edit'])->name('settings.edit');
+    Route::put('/settings', [PartnerSettingController::class, 'update'])->name('settings.update');
+
+    // Requests
+    Route::get('/submissions', [PartnerSubmissionController::class, 'index'])->name('submissions.index');
+    Route::get('/submissions/{submission}', [PartnerSubmissionController::class, 'show'])->name('submissions.show');
+
+    Route::post('/hotels/{hotel:slug}/submissions', [PartnerSubmissionController::class, 'hotelRequest'])
+        ->name('submissions.hotels.request');
+
+    Route::post('/rooms/{room:slug}/submissions', [PartnerSubmissionController::class, 'roomRequest'])
+        ->name('submissions.rooms.request');
+
+    Route::post('/products/{product}/submissions', [PartnerSubmissionController::class, 'productRequest'])
+        ->name('submissions.products.request');
+
+
+
+    // ===================== BOUTIQUE D'ART =====================
+    Route::middleware('module:shop')->prefix('shop')->as('shop.')->group(function () {
+         // Dashboard
+        Route::get('/dashboard', [PartnerProductController::class, 'dashboard'])->name('dashboard');
+        Route::get('/', [PartnerProductController::class, 'dashboard'])->name('dashboard');
+
+        // Products (Partners)
+        Route::get   ('/products',                  [PartnerProductController::class,'index'])->name('products.index');
+        Route::get   ('/products/create',           [PartnerProductController::class,'create'])->name('products.create');
+        Route::post  ('/products',                  [PartnerProductController::class,'store'])->name('products.store');
+        Route::get   ('/products/{product}/edit',   [PartnerProductController::class,'edit'])->name('products.edit');
+        Route::put   ('/products/{product}',        [PartnerProductController::class,'update'])->name('products.update');
+        Route::delete('/products/{product}',        [PartnerProductController::class,'destroy'])->name('products.destroy');
+        Route::post  ('/products/{product}/toggle', [PartnerProductController::class,'toggleStatus'])->name('products.toggle');
+        Route::delete('/products/{product}/media/{media}', [PartnerProductController::class,'destroyMedia'])->name('products.media.destroy');
+        // Orders Partners Controller
+        Route::get('/orders', [PartnerOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [PartnerOrderController::class, 'show'])->name('orders.show');
+        Route::post('/orders/{order}/status', [PartnerOrderController::class, 'updateStatus'])->name('orders.status');
+
+        // Requests
+        Route::get('/submissions', [PartnerProductController::class, 'submissions'])->name('submissions.index');
+        Route::get('/submissions/{submission}', [PartnerProductController::class, 'submissionShow'])->name('submissions.show');
+        Route::post('/products/{product}/submissions', [PartnerSubmissionController::class, 'productRequest'])->name('submissions.products.request');
+
+        // Settings and profile
+        Route::get('/profile',  [PartnerProductController::class, 'editProfile'])->name('profile.edit');
+        Route::put('/profile',  [PartnerProductController::class, 'updateProfile'])->name('profile.update');
+        Route::get('/settings', [PartnerProductController::class, 'editSettings'])->name('settings.edit');
+        Route::put('/settings', [PartnerProductController::class, 'updateSettings'])->name('settings.update');
+
+
+        // subscription
+        Route::get('/subscription',  [PartnerSubscriptionController::class, 'index'])->name('subscription.index');
+        Route::get('/subscription/start',  [PartnerSubscriptionController::class, 'startSubscription'])
+            ->name('subscription.start');
+        Route::get('/subscription/moneroo/return', [PartnerSubscriptionController::class, 'handleMonerooReturn'])
+            ->name('subscription.moneroo.return');
+    });
+
+});

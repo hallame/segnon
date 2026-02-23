@@ -198,9 +198,6 @@ class AdminController extends Controller{
         }
         return back()->with('error', 'Le pays n\'existe pas.');
     }
-
-
-
         // ACCOUNT
     public function myprofile(){
             $admin = Auth::user();
