@@ -1,0 +1,11 @@
+@extends('backend.partners.layouts.master')
+@section('title','Créer un produit')
+@section('content')
+<form method="POST" action="{{ route('partners.products.store') }}" enctype="multipart/form-data" class="p-3">
+  @csrf
+  @include('backend.partners.products._form')
+  <div class="mt-3 text-end">
+    <button class="btn btn-primary">Enregistrer</button>
+  </div>
+</form>
+@endsection

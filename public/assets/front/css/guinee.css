@@ -1,0 +1,210 @@
+:root {
+    --primary-color: #579459;
+    --secondary-color: #ffffff;
+    --accent-color: #e67e22;
+    --text-light: #ffffff;
+    --color-hover:#c56613;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+
+.bann-guinee {
+    height: 400px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.bann-guinee::before{
+    background-color: rgba(0, 0, 0, 0.5); /* Noir avec 50% d'opacité */
+    z-index: -1;
+}
+.bann-guinee span{
+    color: #ffffff;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.main-guinee{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+.main-guinee h3{
+    font-weight:600;
+}
+.main-guinee h5{
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.ligne {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+
+}
+
+.card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.line .card:hover {
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 10px;
+}
+
+.card-title {
+    font-size: 1.2em;
+    margin: 5px 0;
+    color: var(--primary-color);
+}
+.card-title-service {
+    font-size: 1.2em;
+    margin: 5px 0;
+    color: var(--text-light);
+}
+
+
+
+.ligne-service{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Changé de 3 à 4 */
+    gap: 20px; /* Réduire l'espace si nécessaire */
+    margin-bottom: 20px;
+    padding-top: 20px;
+}
+.liste-service{
+    padding-top: 30px;
+    justify-content: center;
+    text-align: center;
+}
+.liste-service .card{background-color: var(--primary-color);color: var(--text-light);}
+.liste-service .card h3 .card-title{color: var(--text-light);}
+.titre-service {
+    text-align: center;
+    font-size: 2em;
+    margin: 40px 0 30px 0;
+    color: #2c3e50;
+    position: relative;
+}
+
+.titre-service::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: var(--primary-color);
+    margin: 15px auto;
+}
+@media (max-width: 1024px) {
+    .ligne {
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur tablettes */
+    }
+}
+@media (max-width: 768px) {
+    .ligne {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 1024px) {
+    .ligne-service {
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur tablettes */
+    }
+}
+@media (max-width: 768px) {
+    .ligne-service {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/*Le style de la section Contexte*/
+.custom-div {
+    background-color: #f8f9fa;
+    border-radius: 20px 0 0 20px; /* Haut-gauche et bas-droit */
+
+    padding: 40px 20px;
+    margin: 50px auto;
+    max-width: 800px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Version alternative pour bordures spécifiques */
+.custom-div {
+    padding-top: 50px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border: solid 2px var(--primary-color);
+}
+
+.custom-text {
+    font-size: 1.2em;
+    line-height: 1.6;
+    color: #333;
+    text-align: center;
+    max-width: 600px;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .custom-div {
+        margin: 30px 15px;
+        padding: 30px 15px;
+        border-radius: 15px 0 0 15px;
+    }
+
+    .custom-text {
+        font-size: 1em;
+    }
+}
+
+

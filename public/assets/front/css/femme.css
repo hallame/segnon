@@ -1,0 +1,131 @@
+
+.main-femme{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 12px;
+}
+.main-guinee h3{
+    font-weight:600;
+}
+
+.content-femme{
+    padding-top: 30px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+
+}
+.content-femme h5{
+    color: var(--primary-color);
+    font-size: 18px;
+    text-align: center;
+
+}
+
+.activite{
+    padding-top: 50px;
+}
+.activite .liste{
+    display: flex;
+}
+
+.activite h5{
+    color: var(--primary-color);
+    font-size: 18px;
+    text-align: center;
+
+}
+
+
+
+.info-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 50%;
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+  .info-card:hover {
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 20px;
+    width: 50%;
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+  }
+
+  .card-icon {
+    font-size: 1.2em;
+    color: #666;
+  }
+
+  .card-content {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .card-footer {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+  }
+
+  .card-description {
+    font-size: 0.9em;
+    color: #666;
+    font-style: italic;
+  }
+
+ /* Version mobile */
+@media (max-width: 767px) {
+  .liste {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espace entre les cartes */
+    padding: 0 15px; /* Marge latérale */
+    box-sizing: border-box;
+  }
+
+  .info-card:hover {
+    padding: 10px;
+    margin: 2px;
+  }
+
+
+
+  .info-card {
+    width: 100% !important; /* Force la pleine largeur */
+    margin-bottom: 15px; /* Espace supplémentaire entre les cartes */
+    padding: 10px;
+    margin: 2px;
+  }
+
+  /* Optionnel - Ajustement du texte */
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  .card-content {
+    font-size: 0.9rem;
+  }
+
+  .card-description {
+    font-size: 0.8rem;
+  }
+}
+

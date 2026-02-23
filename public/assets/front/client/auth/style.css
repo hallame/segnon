@@ -1,0 +1,257 @@
+:root {
+    --primary-color: #579459;
+    --secondary-color: #ffffff;
+    --accent-color: #e67e22;
+    --text-light: #ffffff;
+    --color-hover:#c56613;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+}
+.logo img{
+    height: 70px;
+    width: 70px;
+}
+
+
+.image-container {
+  flex: 1;
+  background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.3)), url('/assets/images/about.jpg') center/cover;
+  color: white;
+  padding: 2rem;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+
+
+.image-container h2{
+    font-size: 1.5rem;
+}
+
+.login-container {
+    flex: 1;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.login-box {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.logo i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+
+.input-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(74,144,226,0.2);
+    flex: 1;
+
+}
+
+.input-group label {
+    position: absolute;
+    left: 1rem;
+    transform: translateY(-10%);
+    color: #95a5a6;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    flex: 1;
+
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    left: 0.8rem;
+    font-size: 0.8rem;
+    background: white;
+    padding: 0 5px;
+    color: var(--primary-color);
+    flex: 1;
+
+}
+
+
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.links {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.links a {
+    color: #95a5a6;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.links a:hover {
+    color: var(--primary-color);
+}
+
+.social-login {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.social-btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.google {
+    background: #db4437;
+    color: white;
+}
+
+.facebook {
+    background: #3b5998;
+    color: white;
+}
+
+
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .login-container {
+        padding: 0.5rem 0.2rem;
+    }
+}
+
+
+.register-container {
+    flex: 1;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+
+.register-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+@media (max-width: 768px) {
+    .register-box {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-box {
+        padding: 1rem;
+        border-radius: 15px;
+    }
+}
+
+
+
+
+h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.input-row {
+    display: flex;
+    gap: 1rem;
+    flex: 1;
+}
+
+.phone-input {
+    flex: 1;
+}
+
+.auth-element {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .auth-element {
+    display: block;
+  }
+}

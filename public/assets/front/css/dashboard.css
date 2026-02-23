@@ -1,0 +1,401 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+:root {
+    --primary-color: #579459;
+    --secondary-color: #ffffff;
+    --accent-color: #e67e22;
+    --text-light: #ffffff;
+    --color-hover:#c56613; 
+}
+
+
+body {
+    background: #f5f6fa;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Sidebar */
+
+/* Modification du CSS existant */
+.sidebar {
+    background: #579459 !important;
+    padding: 1.5rem;
+    border-radius: 20px;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+}
+
+.nav-links a i {
+    width: 25px;
+    font-size: 1.1rem;
+}
+
+.logo {
+    color: #fff;
+    font-size: 1.4rem !important;
+    padding: 0 15px 20px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+/* Style pour l'élément actif */
+.nav-links a.active {
+    background: rgba(255, 255, 255, 0.15) !important;
+    font-weight: 500;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        padding: 1rem;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+    }
+}
+
+/* Main Content */
+.main-content {
+    display: grid;
+    gap: 2rem;
+}
+
+/* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 1rem;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--secondary);
+}
+
+/* Reservations */
+.reservations-list {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.reservation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.status.confirmed {
+    background: #e3fcef;
+    color: #00875a;
+}
+
+.status.pending {
+    background: #fffae6;
+    color: #ff991f;
+}
+
+/* Graphique */
+.chart-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+
+/* Modification des cartes de statistiques */
+.stats-grid {
+    gap: 2rem;
+}
+
+.stat-card {
+    color: white;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Réservations - Dégradé bleu */
+.reservations-stat {
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    box-shadow: 0 10px 20px rgba(74, 144, 226, 0.2);
+}
+
+/* Visites - Dégradé violet */
+.visits-stat {
+    background: linear-gradient(135deg, #6c5ce7 0%, #4b4bdf 100%);
+    box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+}
+
+/* Avis - Dégradé orange */
+.avis-stat {
+    background: linear-gradient(135deg, #ff9a44 0%, #ff6b6b 100%);
+    box-shadow: 0 10px 20px rgba(255, 107, 107, 0.2);
+}
+
+.stat-icon {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white;
+    backdrop-filter: blur(5px);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stat-info {
+    opacity: 0.9;
+    font-size: 0.9rem;
+    display: block;
+}
+
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .sidebar {
+        display: none;
+    }
+}
+
+
+[data-theme="dark"] {
+    --topbar-bg: #2c3e50;
+    --text-primary: #ffffff;
+    --border-color: #34495e;
+    --hover-bg: #34495e;
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: var(--topbar-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
+}
+
+.site-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.search-container {
+    position: relative;
+    width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 20px 12px 40px;
+    border-radius: 25px;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-primary);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.user-status {
+    font-size: 0.8rem;
+    position: relative;
+    padding-left: 15px;
+}
+
+.user-status.online::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: #27ae60;
+    border-radius: 50%;
+}
+
+.theme-toggle button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle button:hover {
+    background: var(--hover-bg);
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] .search-input {
+    border-color: #34495e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .search-container {
+        display: none;
+    }
+    
+    .topbar {
+        padding: 0 1rem;
+    }
+    
+    .user-name {
+        display: none;
+    }
+}
+
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+/* Ajoutez ce CSS pour la nouvelle carte */
+.revenue-stat {
+    background: linear-gradient(135deg, #6a11cb 0%, #fc6767 100%);
+    color: white;
+}
+
+.revenue-stat .stat-icon {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.revenue-stat .stat-info {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Optionnel : Ajoutez une ombre portée pour plus de profondeur */
+.stat-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
