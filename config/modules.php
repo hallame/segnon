@@ -1,168 +1,176 @@
 <?php
 
+/**
+ * Source de vérité unique : modules, rôles et permissions.
+ * Convention permissions : {ressource}.{action} (view-any, view, create, update, delete + extras).
+ * Niveaux de rôle : owner (tout), manager (tout sauf force-delete), editor (CRUD seul), finance (finance.self.*).
+ */
+
 return [
+
+    /*
+    | Permissions transversales (communes à tous les modules partenaire)
+    */
+    'transversal_global' => [
+        'rates.view', 'rates.update',
+        'availability.view', 'availability.update',
+        'finance.self.view', 'finance.self.export',
+        'payments.capture', 'payments.refund',
+        'account.members.invite', 'account.members.remove',
+        'account.profile.update', 'account.settings.update', 'account.modules.manage',
+        'submissions.create', 'reports.view', 'reports.export',
+        'api_keys.manage', 'webhooks.manage', 'media.upload', 'media.delete',
+    ],
+
+    /*
+    | Définition des modules : slug => [ name, roles, resources, transversal ]
+    */
     'modules' => [
-        // ==== HÔTEL ====
+
         'hotel' => [
-            'name' => 'Hôtellerie',
-            'is_core' => true,
-            'roles' => [
+            'name'        => 'Hôtel',
+            'description' => 'Gestion hôtelière : chambres, réservations',
+            'is_core'     => false,
+            'roles'       => [
                 'owner'   => 'hotel_owner',
                 'manager' => 'hotel_manager',
                 'editor'  => 'hotel_editor',
                 'finance' => 'hotel_finance',
             ],
             'resources' => [
-                'hotels'   => ['extras' => ['restore','force-delete','archive','unarchive','publish','unpublish','export']],
-                'rooms'    => ['extras' => ['restore','force-delete','export']],
-                'products' => ['extras' => ['restore','force-delete','archive','unarchive','publish','unpublish','import','export','media.upload','media.delete']],
-                'bookings' => ['extras' => ['manage','cancel','export']],
-                'orders'   => ['extras' => ['manage','refund','export']],
+                'hotels'   => ['extras' => ['restore', 'force-delete', 'archive', 'unarchive', 'publish', 'unpublish', 'export']],
+                'rooms'    => ['extras' => ['restore', 'force-delete', 'export']],
+                'bookings' => ['extras' => ['manage', 'cancel', 'export']],
+                'orders'   => ['extras' => ['manage', 'refund', 'export']],
             ],
-            'transversal' => [
-                'rates.view','rates.update',
-                'availability.view','availability.update',
-                'finance.self.view','finance.self.export',
-                'payments.capture','payments.refund',
-                'account.members.invite','account.members.remove',
-                'account.profile.update','account.settings.update','account.modules.manage',
-                'submissions.create',
-                'reports.view','reports.export',
-                'api_keys.manage','webhooks.manage',
-                'media.upload','media.delete',
-            ],
+            'transversal' => [],
         ],
 
-
-        // ==== SHOP ====
         'shop' => [
-            'name' => "Boutique d’art",
-            'is_core' => true,
-            'roles' => [
+            'name'        => 'Boutique',
+            'description' => 'E-commerce : produits, commandes',
+            'is_core'     => false,
+            'roles'       => [
                 'owner'   => 'shop_owner',
                 'manager' => 'shop_manager',
                 'editor'  => 'shop_editor',
                 'finance' => 'shop_finance',
             ],
             'resources' => [
-                'products' => ['extras' => ['restore','force-delete','archive','unarchive','publish','unpublish','import','export','media.upload','media.delete']],
-                'orders'   => ['extras' => ['manage','refund','export']],
-                'customers'=> ['extras' => ['export']],
+                'products'  => ['extras' => ['restore', 'force-delete', 'archive', 'unarchive', 'publish', 'unpublish', 'import', 'export', 'media.upload', 'media.delete']],
+                'customers' => ['extras' => ['export']],
+                'orders'    => ['extras' => ['manage', 'refund', 'export']],
             ],
-            'transversal' => [
-                'finance.self.view','finance.self.export',
-                'account.members.invite','account.members.remove',
-                'account.profile.update',
-                'reports.view','reports.export',
-                'media.upload','media.delete',
-            ],
+            'transversal' => [],
         ],
 
-        // ==== GUIDES ====
-        'guide' => [
-            'name' => 'Guide touristique',
-            'is_core' => true,
-            'roles' => [
-                'owner'   => 'guide_owner',
-                'manager' => 'guide_manager',
-                'editor'  => 'guide_editor',
-                'finance' => 'guide_finance',
-                // rôle “terrain”
-                'worker'  => 'guide_staff',
+        'expert' => [
+            'name'        => 'Expert',
+            'description' => 'Espace expert : articles, projets',
+            'is_core'     => false,
+            'roles'       => [
+                'owner'   => 'expert_owner',
+                'manager' => 'expert_manager',
+                'editor'  => 'expert_editor',
             ],
             'resources' => [
-                'guides'      => ['extras' => ['approve','suspend','export']],           // gestion profils guides
-                'tours'       => ['extras' => ['publish','unpublish','export']],         // circuits/visites
-                'assignments' => ['extras' => ['manage','reassign','cancel','export']],  // affectations
-                'schedules'   => ['extras' => ['update','export']],                      // plannings
-                'bookings'    => ['extras' => ['manage','cancel','export']],             // réservations guidées
+                'articles' => ['extras' => ['publish', 'unpublish', 'export']],
+                'projects' => ['extras' => ['assign', 'complete', 'export']],
             ],
-            'transversal' => [
-                'availability.view','availability.update',
-                'reports.view','reports.export',
-                // droits “self” pour le guide terrain :
-                'assignments.self.view','assignments.self.update',
-                'schedules.self.update','reports.create',
-            ],
+            'transversal' => ['reports.view', 'reports.export'],
         ],
 
-        // ==== RESTAURANT ====
         'restaurant' => [
-            'name'    => 'Restauration',
-            'is_core' => true,
-            'roles' => [
+            'name'        => 'Restaurant',
+            'description' => 'Menus, réservations, commandes',
+            'is_core'     => false,
+            'roles'       => [
                 'owner'   => 'restaurant_owner',
                 'manager' => 'restaurant_manager',
                 'editor'  => 'restaurant_editor',
                 'finance' => 'restaurant_finance',
-                'worker'  => 'restaurant_staff', // service / cuisine / runner
             ],
             'resources' => [
-                'restaurants' => ['extras' => ['publish','unpublish','archive','unarchive','export']],
-                'menus'       => ['extras' => ['publish','unpublish','export']],
-                'menu_items'  => ['extras' => ['import','export','media.upload','media.delete']],
-                'categories'  => ['extras' => ['export']],
-                'tables'      => ['extras' => ['export']],
-                'bookings'    => ['extras' => ['manage','cancel','export']],   // réservations de tables (garde "bookings" pour rester homogène)
-                'orders'      => ['extras' => ['manage','refund','export']],    // commandes sur place / click&collect
-                'deliveries'  => ['extras' => ['assign','cancel','export']],    // livraisons/prise en charge
-                'schedules'   => ['extras' => ['update','export']],             // horaires & shifts
-                'inventory'   => ['extras' => ['import','export']],             // stock/ingrédients
-                'modifiers'   => ['extras' => ['export']],                      // options, suppléments
+                'menus'         => ['extras' => ['publish', 'unpublish', 'export']],
+                'reservations'  => ['extras' => ['manage', 'cancel', 'export']],
+                'orders'        => ['extras' => ['manage', 'refund', 'export']],
             ],
-            'transversal' => [
-                'availability.view','availability.update',
-                'finance.self.view','finance.self.export',
-                'payments.capture','payments.refund',
-                'account.members.invite','account.members.remove',
-                'account.profile.update',
-                'reports.view','reports.export',
-                'media.upload','media.delete',
-
-                // droits "terrain" pour le staff (compatibles avec le template worker du seeder)
-                'assignments.self.view','assignments.self.update',
-                'schedules.self.update','reports.create',
-            ],
+            'transversal' => [],
         ],
 
-        // ==== ÉVÉNEMENTIEL (Organisateurs) ====
-        'event' => [
-            'name'    => 'Événementiel',
-            'is_core' => true,
-            'roles' => [
-                'owner'   => 'event_owner',
-                'manager' => 'event_manager',
-                'editor'  => 'event_editor',
-                'finance' => 'event_finance',
-                'worker'  => 'event_staff', // billetterie / contrôle / staff terrain
+        'artisan' => [
+            'name'        => 'Artisan',
+            'description' => 'Espace artisan',
+            'is_core'     => false,
+            'roles'       => [
+                'owner'   => 'artisan_owner',
+                'manager' => 'artisan_manager',
+                'editor'  => 'artisan_editor',
             ],
             'resources' => [
-                'events'       => ['extras' => ['publish','unpublish','archive','unarchive','export']],
-                'venues'       => ['extras' => ['export']],
-                'ticket_types' => ['extras' => ['export']],                     // tarifs & catégories
-                'tickets'      => ['extras' => ['export']],                     // tickets émis
-                'orders'       => ['extras' => ['manage','refund','export']],   // ventes billets
-                'attendees'    => ['extras' => ['export']],
-                'checkins'     => ['extras' => ['scan','export']],              // contrôle d’accès
-                'schedules'    => ['extras' => ['update','export']],            // programme / sessions
-                'speakers'     => ['extras' => ['export']],
-                'sponsors'     => ['extras' => ['export']],
-                'coupons'      => ['extras' => ['manage','export']],            // promos / codes
+                'products' => ['extras' => ['publish', 'export']],
+                'orders'   => ['extras' => ['manage', 'export']],
             ],
-            'transversal' => [
-                'availability.view','availability.update',
-                'finance.self.view','finance.self.export',
-                'payments.capture','payments.refund',
-                'account.members.invite','account.members.remove',
-                'account.profile.update',
-                'reports.view','reports.export',
-                'media.upload','media.delete',
+            'transversal' => [],
+        ],
 
-                // staff terrain (compatibles avec le template worker du seeder)
-                'assignments.self.view','assignments.self.update',
-                'schedules.self.update','reports.create',
+        'developer' => [
+            'name'        => 'Développeur',
+            'description' => 'Espace développeur / formateur',
+            'is_core'     => false,
+            'roles'       => [
+                'owner'   => 'developer_owner',
+                'manager' => 'developer_manager',
+                'editor'  => 'developer_editor',
             ],
+            'resources' => [
+                'courses' => ['extras' => ['publish', 'export']],
+                'assignments' => ['extras' => ['grade', 'export']],
+            ],
+            'transversal' => [],
+        ],
+        'student' => [
+            'name'        => 'Étudiant',
+            'description' => 'Espace étudiant',
+            'is_core'     => false,
+            'roles'       => [
+                'owner'   => 'student_owner',
+                'editor'  => 'student_editor',
+            ],
+            'resources' => [
+                'enrollments' => ['extras' => ['export']],
+                'submissions' => ['extras' => ['export']],
+                'courses' => ['extras' => ['publish', 'export']],
+                'assignments' => ['extras' => ['grade', 'export']],
+            ],
+            'transversal' => ['reports.view'],
         ],
 
     ],
+    /*
+    | Admin plateforme (rôles hors scope compte partenaire)
+    */
+    'platform' => [
+        'permissions' => [
+            'platform.view', 'platform.manage',
+            'content.review', 'content.publish',
+            'accounts.verify', 'accounts.manage',
+            'finance.view', 'finance.payouts.manage',
+            'support.tickets.manage',
+        ],
+        'roles' => [
+            'super_admin'   => null, // null = toutes les perms (admin + partenaire)
+            'developer'     => [],
+            'moderator'     => ['platform.view', 'content.review', 'content.publish'],
+            'finance_admin' => ['platform.view', 'finance.view', 'finance.payouts.manage'],
+            'support'       => ['platform.view', 'support.tickets.manage'],
+        ],
+    ],
+
+    
+    /*
+    | Tables à lier au compte démo (colonnes account_id) quand SEED_DEMO_ACCOUNT=true
+    */
+    'demo_assign_tables' => ['hotels', 'products'],
+
 ];

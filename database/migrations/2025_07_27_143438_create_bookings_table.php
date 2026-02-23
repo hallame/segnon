@@ -49,8 +49,6 @@ return new class extends Migration {
 
             $table->foreignId('language_id')->default(1)->constrained('languages')->cascadeOnDelete();
 
-            $table->foreignId('assigned_guide_id')->nullable()->constrained('guides')->nullOnDelete();
-            $table->index(['assigned_guide_id']);
 
             // Index utiles
             $table->index(['check_in', 'check_out']);

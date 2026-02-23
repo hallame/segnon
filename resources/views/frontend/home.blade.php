@@ -7,78 +7,7 @@
 
     <!-- HERO -->
     <section class="relative overflow-hidden bg-slate-950 text-slate-50 min-h-[95dvh] flex items-center">
-        {{-- Tissages / halos --}}
-        {{-- <div class="pointer-events-none absolute inset-0 opacity-80">
-            <div class="absolute -left-[10vw] -top-[10vw] h-[20vw] w-[20vw] rounded-full bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.45),transparent_65%)]"></div>
-            <div class="absolute right-[-15vw] top-[5vw] h-[35vw] w-[25vw] rotate-12 bg-[linear-gradient(135deg,rgba(248,250,252,0.08)_0%,rgba(248,250,252,0.02)_40%,transparent_100%)]"></div>
-            <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent"></div>
-        </div> --}}
-
-        {{-- Effet Neon Grid Futuriste --}}
-        {{-- <div class="pointer-events-none absolute inset-0 overflow-hidden bg-slate-950">
-
-
-            <!-- Lignes de connexion animées -->
-            <div class="absolute inset-0">
-                <svg class="w-full h-full opacity-30">
-                    <defs>
-                        <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:rgba(34,197,94,0.8);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:rgba(56,189,248,0.8);stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-
-                    <!-- Lignes diagonales animées -->
-                    <line x1="20%" y1="20%" x2="40%" y2="40%" stroke="url(#neonGradient)" stroke-width="1" stroke-dasharray="5,5">
-                        <animate attributeName="stroke-dashoffset" from="0" to="20" dur="2s" repeatCount="indefinite" />
-                    </line>
-                    <line x1="60%" y1="30%" x2="80%" y2="50%" stroke="url(#neonGradient)" stroke-width="1" stroke-dasharray="5,5">
-                        <animate attributeName="stroke-dashoffset" from="10" to="30" dur="3s" repeatCount="indefinite" />
-                    </line>
-                </svg>
-            </div>
-            <!-- Éclats de particules -->
-            <div class="absolute top-1/3 left-1/3 w-4 h-4 rounded-full bg-cyan-400/50 animate-pulse"
-                style="box-shadow: 0 0 20px 10px rgba(34, 197, 94, 0.3);"></div>
-            <div class="absolute bottom-1/3 right-1/3 w-4 h-4 rounded-full bg-amber-400/50 animate-pulse"
-                style="animation-delay: 1s; box-shadow: 0 0 20px 10px rgba(251, 191, 36, 0.3);"></div>
-
-            <!-- Gradient de fondu bas -->
-            <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-        </div>
-
-        <style>
-            @keyframes ping-slow {
-                0% {
-                    transform: translate(-50%, -50%) scale(0.8);
-                    opacity: 0.7;
-                }
-                70%, 100% {
-                    transform: translate(-50%, -50%) scale(2);
-                    opacity: 0;
-                }
-            }
-
-            .animate-ping-slow {
-                animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
-            }
-
-            /* Effet de scan line */
-            .scan-line {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.5), transparent);
-                animation: scan 4s linear infinite;
-            }
-
-            @keyframes scan {
-                0% { top: 0%; }
-                100% { top: 100%; }
-            }
-        </style> --}}
+       
 
         {{-- Effet 3D Minimaliste & Élégant --}}
         <div class="pointer-events-none absolute inset-0 overflow-hidden">

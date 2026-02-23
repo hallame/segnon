@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
 class Category extends Model {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'status', 'language_id', 'slug', 'type', 'model', 'position', 'video'];
+
+    protected $fillable = ['name', 'description', 'status', 'slug', 'position', 'video'];
+
 
     public function products() {
         return $this->hasMany(Product::class, 'category_id');
     }
-
-
     
     public function activeProducts() {
         return $this->hasMany(Product::class, 'category_id')
@@ -28,4 +29,6 @@ class Category extends Model {
     public function events() {
         return $this->hasMany(Event::class);
     }
+
+
 }

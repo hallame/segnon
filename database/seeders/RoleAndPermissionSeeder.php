@@ -2,282 +2,298 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Account;
+use App\Models\Module;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\PermissionRegistrar;
-use App\Models\{User, Account, Module, Product, ProductSku};
-use App\Support\Platform;
-use Illuminate\Support\Facades\Schema;
-use App\Models\{Hotel, Room};
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
-class RoleAndPermissionSeeder extends Seeder {
+/**
+ * Seeder unique : structure (modules, rôles, permissions) + compte plateforme + optionnel démo.
+ * Source de vérité : config/modules.php
+ */
+class RoleAndPermissionSeeder extends Seeder
+{
+    private const GUARD = 'web';
 
     public function run(): void {
-        // IMPORTANT: Spatie teams activé et team_foreign_key = 'account_id' dans config/permission.php
+        DB::transaction(function () {
+            $this->resetCache();
+            $this->seedStructure();
+            $this->seedPlatformAccount();
+            if ($this->demoEnabled()) {
+                $this->seedDemoAccount();
+            }
+        });
+    }
+
+    private function resetCache(): void
+    {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
+    }
 
-        // ====== Permissions PARTENAIRES (scopées par account/teams) ======
-        $crud = fn(string $r) => ["$r.view-any","$r.view","$r.create","$r.update","$r.delete"];
-        /**
-         * Définition des ressources métiers + actions additionnelles.
-         * Ajoute ici toute nouvelle ressource/table (ex: 'tours', 'menus', etc.).
-         */
-        $resourceExtras = [
-            // Hôtellerie
-            'hotels'   => ['restore','force-delete','archive','unarchive','publish','unpublish','export'],
-            'rooms'    => ['restore','force-delete','export'],
+    private function teamKey(): string
+    {
+        return config('permission.column_names.team_foreign_key', 'account_id');
+    }
 
-            // Boutique d'art
-            'products' => ['restore','force-delete','archive','unarchive','publish','unpublish','import','export','media.upload','media.delete'],
-            'customers'=> ['export'], // facultatif
+    private function seedStructure(): void {
+        $teamKey = $this->teamKey();
+        $transversalGlobal = config('modules.transversal_global', []);
+        $this->createPermissions($transversalGlobal);
 
-            // Flux transactionnels
-            'orders'   => ['manage','refund','export'],      // manage = confirmer, annuler, marquer payé...
-            'bookings' => ['manage','cancel','export'],      // choisis "bookings" OU "reservations" et tiens-toi à un seul
-        ];
+        $allPartnerPerms = $transversalGlobal;
 
-        // Génération CRUD + extras
-        $partnerPerms = collect($resourceExtras)->flatMap(function (array $extras, string $r) use ($crud) {
-                return array_merge($crud($r), array_map(fn($e) => "$r.$e", $extras));
-            })
-            // Transverses (hors ressource)
-            ->merge([
-                'rates.view','rates.update',
-                'availability.view','availability.update',
-
-                // Finance (self = limité à son compte)
-                'finance.self.view','finance.self.export',
-                'payments.capture','payments.refund',
-
-                // Espace partenaire
-                'account.members.invite','account.members.remove',
-                'account.profile.update','account.settings.update','account.modules.manage',
-
-                // Modération (soumissions à valider)
-                'submissions.create',
-
-                // Rapports & intégrations
-                'reports.view','reports.export',
-                'api_keys.manage','webhooks.manage',
-
-                // Média global (si besoin hors produit)
-                'media.upload','media.delete',
-            ])
-            ->unique()
-            ->values()
-            ->all();
-
-        // Upsert
-        foreach ($partnerPerms as $p) {
-            Permission::firstOrCreate(['name' => $p, 'guard_name' => 'web']);
-        }
-
-
-        // ====== Rôles partenaires ======
-        $hotelOwner   = Role::firstOrCreate(['name' => 'hotel_owner',   'guard_name' => 'web']);
-        $hotelManager = Role::firstOrCreate(['name' => 'hotel_manager', 'guard_name' => 'web']);
-        $hotelEditor  = Role::firstOrCreate(['name' => 'hotel_editor',  'guard_name' => 'web']);
-        $hotelFinance = Role::firstOrCreate(['name' => 'hotel_finance', 'guard_name' => 'web']);
-
-        $hotelOwner->givePermissionTo([
-            'hotels.view-any','hotels.view','hotels.create','hotels.update','hotels.delete',
-            'rooms.view-any','rooms.view','rooms.create','rooms.update','rooms.delete',
-            'products.view-any','products.view','products.create','products.update','products.delete',
-            'rates.update','availability.update',
-            'bookings.view','bookings.manage',
-            'orders.view','orders.manage',
-            'finance.self.view','finance.self.export',
-            'account.members.invite','account.members.remove','account.profile.update',
-        ]);
-
-        $hotelManager->givePermissionTo([
-            'hotels.view-any','hotels.view','hotels.update',
-            'rooms.view-any','rooms.view','rooms.create','rooms.update',
-            'products.view-any','products.view','products.create','products.update',
-            'rates.update','availability.update',
-            'bookings.view','bookings.manage',
-            'orders.view','orders.manage',
-            'finance.self.view',
-        ]);
-
-        $hotelEditor->givePermissionTo([
-            'hotels.view-any','hotels.view',
-            'rooms.view-any','rooms.view','rooms.create','rooms.update',
-            'products.view-any','products.view',
-        ]);
-
-        $hotelFinance->givePermissionTo(['finance.self.view','finance.self.export']);
-
-        // Shop
-        $shopOwner   = Role::firstOrCreate(['name' => 'shop_owner',   'guard_name' => 'web']);
-        $shopManager = Role::firstOrCreate(['name' => 'shop_manager', 'guard_name' => 'web']);
-        $shopEditor  = Role::firstOrCreate(['name' => 'shop_editor',  'guard_name' => 'web']);
-        $shopFinance = Role::firstOrCreate(['name' => 'shop_finance', 'guard_name' => 'web']);
-
-        $shopOwner->givePermissionTo([
-            'products.view-any','products.view','products.create','products.update','products.delete',
-            'orders.view','orders.manage',
-            'finance.self.view','finance.self.export',
-            'account.members.invite','account.members.remove','account.profile.update',
-        ]);
-        $shopManager->givePermissionTo([
-            'products.view-any','products.view','products.create','products.update',
-            'orders.view','orders.manage',
-            'finance.self.view',
-        ]);
-        $shopEditor->givePermissionTo([
-            'products.view-any','products.view','products.create','products.update',
-        ]);
-        $shopFinance->givePermissionTo(['finance.self.view','finance.self.export']);
-
-        // ====== Bloc ADMIN plateforme (global, hors scope de compte) ======
-        $adminPerms = [
-            'platform.view','platform.manage',
-            'content.review','content.publish',
-            'accounts.verify','accounts.manage',
-            'finance.view','finance.payouts.manage',
-            'support.tickets.manage',
-        ];
-        foreach ($adminPerms as $p) {
-            Permission::firstOrCreate(['name' => $p, 'guard_name' => 'web']);
-        }
-
-        $super     = Role::firstOrCreate(['name' => 'super_admin',   'guard_name' => 'web']);
-        $moderator = Role::firstOrCreate(['name' => 'moderator',     'guard_name' => 'web']);
-        $finance   = Role::firstOrCreate(['name' => 'finance_admin', 'guard_name' => 'web']);
-        $support   = Role::firstOrCreate(['name' => 'support',       'guard_name' => 'web']);
-        $dev       = Role::firstOrCreate(['name' => 'developer',     'guard_name' => 'web']);
-
-        // Le super admin a tout (admin + partenaire)
-        $super->givePermissionTo(array_merge($adminPerms, $partnerPerms));
-        $moderator->givePermissionTo(['platform.view','content.review','content.publish']);
-        $finance->givePermissionTo(['platform.view','finance.view','finance.payouts.manage']);
-        $support->givePermissionTo(['platform.view','support.tickets.manage']);
-        // 'developer' n'obtient rien ici : le bypass se fait via Gate::before + config/mega.php
-
-        // ====== Démo / Comptes & utilisateurs seedés via ENV ======
-
-        // 0) Compte "Platform" pour scoper les rôles admin globaux
-        $platform = Account::firstOrCreate(['name' => config('platform.account_name', 'Platform')]);
-        // $platform = Account::firstOrCreate(['name' => config('platform.account_name')]);
-        // reset le cache d’ID si besoin
-        Cache::forget('platform_account_id');
-
-        // 1) Super Admin (scopé sur Platform)
-        $superUser = User::firstOrCreate(
-            ['email' => env('ADMIN_EMAIL', 'admin@zalymerveille.com')],
-            ['firstname' => 'Super', 'lastname' => 'Admin', 'status' => 1, 'password' => bcrypt(env('ADMIN_PASSWORD','u4esgfw4588@#scwcwDE'))],
-        );
-        $superUser->email_verified_at = now(); $superUser->save();
-        // rattacher au compte Platform + default
-        $superUser->accounts()->syncWithoutDetaching([$platform->id => ['is_owner' => true]]);
-        if (empty($superUser->default_account_id)) {
-            $superUser->default_account_id = $platform->id;
-            $superUser->save();
-        }
-
-        // assigner le rôle super_admin dans la team Platform (PAS de NULL)
-        app(PermissionRegistrar::class)->setPermissionsTeamId($platform->id);
-        $superUser->assignRole('super_admin');
-
-
-        // 2) Developer (Mega Access) – aussi scopé sur Platform
-        if ($devEmail = env('DEV_EMAIL', 'ever21321@gmail.com')) {
-            $devUser = User::firstOrCreate(
-                ['email' => $devEmail],
-                ['firstname' => 'Ever', 'lastname' => 'Never', 'status' => 1, 'password' => bcrypt(env('DEV_PASSWORD','u4esgfw4588@#scDE'))]
+        foreach (config('modules.modules', []) as $slug => $def) {
+            $module = Module::updateOrCreate(
+                ['slug' => $slug],
+                [
+                    'name'        => $def['name'],
+                    'description' => $def['description'] ?? null,
+                    'status'      => true,
+                    'is_core'     => $def['is_core'] ?? false,
+                ]
             );
-            $devUser->email_verified_at = now();  // ✅
-            $devUser->save();
 
-            $devUser->accounts()->syncWithoutDetaching([$platform->id => ['is_owner' => false]]);
-            app(PermissionRegistrar::class)->setPermissionsTeamId($platform->id);
-            $devUser->assignRole('developer'); // les “super pouvoirs” dev passent par Gate::before + config/mega.php
+            $perms = $this->buildModulePermissions($def);
+            $this->createPermissions($perms);
+            $allPartnerPerms = array_merge($allPartnerPerms, $perms);
+
+            $modulePerms = array_values(array_unique(array_merge($perms, $def['transversal'] ?? [])));
+            $ownerPerms = array_values(array_unique(array_merge($modulePerms, $transversalGlobal)));
+
+            $roleModels = [];
+            foreach ($def['roles'] ?? [] as $level => $roleName) {
+                $role = Role::firstOrCreate(
+                    [
+                        'name'       => $roleName,
+                        'guard_name' => self::GUARD,
+                        $teamKey     => null,
+                    ],
+                    ['name' => $roleName, 'guard_name' => self::GUARD, $teamKey => null]
+                );
+                $roleModels[$level] = $role;
+
+                DB::table('module_roles')->updateOrInsert(
+                    ['module_id' => $module->id, 'role_id' => $role->id],
+                    ['level' => $level, 'updated_at' => now(), 'created_at' => DB::raw('COALESCE(created_at, NOW())')]
+                );
+            }
+
+            $this->assignPermissionsByLevel($roleModels, $ownerPerms, $modulePerms);
         }
 
+        $this->seedPlatformRoles(array_values(array_unique($allPartnerPerms)));
+        $this->resetCache();
+    }
 
-        // 3) Compte partenaire de démo (scopé par account)
-        $acc = Account::firstOrCreate(['name' => env('DEMO_ACCOUNT_NAME','Demo Partner')]);
+    private function buildModulePermissions(array $def): array {
+        $perms = [];
+        foreach ($def['resources'] ?? [] as $resource => $opts) {
+            $perms[] = "{$resource}.view-any";
+            $perms[] = "{$resource}.view";
+            $perms[] = "{$resource}.create";
+            $perms[] = "{$resource}.update";
+            $perms[] = "{$resource}.delete";
+            foreach (($opts['extras'] ?? []) as $extra) {
+                $perms[] = "{$resource}.{$extra}";
+            }
+        }
+        return array_merge($perms, $def['transversal'] ?? []);
+    }
 
-        // Activer TOUS les modules existants pour ce compte
-        $allModuleIds = \App\Models\Module::pluck('id')->all();
-        $acc->modules()->syncWithoutDetaching(
-            collect($allModuleIds)->mapWithKeys(
-                fn($id) => [$id => ['is_enabled' => true, 'activated_at' => now()]]
-            )->all()
+    private function createPermissions(array $names): void {
+        foreach (array_unique($names) as $name) {
+            Permission::firstOrCreate(
+                ['name' => $name, 'guard_name' => self::GUARD],
+                ['name' => $name, 'guard_name' => self::GUARD]
+            );
+        }
+    }
+
+    /** @param array<string, Role> $roleModels */
+    private function assignPermissionsByLevel(array $roleModels, array $ownerPerms, array $modulePerms): void {
+        $all = collect($ownerPerms);
+        $manager = $all->reject(fn (string $p) => str_ends_with($p, '.force-delete'))->values()->all();
+        $editor = collect($modulePerms)->filter(fn (string $p) => (bool) preg_match('#\.(view-any|view|create|update)$#', $p))->values()->all();
+        $finance = ['finance.self.view', 'finance.self.export'];
+
+        if (isset($roleModels['owner'])) {
+            $roleModels['owner']->syncPermissions($ownerPerms);
+        }
+        if (isset($roleModels['manager'])) {
+            $roleModels['manager']->syncPermissions($manager);
+        }
+        if (isset($roleModels['editor'])) {
+            $roleModels['editor']->syncPermissions($editor);
+        }
+        if (isset($roleModels['finance'])) {
+            $roleModels['finance']->syncPermissions($finance);
+        }
+    }
+
+    private function seedPlatformRoles(array $allPartnerPerms): void {
+        $platform = config('modules.platform', []);
+        $adminPerms = $platform['permissions'] ?? [];
+        $this->createPermissions($adminPerms);
+
+        $teamKey = $this->teamKey();
+        $super = Role::firstOrCreate(
+            ['name' => 'super_admin', 'guard_name' => self::GUARD, $teamKey => null],
+            ['name' => 'super_admin', 'guard_name' => self::GUARD, $teamKey => null]
+        );
+        $super->syncPermissions(array_values(array_unique(array_merge($adminPerms, $allPartnerPerms))));
+
+        foreach ($platform['roles'] ?? [] as $roleName => $permissionList) {
+            if ($roleName === 'super_admin') {
+                continue;
+            }
+            $role = Role::firstOrCreate(
+                ['name' => $roleName, 'guard_name' => self::GUARD, $teamKey => null],
+                ['name' => $roleName, 'guard_name' => self::GUARD, $teamKey => null]
+            );
+            if ($permissionList !== null && is_array($permissionList)) {
+                $role->syncPermissions($permissionList);
+            }
+        }
+    }
+
+    private function seedPlatformAccount(): void {
+        $platform = Account::firstOrCreate(
+            ['name' => config('platform.account_name', 'Platform')],
+            ['slug' => 'platform', 'is_verified' => true, 'status' => Account::STATUS_ACTIVE]
         );
 
-        // User propriétaire de démo
-        $owner = User::firstOrCreate(
-            ['email' => env('DEMO_OWNER_EMAIL','dev@dev.com')],
-            ['firstname' => 'Owner', 'lastname' => 'Dev', 'password' => bcrypt('password')]
+        $this->createPlatformUser(
+            env('ADMIN_EMAIL', env('PLATFORM_OWNER_EMAIL', 'admin@example.com')),
+            env('ADMIN_FIRSTNAME', 'Super'),
+            env('ADMIN_LASTNAME', 'Admin'),
+            env('ADMIN_PASSWORD', 'password'),
+            $platform,
+            ['super_admin'],
+            true
         );
-        $owner->email_verified_at = now();
-        $owner->save();
 
-        // Lier comme OWNER du compte
-        $owner->accounts()->syncWithoutDetaching([$acc->id => ['is_owner' => true]]);
+        if ($devEmail = env('DEV_EMAIL')) {
+            $this->createPlatformUser(
+                $devEmail,
+                env('DEV_FIRSTNAME', 'Dev'),
+                env('DEV_LASTNAME', 'User'),
+                env('DEV_PASSWORD', 'password'),
+                $platform,
+                ['developer'],
+                false
+            );
+        }
 
-        // Récupérer tous les rôles "owner" mappés aux modules (module_roles.level='owner')
-        $ownerRoleNames = \App\Models\Module::with(['roles' => fn($q) => $q->wherePivot('level','owner')])
-            ->whereIn('id', $allModuleIds)
-            ->get()
-            ->flatMap(fn($m) => $m->roles->pluck('name'))
-            ->unique()
-            ->values()
-            ->all();
-
-        // Assigner ces rôles dans la TEAM (= account) du partenaire
-        app(PermissionRegistrar::class)->setPermissionsTeamId($acc->id);
+        $moduleIds = Module::pluck('id')->all();
+        $ownerRoleNames = Module::getOwnerRoleNamesForModuleIds($moduleIds);
         if (!empty($ownerRoleNames)) {
+            app(PermissionRegistrar::class)->setPermissionsTeamId($platform->id);
+            $platformUser = User::where('email', env('ADMIN_EMAIL', env('PLATFORM_OWNER_EMAIL', 'admin@example.com')))->first();
+            if ($platformUser) {
+                $platformUser->assignRole($ownerRoleNames);
+            }
+        }
+
+        Cache::forget('platform_account_id');
+    }
+
+    private function createPlatformUser(
+        string $email,
+        string $firstname,
+        string $lastname,
+        string $password,
+        Account $platform,
+        array $roles,
+        bool $isOwner
+    ): void {
+        $user = User::firstOrCreate(
+            ['email' => $email],
+            [
+                'firstname'         => $firstname,
+                'lastname'          => $lastname,
+                'password'          => bcrypt($password),
+                'email_verified_at' => now(),
+                'status'           => User::STATUS_ACTIVE,
+            ]
+        );
+
+        $user->accounts()->syncWithoutDetaching([$platform->id => ['is_owner' => $isOwner]]);
+        if (empty($user->default_account_id)) {
+            $user->default_account_id = $platform->id;
+            $user->save();
+        }
+
+        app(PermissionRegistrar::class)->setPermissionsTeamId($platform->id);
+        foreach ($roles as $role) {
+            $user->assignRole($role);
+        }
+    }
+
+    private function demoEnabled(): bool
+    {
+        return filter_var(env('SEED_DEMO_ACCOUNT', false), FILTER_VALIDATE_BOOLEAN);
+    }
+
+    private function seedDemoAccount(): void
+    {
+        $account = Account::firstOrCreate(
+            ['name' => env('DEMO_ACCOUNT_NAME', 'Demo Partner')],
+            ['is_verified' => true, 'status' => Account::STATUS_ACTIVE]
+        );
+
+        $moduleIds = Module::pluck('id')->all();
+        if (!empty($moduleIds)) {
+            $account->modules()->syncWithoutDetaching(
+                collect($moduleIds)->mapWithKeys(
+                    fn ($id) => [$id => ['is_enabled' => true, 'activated_at' => now()]]
+                )->all()
+            );
+        }
+
+        $owner = User::firstOrCreate(
+            ['email' => env('DEMO_OWNER_EMAIL', 'owner@demo.com')],
+            [
+                'firstname'         => env('DEMO_OWNER_FIRSTNAME', 'Demo'),
+                'lastname'          => env('DEMO_OWNER_LASTNAME', 'Owner'),
+                'password'          => bcrypt(env('DEMO_OWNER_PASSWORD', 'password')),
+                'email_verified_at' => now(),
+                'status'           => User::STATUS_ACTIVE,
+            ]
+        );
+
+        $owner->accounts()->syncWithoutDetaching([$account->id => ['is_owner' => true]]);
+        if (empty($owner->default_account_id)) {
+            $owner->default_account_id = $account->id;
+            $owner->save();
+        }
+
+        $ownerRoleNames = Module::getOwnerRoleNamesForModuleIds($moduleIds);
+        if (!empty($ownerRoleNames)) {
+            app(PermissionRegistrar::class)->setPermissionsTeamId($account->id);
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
             $owner->assignRole($ownerRoleNames);
         }
 
+        $this->assignExistingDataToAccount($account);
+    }
 
-        if (Schema::hasTable('hotels') && Schema::hasColumn('hotels','account_id')) {
-            $available = Hotel::whereNull('account_id')->count();
-
-            if ($available > 0) {
-                $take = min($available, random_int(3, 10));
-                $hotelIds = Hotel::whereNull('account_id')
-                    ->inRandomOrder()
-                    ->take($take)
-                    ->pluck('id');
-
-                // Assigner ces hôtels au compte de démo
-                Hotel::whereIn('id', $hotelIds)->update(['account_id' => $acc->id]);
-
-                // Assigner leurs rooms si la colonne existe (et si non déjà scopées)
-                if (Schema::hasTable('rooms') && Schema::hasColumn('rooms','account_id')) {
-                    Room::whereIn('hotel_id', $hotelIds)
-                        ->whereNull('account_id')
-                        ->update(['account_id' => $acc->id]);
-                }
+    private function assignExistingDataToAccount(Account $account): void {
+        $tables = config('modules.demo_assign_tables', ['hotels', 'products']);
+        foreach ($tables as $table) {
+            if (!Schema::hasTable($table) || !Schema::hasColumn($table, 'account_id')) {
+                continue;
+            }
+            $ids = DB::table($table)->whereNull('account_id')->inRandomOrder()->limit(10)->pluck('id');
+            if ($ids->isNotEmpty()) {
+                DB::table($table)->whereIn('id', $ids)->update(['account_id' => $account->id]);
             }
         }
-
-        if (Schema::hasTable('products') && Schema::hasColumn('products','account_id')) {
-            $available = Product::whereNull('account_id')->count();
-            if ($available > 0) {
-                $take = min($available, random_int(5, 10));
-                $productIds = Product::whereNull('account_id')
-                    ->inRandomOrder()
-                    ->take($take)
-                    ->pluck('id');
-                // Assigner ces produits au compte de démo
-                Product::whereIn('id', $productIds)->update(['account_id' => $acc->id]);
-                // Assigner leurs ProductSku si la colonne existe (et si non déjà scopées)
-                if (Schema::hasTable('rooms') && Schema::hasColumn('product_skus','account_id')) {
-                    ProductSku::whereIn('product_id', $productIds)
-                        ->whereNull('account_id')
-                        ->update(['account_id' => $acc->id]);
-                }
-            }
-        }
-
     }
 }
-

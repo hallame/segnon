@@ -151,9 +151,7 @@ class Event extends Model implements HasMedia {
         return $this->belongsTo(Category::class);
     }
 
-    public function country(){
-        return $this->belongsTo(Country::class);
-    }
+
 
     public function reviews(){
         return $this->morphMany(Review::class, 'reviewable');

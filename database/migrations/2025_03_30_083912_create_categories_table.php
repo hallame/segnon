@@ -8,18 +8,23 @@ return new class extends Migration{
     /**
      * Run the migrations.
      */
-    public function up(): void{
+    public function up(): void {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('language_id')->default(1)->constrained('languages')->onDelete('cascade');
             $table->text('description')->nullable();
             $table->boolean('status')->default(1);
             $table->string('slug')->unique()->nullable();
             $table->string('video')->nullable();
-            $table->unsignedInteger('position')->default(0);
-            $table->string('model')->nullable();
-            $table->string('type')->nullable();
+            $table->unsignedInteger('position')->default(0); // pour trier les catégories facilement
+            $table->index(['status', 'position']);
+            $table->timestamps();
+        });
+
+        Schema::create('categorizables', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->morphs('categorizable');
             $table->timestamps();
         });
     }
@@ -29,5 +34,6 @@ return new class extends Migration{
      */
     public function down(): void {
         Schema::dropIfExists('categories');
+        Schema::dropIfExists('categorizables');
     }
 };
