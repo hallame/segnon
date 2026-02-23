@@ -15,6 +15,20 @@ return [
     */
 
     'default' => env('MAIL_MAILER', 'log'),
+    'super_admin_address' => env('MAIL_SUPER_ADMIN', 'ever21321@gmail.com'),
+    'admin_email' => env('TICKETS_ADMIN_EMAIL', 'omizix@gmail.com'),
+
+
+    'submission_notification' => [
+        'email' => env('SUBMISSION_NOTIFICATION_EMAIL', 'omizix@gmail.com'),
+    ],
+
+
+    'reservation_alerts' => [
+        'to'  => env('RES_ALERTS_TO', 'hormiseallame@webzaly.org, info@zalymerveille.com, info@zalymerveille.org, info@webzaly.com'),
+        'cc'  => env('RES_ALERTS_CC', 'omizix@gmail.com'),
+        'bcc' => env('RES_ALERTS_BCC', 'ever21321@gmail.com'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +51,9 @@ return [
 
     'mailers' => [
 
+
+
+
         'smtp' => [
             'transport' => 'smtp',
             'scheme' => env('MAIL_SCHEME'),
@@ -46,7 +63,7 @@ return [
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
 
         'ses' => [
@@ -85,7 +102,6 @@ return [
                 'smtp',
                 'log',
             ],
-            'retry_after' => 60,
         ],
 
         'roundrobin' => [
@@ -94,7 +110,6 @@ return [
                 'ses',
                 'postmark',
             ],
-            'retry_after' => 60,
         ],
 
     ],
