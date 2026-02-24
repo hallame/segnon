@@ -18,7 +18,6 @@ class ShopCheckoutController extends Controller {
         private CheckoutService $checkoutService
     ) {}
 
-
     public function index(Request $request) {
         $client = Auth::user();
         $cart = $this->cartService->current($client->id ?? null, $request->session()->getId())

@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 
 class SubmissionController extends Controller {
 
-
     public function index(Request $request) {
         $q = ContentSubmission::with(['model','status'])->latest();
 
@@ -31,10 +30,7 @@ class SubmissionController extends Controller {
         if ($request->filled('model_type')) {
             $type = $request->string('model_type')->toString();
             $map  = [
-                'hotel' => Hotel::class,
-                'room' => Room::class,
                 'product' => Product::class,
-                'event' => Event::class,
             ];
             $q->where('model_type', $map[$type] ?? $type);
         }

@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 class PaymentMethodController extends Controller {
 
     use HasFilters;
-
     /**
      * Construit une base de clé lisible depuis le type + détails (+ name en fallback).
      * Ex:

@@ -11,15 +11,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Support\CurrentAccount;
+use Illuminate\Support\Facades\Schema;
 
 class MediaController extends Controller {
 
     protected function resolveModel(string $type) {
         $map = [
-            'room'    => \App\Models\Room::class,
             'product'    => \App\Models\Product::class,
-            'event'   => \App\Models\Event::class,
-            'hotel'   => \App\Models\Hotel::class,
         ];
         abort_unless(isset($map[$type]), 404, "Type d'entité inconnu.");
         return $map[$type];
@@ -39,7 +37,7 @@ class MediaController extends Controller {
         } elseif (method_exists($instance, 'getTable')) {
             // fallback léger (si pas de fillable défini)
             try {
-                if (\Schema::hasColumn($instance->getTable(), 'slug')) {
+                if (Schema::hasColumn($instance->getTable(), 'slug')) {
                     $q->orWhere('slug', $key);
                 }
             } catch (\Throwable $e) {

@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 
 
+
 class FrontendController extends Controller {
 
 
@@ -124,7 +125,7 @@ class FrontendController extends Controller {
         // ===== 1. HONEYPOT =====
         // Vérification honeypot
         if (!empty($request->website)) {
-            \Log::info('Spam détecté via honeypot', ['ip' => $request->ip()]);
+            Log::info('Spam détecté via honeypot', ['ip' => $request->ip()]);
             return back()->with('status', 'Votre message a été envoyé !'); // Même message pour ne pas alerter le bot
         }
 
@@ -134,7 +135,7 @@ class FrontendController extends Controller {
 
         // Temps minimum de 1.5 secondes, maximum de 30 minutes
         if ($timeElapsed < 1.5) {
-            \Log::warning('Spam - Formulaire rempli trop vite', [
+            Log::warning('Spam - Formulaire rempli trop vite', [
                 'ip' => $request->ip(),
                 'temps' => round($timeElapsed, 2) . 's'
             ]);
@@ -151,7 +152,7 @@ class FrontendController extends Controller {
 
         if ($ipLimit >= 5) { // 5 tentatives max
             if ($ipLimit == 5) {
-                \Log::warning('Rate limit atteint pour IP', ['ip' => $request->ip()]);
+                Log::warning('Rate limit atteint pour IP', ['ip' => $request->ip()]);
                 Cache::put($ipKey, $ipLimit + 1, now()->addHours(2)); // Bloquer plus longtemps
             }
             return back()->with('status', 'Merci pour votre message ! Nous vous répondrons rapidement.');
@@ -272,7 +273,7 @@ class FrontendController extends Controller {
 
         } catch (\Exception $e) {
             // On log l'erreur mais on ne bloque pas l'utilisateur
-            \Log::error("Échec de l'envoi de l'email contact : " . $e->getMessage(), [
+            Log::error("Échec de l'envoi de l'email contact : " . $e->getMessage(), [
                 'contact_id' => $supportContact->id,
                 'email' => $validated['email']
             ]);

@@ -63,7 +63,6 @@ class ShopPaymentController extends Controller {
             ->with('success', 'Paiement soumis. En attente de validation.');
     }
 
-
     public function payOnline(Request $request, Order $order, MonerooPaymentService $moneroo) {
         // Sécurité basique, comme dans show()
         $sessEmail = (string) (session('user.email') ?? '');

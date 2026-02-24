@@ -15,7 +15,6 @@ class ShopController extends Controller {
 
     public function index(Request $request) {
 
-
         $q    = trim((string) $request->get('q'));
         $sort = $request->get('sort');
         $categorySlug = $request->get('c');
