@@ -1,984 +1,1291 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Segnon Shop — Rideaux · Draps · Décoration</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700;1,900&family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        ivory:   '#F9F4EC',
-        'ivory-dark': '#EFE8D8',
-        amber:   '#B5651D',
-        'amber-light': '#F0C99A',
-        'amber-pale': '#FBF0E0',
-        emerald: '#1B5E42',
-        'emerald-light': '#D4EAE0',
-        ink:     '#0F0D0B',
-        'ink-soft': '#2C2620',
-        'ink-muted': '#7A6E64',
-        'ink-faint': '#BFB5A8',
-        rouge:   '#C0392B',
-        'rouge-pale': '#FAEAEA',
-        gold:    '#D4A843',
-        'gold-pale': '#FDF5E0',
-      },
-      fontFamily: {
-        display: ['Playfair Display', 'Georgia', 'serif'],
-        sans: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
-      },
-      animation: {
-        'float-slow': 'floatSlow 7s ease-in-out infinite',
-        'float-med':  'floatMed 5s ease-in-out infinite',
-        'ticker':     'ticker 35s linear infinite',
-        'spin-slow':  'spin 20s linear infinite',
-        'fade-up':    'fadeUp .7s ease forwards',
-        'grain':      'grain 8s steps(10) infinite',
-      },
-      keyframes: {
-        floatSlow: { '0%,100%': {transform:'translateY(0) rotate(-1deg)'}, '50%': {transform:'translateY(-18px) rotate(1.5deg)'} },
-        floatMed:  { '0%,100%': {transform:'translateY(0)'}, '50%': {transform:'translateY(-12px)'} },
-        ticker:    { '0%': {transform:'translateX(0)'}, '100%': {transform:'translateX(-50%)'} },
-        fadeUp:    { '0%': {opacity:'0',transform:'translateY(28px)'}, '100%': {opacity:'1',transform:'translateY(0)'} },
-        grain:     { '0%,100%': {transform:'translate(0,0)'}, '10%': {transform:'translate(-5%,-10%)'}, '30%': {transform:'translate(3%,-15%)'}, '50%': {transform:'translate(12%,9%)'}, '70%': {transform:'translate(9%,4%)'}, '90%': {transform:'translate(-1%,7%)'} },
-      },
-    }
-  }
-}
-</script>
-
-<style>
-  /* ── FONTS & BASE ── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { cursor: none; overflow-x: hidden; background: #F9F4EC; }
-
-  /* ── CURSOR ── */
-  #c-dot {
-    position: fixed; pointer-events: none; z-index: 9999;
-    width: 10px; height: 10px; border-radius: 50%;
-    background: #B5651D; transform: translate(-50%,-50%);
-    transition: width .25s, height .25s, background .25s, opacity .25s;
-    mix-blend-mode: multiply;
-  }
-  #c-ring {
-    position: fixed; pointer-events: none; z-index: 9998;
-    width: 40px; height: 40px; border-radius: 50%;
-    border: 1.5px solid rgba(181,101,29,.4);
-    transform: translate(-50%,-50%);
-    transition: transform .55s cubic-bezier(.22,1,.36,1), width .3s, height .3s, opacity .3s;
-  }
-  body:has(a:hover) #c-dot, body:has(button:hover) #c-dot { width: 22px; height: 22px; background: rgba(181,101,29,.2); border: 1.5px solid #B5651D; }
-
-  /* ── NOISE OVERLAY ── */
-  .noise::after {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 10;
-    animation: grain 8s steps(10) infinite;
-  }
-
-  /* ── HERO DIAGONAL ── */
-  .hero-clip { clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%); }
-  .hero-img-clip { clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%); }
-
-  /* ── TICKER ── */
-  .ticker-wrap { display: flex; animation: ticker 35s linear infinite; white-space: nowrap; }
-
-  /* ── CARD HOVER ── */
-  .prod-card { transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s; }
-  .prod-card:hover { transform: translateY(-10px) rotate(.3deg); }
-  .prod-card:hover .prod-overlay { opacity: 1; }
-  .prod-overlay { opacity: 0; transition: opacity .35s; }
-
-  /* ── CAT CARD ── */
-  .cat-card { transition: transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s; }
-  .cat-card:hover { transform: scale(1.03) rotate(-.4deg); }
-  .cat-card:hover .cat-inner-emoji { transform: scale(1.12) translateY(-6px); }
-  .cat-inner-emoji { transition: transform .45s; }
-
-  /* ── SECTION REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(32px); transition: opacity .7s ease, transform .7s ease; }
-  .reveal.on { opacity: 1; transform: translateY(0); }
-  .delay-1 { transition-delay: .12s; }
-  .delay-2 { transition-delay: .24s; }
-  .delay-3 { transition-delay: .36s; }
-  .delay-4 { transition-delay: .48s; }
-
-  /* ── PROMO CARD ── */
-  .promo-hover { transition: transform .35s cubic-bezier(.22,1,.36,1); }
-  .promo-hover:hover { transform: scale(1.025); }
-
-  /* ── WHY CARD ── */
-  .why-card { transition: background .3s, border-color .3s, transform .3s; }
-  .why-card:hover { transform: translateY(-5px); }
-
-  /* ── TESTI CARD ── */
-  .testi-card { transition: transform .35s, box-shadow .35s; }
-  .testi-card:hover { transform: translateY(-6px); }
-
-  /* ── FORM ── */
-  .form-field { transition: border-color .25s, box-shadow .25s; }
-  .form-field:focus { border-color: #B5651D !important; box-shadow: 0 0 0 4px rgba(181,101,29,.1) !important; }
-
-  /* ── STRIPE DECO ── */
-  .stripe-deco {
-    background: repeating-linear-gradient(
-      -45deg,
-      transparent, transparent 4px,
-      rgba(181,101,29,.08) 4px, rgba(181,101,29,.08) 8px
-    );
-  }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #F9F4EC; }
-  ::-webkit-scrollbar-thumb { background: #B5651D; border-radius: 3px; }
-
-  /* ── NAV SCROLL ── */
-  .nav-glass { background: rgba(249,244,236,.92); backdrop-filter: blur(20px); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    
+    <!-- SEO -->
+    <title>Segnon Shop — L'Élégance Africaine</title>
+    <meta name="description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception. Des pièces uniques qui racontent une histoire.">
+    <meta name="keywords" content="rideaux, draps, quincaillerie, décoration, maison, afrique, artisanat, luxe">
+    <meta name="author" content="Segnon Shop">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://segnonshop.com/">
+    <meta property="og:title" content="Segnon Shop — L'Élégance Africaine">
+    <meta property="og:description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=1200">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Segnon Shop — L'Élégance Africaine">
+    <meta name="twitter:description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=1200">
+    
+    <!-- Favicon / icônes -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Couleur du thème pour navigateurs mobiles -->
+    <meta name="theme-color" content="#f15b30">
+    <meta name="msapplication-TileColor" content="#f15b30">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration Tailwind personnalisée -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'terracotta': {
+                            50: '#fff4ed',
+                            100: '#ffe6d5',
+                            200: '#fdccb0',
+                            300: '#fbaa82',
+                            400: '#f77f54',
+                            500: '#f15b30',
+                            600: '#de411d',
+                            700: '#b83216',
+                            800: '#932b18',
+                            900: '#782616',
+                        },
+                        'saffron': {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        'safari': {
+                            50: '#f2f7f2',
+                            100: '#e0ebe0',
+                            200: '#c3d9c3',
+                            300: '#9cbf9c',
+                            400: '#74a074',
+                            500: '#558255',
+                            600: '#3e643e',
+                            700: '#324f32',
+                            800: '#294029',
+                            900: '#223622',
+                        },
+                        'night': {
+                            50: '#f5f5f6',
+                            100: '#e6e6e8',
+                            200: '#cfd0d4',
+                            300: '#adaeb6',
+                            400: '#858792',
+                            500: '#676a77',
+                            600: '#4f515d',
+                            700: '#3f414b',
+                            800: '#2f3139',
+                            900: '#1e1f24',
+                        },
+                        'sand': {
+                            50: '#faf8f4',
+                            100: '#f2ede3',
+                            200: '#e5dbcc',
+                            300: '#d3c4ae',
+                            400: '#bfa88a',
+                            500: '#af8f6b',
+                            600: '#9d7855',
+                            700: '#826145',
+                            800: '#6a4f3c',
+                            900: '#564133',
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['Clash Display', 'system-ui', 'sans-serif'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'marquee2': 'marquee2 25s linear infinite',
+                        'gradient': 'gradient 8s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        marquee2: {
+                            '0%': { transform: 'translateX(100%)' },
+                            '100%': { transform: 'translateX(0%)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        }
+                    },
+                    backgroundSize: {
+                        '300%': '300%',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Styles personnalisés -->
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #f15b30 0%, #f59e0b 50%, #558255 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+    </style>
 </head>
+<body class="font-sans antialiased bg-sand-50 text-night-900">
+    <!-- ===== NAVBAR ===== -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-sand-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  <!-- AJOUTER CECI -->
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="/" class="text-3xl font-['Clash_Display'] font-bold tracking-tight">
+                    SEGNON<span class="text-terracotta-500">.</span>
+                </a>
 
-<body class="font-sans text-ink bg-ivory">
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <a href="#accueil" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                        Accueil
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#collections" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                        Collections
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#produits" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                        Nouveautés
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#promos" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                        Promos
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#contact" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                        Contact
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                </div>
 
-<!-- CURSOR -->
-<div id="c-dot"></div>
-<div id="c-ring"></div>
+                <!-- Actions -->
+                <div class="flex items-center gap-2">
+                    <button class="p-2 hover:bg-sand-100 rounded-full transition">
+                        <i class="fas fa-search text-night-700"></i>
+                    </button>
+                    <button class="p-2 hover:bg-sand-100 rounded-full transition relative">
+                        <i class="far fa-heart text-night-700"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">3</span>
+                    </button>
+                    <button class="p-2 hover:bg-sand-100 rounded-full transition relative">
+                        <i class="fas fa-shopping-bag text-night-700"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
+                    </button>
+                    <a href="https://wa.me/22900000000" class="hidden md:flex items-center gap-2 bg-terracotta-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-terracotta-600 transition shadow-lg hover:shadow-xl ml-2">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                    <button class="lg:hidden p-2 hover:bg-sand-100 rounded-full transition">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<!-- ═══════════════════════════════════
-     NAVIGATION
-═══════════════════════════════════ -->
-<nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-  <div class="max-w-screen-xl mx-auto flex items-center justify-between px-8 h-[68px]">
+    <!-- ===== HERO SECTION ===== -->
+    <section id="accueil" class="relative bg-gradient-to-br from-sand-100 via-white to-saffron-50 overflow-hidden">
+        <!-- Formes décoratives -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-terracotta-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-safari-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float-slow"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="space-y-8 text-center lg:text-left">
+                    
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-['Clash_Display'] font-bold leading-[1.1] tracking-tight">
+                        <span class="block text-night-900">L'élégance</span>
+                        <span class="gradient-text">africaine</span>
+                        <span class="block text-night-900">réinventée</span>
+                    </h1>
+                    
+                    <p class="text-lg text-night-600 max-w-xl mx-auto lg:mx-0">
+                        Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception. 
+                        Des pièces uniques qui racontent une histoire.
+                    </p>
+                    
+                    <!-- CTA Group -->
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                        <a href="#collections" class="group bg-terracotta-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-terracotta-600 transition flex items-center gap-2 shadow-lg hover:shadow-xl">
+                            Explorer
+                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
+                        </a>
+                        <a href="https://wa.me/22900000000" class="group bg-white text-night-900 px-8 py-4 rounded-full font-semibold border-2 border-sand-300 hover:border-terracotta-500 transition flex items-center gap-2">
+                            <i class="fab fa-whatsapp text-terracotta-500"></i>
+                            WhatsApp direct
+                        </a>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-sand-200 max-w-md mx-auto lg:mx-0">
+                        <div>
+                            <div class="text-2xl font-['Clash_Display'] font-bold text-terracotta-500">5000+</div>
+                            <div class="text-xs text-night-500">Clients</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-['Clash_Display'] font-bold text-safari-600">200+</div>
+                            <div class="text-xs text-night-500">Produits</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-['Clash_Display'] font-bold text-saffron-600">4.9/5</div>
+                            <div class="text-xs text-night-500">Avis</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Content - Images Grid -->
+                <div class="grid grid-cols-2 gap-4 relative">
+                    <!-- Image 1 -->
+                    <div class="space-y-4">
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
+                            <img src="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=800&auto=format&fit=crop" 
+                                 alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
+                        </div>
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
+                            <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop" 
+                                 alt="Draps" class="w-full h-48 object-cover hover:scale-110 transition duration-700">
+                        </div>
+                    </div>
+                    <!-- Image 2 -->
+                    <div class="space-y-4 mt-8">
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
+                            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop" 
+                                 alt="Rideaux" class="w-full h-48 object-cover hover:scale-110 transition duration-700">
+                        </div>
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
+                            <img src="https://images.unsplash.com/photo-1532372320978-9b4b6d95f4b8?w=800&auto=format&fit=crop" 
+                                 alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
+                        </div>
+                    </div>
+                    
+                    <!-- Badge flottant -->
+                    <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-2xl p-4 animate-float hidden md:block">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-terracotta-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-night-900">4.9/5</div>
+                                <div class="text-sm text-night-500">1500+ avis</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Logo -->
-    <a href="#" class="flex items-center gap-3 group">
-      <div class="w-9 h-9 bg-amber rounded-xl flex items-center justify-center text-white font-display font-bold text-lg italic">S</div>
-      <span class="font-display font-bold text-xl tracking-tight text-ink-soft">Segnon<span class="text-amber">Shop</span></span>
-    </a>
-
-    <!-- Links -->
-    <div class="hidden md:flex items-center gap-1">
-      <a href="#categories" class="px-4 py-2 text-sm text-ink-muted hover:text-ink hover:bg-ink/5 rounded-full transition-all duration-200">Catalogue</a>
-      <a href="#produits"   class="px-4 py-2 text-sm text-ink-muted hover:text-ink hover:bg-ink/5 rounded-full transition-all duration-200">Produits</a>
-      <a href="#promos"     class="px-4 py-2 text-sm text-ink-muted hover:text-ink hover:bg-ink/5 rounded-full transition-all duration-200">Promotions</a>
-      <a href="#avis"       class="px-4 py-2 text-sm text-ink-muted hover:text-ink hover:bg-ink/5 rounded-full transition-all duration-200">Avis</a>
-      <a href="#contact"    class="px-4 py-2 text-sm text-ink-muted hover:text-ink hover:bg-ink/5 rounded-full transition-all duration-200">Contact</a>
+    <!-- ===== MARQUEE BANNER ===== -->
+    <div class="bg-night-900 text-white py-5 overflow-hidden border-y-4 border-terracotta-500">
+        <div class="animate-marquee whitespace-nowrap flex">
+            <div class="inline-flex items-center gap-8 mx-4">
+                <span class="text-xl font-semibold">✨ RIDEAUX PREMIUM</span>
+                <span class="w-2 h-2 bg-terracotta-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🛏️ DRAPS DE LUXE</span>
+                <span class="w-2 h-2 bg-saffron-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🔧 QUINCAILLERIE DESIGN</span>
+                <span class="w-2 h-2 bg-safari-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🏺 DÉCORATION UNIQUE</span>
+                <span class="w-2 h-2 bg-terracotta-500 rounded-full"></span>
+                <span class="text-xl font-semibold">⭐ SATISFACTION CLIENT</span>
+                <span class="w-2 h-2 bg-saffron-500 rounded-full"></span>
+            </div>
+            <!-- Duplicate pour effet infini -->
+            <div class="inline-flex items-center gap-8 mx-4">
+                <span class="text-xl font-semibold">✨ RIDEAUX PREMIUM</span>
+                <span class="w-2 h-2 bg-terracotta-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🛏️ DRAPS DE LUXE</span>
+                <span class="w-2 h-2 bg-saffron-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🔧 QUINCAILLERIE DESIGN</span>
+                <span class="w-2 h-2 bg-safari-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🏺 DÉCORATION UNIQUE</span>
+                <span class="w-2 h-2 bg-terracotta-500 rounded-full"></span>
+                <span class="text-xl font-semibold">⭐ SATISFACTION CLIENT</span>
+                <span class="w-2 h-2 bg-saffron-500 rounded-full"></span>
+            </div>
+        </div>
     </div>
 
-    <!-- CTAs -->
-    <div class="hidden md:flex items-center gap-3">
-      <a href="tel:+22900000000" class="flex items-center gap-2 px-5 py-2.5 rounded-full border border-ink/15 text-sm text-ink-soft hover:border-ink/40 hover:text-ink transition-all duration-200">
-        📞 Appeler
-      </a>
-      <a href="https://wa.me/22900000000" class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald text-white text-sm font-medium hover:bg-emerald/90 transition-all duration-200 shadow-lg shadow-emerald/20">
-        💬 WhatsApp
-      </a>
-    </div>
-  </div>
-</nav>
-
-<!-- ═══════════════════════════════════
-     HERO
-═══════════════════════════════════ -->
-<section class="relative min-h-screen grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
-
-  <!-- LEFT — Text -->
-  <div class="relative z-10 flex flex-col justify-center px-8 md:px-16 py-20 lg:py-24 bg-ivory">
-
-
-    <!-- Headline -->
-    <h1 class="font-display font-black leading-[.92] tracking-tight mb-8" style="font-size: clamp(56px, 7vw, 104px); animation: fadeUp .7s .2s both">
-      <span class="block text-ink">Votre</span>
-      <span class="block text-amber italic">intérieur,</span>
-      <span class="block text-ink">sublimé.</span>
-    </h1>
-
-    <!-- Desc -->
-    <p class="text-ink-muted text-lg leading-relaxed max-w-[420px] mb-10 font-light" style="animation: fadeUp .7s .35s both">
-      Rideaux premium, draps de luxe, quincaillerie design et décoration — tout pour transformer chaque pièce de votre maison.
-    </p>
-
-    <!-- Actions -->
-    <div class="flex flex-wrap gap-4 mb-14" style="animation: fadeUp .7s .5s both">
-      <a href="#categories" class="inline-flex items-center gap-3 px-8 py-4 bg-ink text-white text-sm font-semibold rounded-2xl hover:bg-amber transition-all duration-300 shadow-xl shadow-ink/20 hover:shadow-amber/30 hover:-translate-y-1">
-        Explorer
-        <span class="text-base">→</span>
-      </a>
-      <a href="https://wa.me/22900000000" class="inline-flex items-center gap-3 px-7 py-4 border-2 border-emerald text-emerald text-sm font-semibold rounded-2xl hover:bg-emerald hover:text-white transition-all duration-300 hover:-translate-y-1">
-        💬 WhatsApp
-      </a>
-    </div>
-
-    <!-- Stats -->
-    {{-- <div class="flex gap-10 pt-8 border-t border-ink/10" style="animation: fadeUp .7s .65s both">
-      <div>
-        <div class="font-display text-4xl font-black text-ink tracking-tight">200<span class="text-amber text-2xl">+</span></div>
-        <div class="text-xs text-ink-muted mt-1 font-medium uppercase tracking-wider">Produits</div>
-      </div>
-      <div class="w-px bg-ink/10"></div>
-      <div>
-        <div class="font-display text-4xl font-black text-ink tracking-tight">1.2k</div>
-        <div class="text-xs text-ink-muted mt-1 font-medium uppercase tracking-wider">Clients</div>
-      </div>
-      <div class="w-px bg-ink/10"></div>
-      <div>
-        <div class="font-display text-4xl font-black text-ink tracking-tight">4.9<span class="text-gold text-2xl">★</span></div>
-        <div class="text-xs text-ink-muted mt-1 font-medium uppercase tracking-wider">Note</div>
-      </div>
-    </div> --}}
-  </div>
-
-  <!-- RIGHT — Visual -->
-  <div class="relative bg-amber-pale hero-img-clip overflow-hidden hidden lg:block noise">
-
-    <!-- Ambient blobs -->
-    <div class="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-amber/20 blur-3xl"></div>
-    <div class="absolute bottom-1/3 left-1/4 w-60 h-60 rounded-full bg-emerald/15 blur-3xl"></div>
-
-    <!-- Center shape -->
-    <div class="absolute inset-0 flex items-center justify-center">
-      <div class="relative">
-        <!-- Big pill -->
-        <div class="w-[340px] h-[440px] rounded-[120px] bg-gradient-to-br from-amber-light/80 to-amber/40 flex items-center justify-center animate-float-slow shadow-2xl shadow-amber/30">
-          <span class="text-[110px] drop-shadow-xl">🪟</span>
+    <!-- ===== CATEGORIES SECTION ===== -->
+    <section id="collections" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white py-8">
+        <!-- Section Header -->
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mt-4 mb-6">
+                Explorez nos <span class="gradient-text">univers</span>
+            </h2>
+            <p class="text-night-600">
+                Quatre univers distincts pour sublimer chaque pièce de votre intérieur.
+            </p>
         </div>
-        <!-- Stripe deco -->
-        <div class="absolute -bottom-6 -right-6 w-48 h-48 rounded-3xl stripe-deco opacity-60 -z-10"></div>
-      </div>
-    </div>
-
-    <!-- Floating chips -->
-    <div class="absolute top-[18%] left-[5%] animate-float-med">
-      <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-xl flex items-center gap-3 border border-white/60">
-        <div class="w-10 h-10 rounded-xl bg-emerald-light flex items-center justify-center text-xl">🛏️</div>
-        <div>
-          <div class="text-[11px] text-ink-muted font-medium">Nouveauté</div>
-          <div class="text-sm font-bold text-ink-soft">Draps Satin 2025</div>
+        
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Catégorie 1 -->
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop" 
+                        alt="Rideaux" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-night-900/80 via-night-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-terracotta-500 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">120+ modèles</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Rideaux</h3>
+                    <p class="text-white/70 text-sm mb-4">Voilages, occultants, sur-mesure</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Catégorie 2 -->
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop" 
+                        alt="Draps" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-night-900/80 via-night-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-safari-600 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">Nouveauté</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Draps</h3>
+                    <p class="text-white/70 text-sm mb-4">Coton, satin, microfibre</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Catégorie 3 -->
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=800&auto=format&fit=crop" 
+                        alt="Quincaillerie" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-night-900/80 via-night-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-saffron-600 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">Jusqu'à -20%</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Quincaillerie</h3>
+                    <p class="text-white/70 text-sm mb-4">Tringles, crochets, rails</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Catégorie 4 -->
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1532372320978-9b4b6d95f4b8?w=800&auto=format&fit=crop" 
+                        alt="Décoration" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-night-900/80 via-night-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-terracotta-500 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">Pièces uniques</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Décoration</h3>
+                    <p class="text-white/70 text-sm mb-4">Coussins, tapis, art déco</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
+    </section>
 
-    <div class="absolute bottom-[25%] right-[6%] animate-float-med" style="animation-delay:1.2s">
-      <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-xl flex items-center gap-3 border border-white/60">
-        <div class="w-10 h-10 rounded-xl bg-amber-pale flex items-center justify-center text-xl">🏷️</div>
-        <div>
-          <div class="text-[11px] text-ink-muted font-medium">Promo</div>
-          <div class="text-sm font-bold text-amber">–30% Rideaux</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="absolute top-[55%] left-[8%] animate-float-med" style="animation-delay:.6s">
-      <div class="bg-white/90 backdrop-blur rounded-2xl p-4 shadow-xl flex items-center gap-3 border border-white/60">
-        <div class="w-10 h-10 rounded-xl bg-gold-pale flex items-center justify-center text-xl">⭐</div>
-        <div>
-          <div class="text-[11px] text-ink-muted font-medium">Avis clients</div>
-          <div class="text-sm font-bold text-ink-soft">4.9 · 150+ avis</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom accent strip -->
-    <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-amber via-gold to-emerald"></div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════
-     TICKER
-═══════════════════════════════════ -->
-<div class="bg-ink overflow-hidden py-4 border-y-2 border-amber/30">
-  <div class="ticker-wrap" style="white-space:nowrap">
-    <!-- 2× for seamless loop -->
-    <template id="tpl">
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-white/60">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> Rideaux Premium
-      </span>
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-amber">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> Draps de Luxe
-      </span>
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-white/60">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> Livraison Rapide
-      </span>
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-emerald-light">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> Qualité Garantie
-      </span>
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-white/60">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> Décoration Intérieure
-      </span>
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-gold">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> 200+ Produits
-      </span>
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-white/60">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> Quincaillerie Design
-      </span>
-      <span class="inline-flex items-center gap-3 px-7 text-[13px] font-medium uppercase tracking-[.1em] text-amber">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber flex-shrink-0"></span> WhatsApp Direct ✦
-      </span>
-    </template>
-  </div>
-</div>
-
-
-<!-- ═══════════════════════════════════
-     CATEGORIES
-═══════════════════════════════════ -->
-<section class="py-28 px-6 md:px-14 bg-ivory" id="categories">
-  <div class="max-w-screen-xl mx-auto">
-
-    <!-- Header -->
-    <div class="flex items-end justify-between mb-14 reveal">
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="w-6 h-0.5 bg-amber rounded-full"></span>
-          <span class="text-xs font-bold tracking-[.18em] uppercase text-amber">Nos Collections</span>
-        </div>
-        <h2 class="font-display font-black text-ink leading-none tracking-tight" style="font-size:clamp(38px,4.5vw,68px)">
-          Explorez par <em class="text-amber italic font-black">catégorie</em>
-        </h2>
-      </div>
-      <a href="#" class="hidden md:flex items-center gap-2 text-sm font-semibold text-ink-muted border-b-2 border-ink/15 pb-0.5 hover:text-amber hover:border-amber transition-all duration-200">
-        Tout voir <span>→</span>
-      </a>
-    </div>
-
-    <!-- Grid -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-
-      <!-- Card: Rideaux (big) -->
-      <div class="cat-card lg:col-span-2 lg:row-span-2 relative rounded-3xl overflow-hidden cursor-pointer group reveal" style="min-height:480px; background: linear-gradient(145deg,#FDF0E0,#F0C99A)">
-        <div class="absolute top-5 left-5 z-20">
-          <span class="px-3 py-1 rounded-full bg-amber text-white text-[11px] font-bold uppercase tracking-wider">⭐ Le plus populaire</span>
-        </div>
-        <div class="cat-inner-emoji absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[60%] text-[110px] drop-shadow-2xl">🪟</div>
-        <!-- Stripe deco -->
-        <div class="absolute bottom-0 right-0 w-40 h-40 stripe-deco opacity-40 rounded-tl-3xl"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-amber/30 via-amber/10 to-transparent">
-          <div class="text-[11px] text-amber-800/70 font-semibold uppercase tracking-widest mb-1">80+ références</div>
-          <div class="font-display font-black text-3xl text-ink-soft tracking-tight">Rideaux</div>
-          <div class="text-sm text-ink-muted mt-1">Voilages · Occultants · Sur-mesure</div>
-        </div>
-        <div class="absolute top-5 right-5 w-9 h-9 bg-white/80 backdrop-blur rounded-xl flex items-center justify-center text-amber font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm">↗</div>
-      </div>
-
-      <!-- Card: Draps -->
-      <div class="cat-card relative rounded-3xl overflow-hidden cursor-pointer group reveal delay-1" style="min-height:230px; background:linear-gradient(145deg,#D4EAE0,#A8D4C0)">
-        <div class="absolute top-5 left-5 z-20">
-          <span class="px-3 py-1 rounded-full bg-emerald text-white text-[11px] font-bold uppercase tracking-wider">✦ Nouveau</span>
-        </div>
-        <div class="cat-inner-emoji absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] text-7xl drop-shadow-xl">🛏️</div>
-        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-emerald/30 to-transparent">
-          <div class="font-display font-black text-2xl text-ink-soft tracking-tight">Draps</div>
-          <div class="text-xs text-ink-muted mt-0.5">Coton · Satin · Microfibre</div>
-        </div>
-        <div class="absolute top-5 right-5 w-8 h-8 bg-white/80 backdrop-blur rounded-xl flex items-center justify-center text-emerald font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm">↗</div>
-      </div>
-
-      <!-- Card: Quincaillerie -->
-      <div class="cat-card relative rounded-3xl overflow-hidden cursor-pointer group reveal delay-2" style="min-height:230px; background:linear-gradient(145deg,#FDF5E0,#EDD9A3)">
-        <div class="cat-inner-emoji absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] text-7xl drop-shadow-xl">🔧</div>
-        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-gold/20 to-transparent">
-          <div class="font-display font-black text-2xl text-ink-soft tracking-tight">Quincaillerie</div>
-          <div class="text-xs text-ink-muted mt-0.5">Tringles · Crochets · Rails</div>
-        </div>
-        <div class="absolute top-5 right-5 w-8 h-8 bg-white/80 backdrop-blur rounded-xl flex items-center justify-center text-gold font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm">↗</div>
-      </div>
-
-      <!-- Card: Décoration -->
-      <div class="cat-card relative rounded-3xl overflow-hidden cursor-pointer group reveal delay-1" style="min-height:230px; background:linear-gradient(145deg,#EAF0F8,#C0D4E8)">
-        <div class="absolute top-5 left-5 z-20">
-          <span class="px-3 py-1 rounded-full bg-rouge text-white text-[11px] font-bold uppercase tracking-wider">–20%</span>
-        </div>
-        <div class="cat-inner-emoji absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] text-7xl drop-shadow-xl">🏺</div>
-        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-blue-400/20 to-transparent">
-          <div class="font-display font-black text-2xl text-ink-soft tracking-tight">Décoration</div>
-          <div class="text-xs text-ink-muted mt-0.5">Coussins · Tapis · Art déco</div>
-        </div>
-        <div class="absolute top-5 right-5 w-8 h-8 bg-white/80 backdrop-blur rounded-xl flex items-center justify-center text-blue-600 font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm">↗</div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════
-     PRODUCTS
-═══════════════════════════════════ -->
-<section class="py-28 px-6 md:px-14 bg-ivory-dark" id="produits">
-  <div class="max-w-screen-xl mx-auto">
-
-    <div class="flex items-end justify-between mb-14 reveal">
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="w-6 h-0.5 bg-emerald rounded-full"></span>
-          <span class="text-xs font-bold tracking-[.18em] uppercase text-emerald">Sélection</span>
-        </div>
-        <h2 class="font-display font-black text-ink leading-none tracking-tight" style="font-size:clamp(38px,4.5vw,68px)">
-          Produits <em class="italic text-emerald">vedettes</em>
-        </h2>
-      </div>
-      <!-- Tabs -->
-      <div class="hidden md:flex gap-2">
-        <button onclick="tabActive(this)" class="tab-btn active px-4 py-2 rounded-full text-sm font-semibold bg-ink text-white transition-all">Tous</button>
-        <button onclick="tabActive(this)" class="tab-btn px-4 py-2 rounded-full text-sm font-semibold border border-ink/20 text-ink-muted hover:border-ink/50 hover:text-ink transition-all">Rideaux</button>
-        <button onclick="tabActive(this)" class="tab-btn px-4 py-2 rounded-full text-sm font-semibold border border-ink/20 text-ink-muted hover:border-ink/50 hover:text-ink transition-all">Draps</button>
-        <button onclick="tabActive(this)" class="tab-btn px-4 py-2 rounded-full text-sm font-semibold border border-ink/20 text-ink-muted hover:border-ink/50 hover:text-ink transition-all">Déco</button>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-
-      <!-- Product card macro -->
-      <!-- P1 -->
-      <div class="prod-card bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-amber/15 reveal">
-        <div class="relative h-56 flex items-center justify-center" style="background:linear-gradient(145deg,#FDF0E0,#F0C99A)">
-          <span class="text-8xl drop-shadow-xl">🪟</span>
-          <span class="absolute top-4 left-4 bg-rouge text-white text-[11px] font-bold px-3 py-1 rounded-full">–25%</span>
-          <div class="prod-overlay absolute inset-0 bg-ink/60 backdrop-blur-sm flex flex-col items-center justify-center gap-3 p-4">
-            <a href="https://wa.me/22900000000?text=Rideau Velours" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#25D366] text-white text-sm font-semibold hover:bg-[#1aab52] transition-colors">💬 Commander WhatsApp</a>
-            <a href="tel:+22900000000" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-ink text-sm font-semibold hover:bg-ivory transition-colors">📞 Appeler maintenant</a>
-          </div>
-        </div>
-        <div class="p-5">
-          <div class="text-[11px] font-bold uppercase tracking-widest text-amber mb-2">Rideaux</div>
-          <div class="font-display font-bold text-lg text-ink-soft mb-4 leading-tight">Rideau Velours Anthracite</div>
-          <div class="flex items-end justify-between">
+    <!-- ===== FEATURED PRODUCTS ===== -->
+    <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-sand-50 py-8">
+        <!-- Section Header avec tabs -->
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-12">
             <div>
-              <div class="font-display font-black text-xl text-ink">15 000 F</div>
-              <div class="text-xs text-ink-faint line-through mt-0.5">20 000 F</div>
+                <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mt-4">
+                    Nos <span class="gradient-text">incontournables</span>
+                </h2>
             </div>
-            <div class="flex items-center gap-1.5 text-xs text-ink-muted">
-              <span class="text-gold">★★★★★</span> (42)
+            
+            <!-- Tabs -->
+            <div class="flex flex-wrap gap-2 mt-6 lg:mt-0 p-1 bg-white rounded-2xl shadow-sm">
+                <button class="tab-btn active px-6 py-3 rounded-xl bg-terracotta-500 text-white font-medium transition">Tous</button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-night-600 hover:bg-sand-200 font-medium transition">Rideaux</button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-night-600 hover:bg-sand-200 font-medium transition">Draps</button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-night-600 hover:bg-sand-200 font-medium transition">Déco</button>
             </div>
-          </div>
         </div>
-      </div>
-
-      <!-- P2 -->
-      <div class="prod-card bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-emerald/15 reveal delay-1">
-        <div class="relative h-56 flex items-center justify-center" style="background:linear-gradient(145deg,#D4EAE0,#A8D4C0)">
-          <span class="text-8xl drop-shadow-xl">🛏️</span>
-          <span class="absolute top-4 left-4 bg-emerald text-white text-[11px] font-bold px-3 py-1 rounded-full">Nouveau</span>
-          <div class="prod-overlay absolute inset-0 bg-ink/60 backdrop-blur-sm flex flex-col items-center justify-center gap-3 p-4">
-            <a href="https://wa.me/22900000000?text=Drap Satin" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#25D366] text-white text-sm font-semibold hover:bg-[#1aab52] transition-colors">💬 Commander WhatsApp</a>
-            <a href="tel:+22900000000" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-ink text-sm font-semibold hover:bg-ivory transition-colors">📞 Appeler maintenant</a>
-          </div>
-        </div>
-        <div class="p-5">
-          <div class="text-[11px] font-bold uppercase tracking-widest text-emerald mb-2">Draps</div>
-          <div class="font-display font-bold text-lg text-ink-soft mb-4 leading-tight">Drap Satin Blanc Royal</div>
-          <div class="flex items-end justify-between">
-            <div>
-              <div class="font-display font-black text-xl text-ink">12 500 F</div>
+        
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Produit 1 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-terracotta-500 text-white text-xs px-3 py-1 rounded-full">-30%</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1617104551722-3b2d513664dd?w=800&auto=format&fit=crop" 
+                            alt="Rideau velours" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <!-- Overlay Actions -->
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-night-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-terracotta-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-terracotta-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-night-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-sand-100">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-terracotta-500 font-semibold">Rideaux</span>
+                        <div class="flex items-center gap-1 text-saffron-500 text-xs">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span class="text-night-400 ml-1">(45)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Rideau Velours Premium</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-night-900">24 500 F</span>
+                        <span class="text-sm text-night-400 line-through">35 000 F</span>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center gap-1.5 text-xs text-ink-muted">
-              <span class="text-gold">★★★★★</span> (28)
+            
+            <!-- Produit 2 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-safari-600 text-white text-xs px-3 py-1 rounded-full">Nouveau</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1616628188859-7f11e9a7a7e9?w=800&auto=format&fit=crop" 
+                            alt="Drap satin" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-night-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-terracotta-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-terracotta-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-night-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-sand-100">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-safari-600 font-semibold">Draps</span>
+                        <div class="flex items-center gap-1 text-saffron-500 text-xs">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="text-night-400 ml-1">(32)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Parure de lit 5 pièces</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-night-900">32 000 F</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- P3 -->
-      <div class="prod-card bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-gold/15 reveal delay-2">
-        <div class="relative h-56 flex items-center justify-center" style="background:linear-gradient(145deg,#FDF5E0,#EDD9A3)">
-          <span class="text-8xl drop-shadow-xl">🔧</span>
-          <div class="prod-overlay absolute inset-0 bg-ink/60 backdrop-blur-sm flex flex-col items-center justify-center gap-3 p-4">
-            <a href="https://wa.me/22900000000?text=Tringle" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#25D366] text-white text-sm font-semibold hover:bg-[#1aab52] transition-colors">💬 Commander WhatsApp</a>
-            <a href="tel:+22900000000" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-ink text-sm font-semibold hover:bg-ivory transition-colors">📞 Appeler maintenant</a>
-          </div>
-        </div>
-        <div class="p-5">
-          <div class="text-[11px] font-bold uppercase tracking-widest text-gold mb-2">Quincaillerie</div>
-          <div class="font-display font-bold text-lg text-ink-soft mb-4 leading-tight">Tringle Double Chromée 200cm</div>
-          <div class="flex items-end justify-between">
-            <div>
-              <div class="font-display font-black text-xl text-ink">8 000 F</div>
+            
+            <!-- Produit 3 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-saffron-600 text-white text-xs px-3 py-1 rounded-full">Top vente</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&auto=format&fit=crop" 
+                            alt="Poignée" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-night-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-terracotta-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-terracotta-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-night-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-sand-100">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-saffron-600 font-semibold">Quincaillerie</span>
+                        <div class="flex items-center gap-1 text-saffron-500 text-xs">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span class="text-night-400 ml-1">(18)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Poignée de porte design</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-night-900">8 500 F</span>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center gap-1.5 text-xs text-ink-muted">
-              <span class="text-gold">★★★★☆</span> (19)
+            
+            <!-- Produit 4 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-terracotta-500 text-white text-xs px-3 py-1 rounded-full">-25%</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1567225591450-0605936a7f2c?w=800&auto=format&fit=crop" 
+                            alt="Miroir" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-night-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-terracotta-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-terracotta-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-night-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-sand-100">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-terracotta-500 font-semibold">Décoration</span>
+                        <div class="flex items-center gap-1 text-saffron-500 text-xs">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="text-night-400 ml-1">(27)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Miroir doré sculpté</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-night-900">18 000 F</span>
+                        <span class="text-sm text-night-400 line-through">24 000 F</span>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        
+        <!-- View All Button -->
+        <div class="text-center mt-12">
+            <a href="#" class="inline-flex items-center gap-2 bg-night-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-terracotta-500 transition shadow-md hover:shadow-lg">
+                Voir tous les produits
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
 
-      <!-- P4 -->
-      <div class="prod-card bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-blue-200/60 reveal delay-3">
-        <div class="relative h-56 flex items-center justify-center" style="background:linear-gradient(145deg,#EAF0F8,#C0D4E8)">
-          <span class="text-8xl drop-shadow-xl">🏺</span>
-          <span class="absolute top-4 left-4 bg-rouge text-white text-[11px] font-bold px-3 py-1 rounded-full">–15%</span>
-          <div class="prod-overlay absolute inset-0 bg-ink/60 backdrop-blur-sm flex flex-col items-center justify-center gap-3 p-4">
-            <a href="https://wa.me/22900000000?text=Coussins" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#25D366] text-white text-sm font-semibold hover:bg-[#1aab52] transition-colors">💬 Commander WhatsApp</a>
-            <a href="tel:+22900000000" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-ink text-sm font-semibold hover:bg-ivory transition-colors">📞 Appeler maintenant</a>
-          </div>
-        </div>
-        <div class="p-5">
-          <div class="text-[11px] font-bold uppercase tracking-widest text-blue-500 mb-2">Décoration</div>
-          <div class="font-display font-bold text-lg text-ink-soft mb-4 leading-tight">Set 4 Coussins Déco Premium</div>
-          <div class="flex items-end justify-between">
-            <div>
-              <div class="font-display font-black text-xl text-ink">18 700 F</div>
-              <div class="text-xs text-ink-faint line-through mt-0.5">22 000 F</div>
+    <!-- ===== PROMO BANNER ===== -->
+
+    <section class="py-16 bg-gradient-to-r from-terracotta-600 via-saffron-600 to-safari-600 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  <!-- AJOUTER CECI -->
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-8 z-10">
+                <div class="text-center lg:text-left">
+                    <span class="inline-block bg-white/20 px-4 py-2 rounded-full text-sm font-semibold mb-4">⚡ OFFRE EXCEPTIONNELLE</span>
+                    <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mb-4">
+                        Jusqu'à -50% sur une sélection
+                    </h2>
+                    <p class="text-white/90 text-lg max-w-2xl">
+                        Rideaux, draps et décoration. Livraison offerte.
+                    </p>
+                </div>
+                
+                <!-- Timer -->
+                <div class="flex gap-3">
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]">
+                        <div class="text-3xl font-['Clash_Display'] font-bold" id="days">24</div>
+                        <div class="text-xs text-white/80">Jours</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]">
+                        <div class="text-3xl font-['Clash_Display'] font-bold" id="hours">12</div>
+                        <div class="text-xs text-white/80">Heures</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]">
+                        <div class="text-3xl font-['Clash_Display'] font-bold" id="minutes">45</div>
+                        <div class="text-xs text-white/80">Minutes</div>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]">
+                        <div class="text-3xl font-['Clash_Display'] font-bold" id="seconds">30</div>
+                        <div class="text-xs text-white/80">Secondes</div>
+                    </div>
+                </div>
+                
+                <a href="#" class="bg-white text-night-900 px-8 py-4 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition flex items-center gap-2 whitespace-nowrap">
+                    J'en profite
+                    <i class="fas fa-bolt"></i>
+                </a>
             </div>
-            <div class="flex items-center gap-1.5 text-xs text-ink-muted">
-              <span class="text-gold">★★★★★</span> (55)
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+
+    <section class="py-10 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  <!-- AJOUTER CECI -->
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-saffron-600 font-semibold text-sm uppercase tracking-wider">Témoignages</span>
+                <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mt-4 mb-6">
+                    Ils nous font <span class="gradient-text">confiance</span>
+                </h2>
             </div>
-          </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="bg-sand-50 p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="flex items-center gap-1 text-saffron-500 text-lg mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-night-600 mb-6 leading-relaxed">
+                        "Rideaux magnifiques, qualité exceptionnelle. Le service WhatsApp est ultra rapide, livraison en 24h. Je recommande !"
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-terracotta-500 rounded-full flex items-center justify-center text-white font-bold text-xl">A</div>
+                        <div>
+                            <h4 class="font-bold text-night-900">Aminata Diallo</h4>
+                            <p class="text-sm text-night-500">Dakar, Sénégal</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-sand-50 p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="flex items-center gap-1 text-saffron-500 text-lg mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-night-600 mb-6 leading-relaxed">
+                        "Draps d'une douceur incroyable. Prix imbattables. Je suis devenue cliente fidèle, toute ma maison est équipée Segnon Shop !"
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-safari-600 rounded-full flex items-center justify-center text-white font-bold text-xl">K</div>
+                        <div>
+                            <h4 class="font-bold text-night-900">Kofi Mensah</h4>
+                            <p class="text-sm text-night-500">Abidjan, Côte d'Ivoire</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-sand-50 p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="flex items-center gap-1 text-saffron-500 text-lg mb-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-night-600 mb-6 leading-relaxed">
+                        "Service client exceptionnel. Ils m'ont conseillée pour choisir mes rideaux. Le rendu est magnifique, exactement ce que je voulais."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-saffron-600 rounded-full flex items-center justify-center text-white font-bold text-xl">F</div>
+                        <div>
+                            <h4 class="font-bold text-night-900">Fatou Ndiaye</h4>
+                            <p class="text-sm text-night-500">Dakar, Sénégal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-    </div>
-  </div>
-</section>
+    </section>
 
 
-<!-- ═══════════════════════════════════
-     CTA BAND — EMERALD
-═══════════════════════════════════ -->
-<section class="relative overflow-hidden bg-emerald py-24 px-6 md:px-14 noise reveal">
-  <!-- Watermark -->
-  <div class="absolute inset-y-0 right-0 flex items-center pointer-events-none overflow-hidden">
-    <span class="font-display font-black italic text-white/[.05] select-none leading-none" style="font-size:220px;white-space:nowrap">SEGNON</span>
-  </div>
-  <!-- Circle deco -->
-  <div class="absolute -top-20 -left-20 w-64 h-64 rounded-full border border-white/10"></div>
-  <div class="absolute -bottom-12 right-24 w-40 h-40 rounded-full border border-white/10"></div>
-
-  <div class="max-w-screen-xl mx-auto relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
-    <div class="text-center lg:text-left">
-      <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full border border-white/20 text-white/70 text-xs font-semibold uppercase tracking-widest">
-        ✦ Contact Direct
-      </div>
-      <h2 class="font-display font-black text-white leading-none tracking-tight mb-5" style="font-size:clamp(40px,5vw,76px)">
-        Besoin d'un<br><em class="italic font-black" style="color:#F0C99A">conseil ?</em>
-      </h2>
-      <p class="text-white/65 text-lg max-w-md font-light leading-relaxed">
-        Nos conseillers répondent en moins de 5 minutes. Choisissez votre couleur, taille ou style — on vous guide.
-      </p>
-    </div>
-    <div class="flex flex-col gap-4 min-w-[280px]">
-      <a href="https://wa.me/22900000000?text=Bonjour Segnon Shop" class="flex items-center justify-center gap-3 py-5 px-10 bg-white text-emerald font-bold rounded-2xl text-base hover:translate-x-2 transition-transform duration-300 shadow-2xl">
-        <span class="text-xl">💬</span> Écrire sur WhatsApp
-      </a>
-      <a href="tel:+22900000000" class="flex items-center justify-center gap-3 py-4 px-10 bg-white/15 text-white font-semibold rounded-2xl text-base border-2 border-white/25 hover:bg-white/25 transition-colors duration-200">
-        <span class="text-xl">📞</span> Appeler maintenant
-      </a>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════
-     COMMENT ÇA MARCHE
-═══════════════════════════════════ -->
-<section class="py-28 px-6 md:px-14 bg-white" id="process">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <div class="inline-flex items-center gap-2 mb-4">
-        <span class="w-6 h-0.5 bg-gold rounded-full"></span>
-        <span class="text-xs font-bold tracking-[.18em] uppercase text-gold">Comment ça marche</span>
-        <span class="w-6 h-0.5 bg-gold rounded-full"></span>
-      </div>
-      <h2 class="font-display font-black text-ink leading-none tracking-tight" style="font-size:clamp(36px,4vw,64px)">
-        Commander en <em class="italic text-gold">4 étapes</em>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- Step cards -->
-      <div class="why-card group relative rounded-3xl border-2 border-ivory-dark bg-ivory p-8 hover:border-amber hover:bg-amber-pale reveal">
-        <div class="font-display font-black text-6xl text-ink/10 group-hover:text-amber/20 transition-colors leading-none mb-5 tracking-tight">01</div>
-        <div class="text-4xl mb-4">🔍</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Explorez</div>
-        <div class="text-sm text-ink-muted leading-relaxed">Parcourez notre catalogue en ligne et repérez les produits qui correspondent à votre style.</div>
-        <div class="absolute top-1/2 -right-[13px] w-6 h-6 rounded-full bg-white border-2 border-amber/30 hidden lg:flex items-center justify-center text-xs text-ink-muted z-10">→</div>
-      </div>
-      <div class="why-card group relative rounded-3xl border-2 border-ivory-dark bg-ivory p-8 hover:border-emerald hover:bg-emerald-light delay-1 reveal">
-        <div class="font-display font-black text-6xl text-ink/10 group-hover:text-emerald/20 transition-colors leading-none mb-5 tracking-tight">02</div>
-        <div class="text-4xl mb-4">💬</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Contactez</div>
-        <div class="text-sm text-ink-muted leading-relaxed">WhatsApp ou téléphone — réponse garantie en moins de 5 minutes par notre équipe.</div>
-        <div class="absolute top-1/2 -right-[13px] w-6 h-6 rounded-full bg-white border-2 border-emerald/30 hidden lg:flex items-center justify-center text-xs text-ink-muted z-10">→</div>
-      </div>
-      <div class="why-card group relative rounded-3xl border-2 border-ivory-dark bg-ivory p-8 hover:border-gold hover:bg-gold-pale delay-2 reveal">
-        <div class="font-display font-black text-6xl text-ink/10 group-hover:text-gold/20 transition-colors leading-none mb-5 tracking-tight">03</div>
-        <div class="text-4xl mb-4">✅</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Confirmez</div>
-        <div class="text-sm text-ink-muted leading-relaxed">Validez votre commande, choisissez entre livraison express ou retrait en boutique.</div>
-        <div class="absolute top-1/2 -right-[13px] w-6 h-6 rounded-full bg-white border-2 border-gold/30 hidden lg:flex items-center justify-center text-xs text-ink-muted z-10">→</div>
-      </div>
-      <div class="why-card group rounded-3xl border-2 border-ivory-dark bg-ivory p-8 hover:border-rouge hover:bg-rouge-pale delay-3 reveal">
-        <div class="font-display font-black text-6xl text-ink/10 group-hover:text-rouge/20 transition-colors leading-none mb-5 tracking-tight">04</div>
-        <div class="text-4xl mb-4">🎉</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Profitez</div>
-        <div class="text-sm text-ink-muted leading-relaxed">Votre intérieur est transformé. Qualité premium, satisfaction 100% garantie.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════
-     PROMOS
-═══════════════════════════════════ -->
-<section class="py-28 px-6 md:px-14 bg-ivory" id="promos">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="mb-14 reveal">
-      <div class="flex items-center gap-2 mb-3">
-        <span class="w-6 h-0.5 bg-rouge rounded-full"></span>
-        <span class="text-xs font-bold tracking-[.18em] uppercase text-rouge">Offres Spéciales</span>
-      </div>
-      <h2 class="font-display font-black text-ink leading-none tracking-tight" style="font-size:clamp(36px,4vw,64px)">
-        Promotions <em class="italic text-rouge">du moment</em>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-5">
-
-      <!-- Big promo -->
-      <div class="promo-hover lg:col-span-3 relative rounded-3xl overflow-hidden cursor-pointer reveal" style="min-height:420px;background:linear-gradient(140deg,#B5651D 0%,#8B3A0D 100%)">
-        <div class="absolute inset-0 noise"></div>
-        <!-- Pattern -->
-        <div class="absolute inset-0 stripe-deco opacity-20"></div>
-        <!-- Watermark -->
-        <div class="absolute -right-6 top-4 font-display font-black italic text-white/10 leading-none select-none" style="font-size:120px">–30%</div>
-        <!-- Badge -->
-        <div class="absolute top-6 left-6">
-          <span class="px-4 py-1.5 rounded-full bg-white/20 border border-white/30 text-white text-xs font-bold uppercase tracking-wider">⏳ Offre limitée</span>
+    <!-- ===== CTA SECTION ===== -->
+    <section class="py-16 bg-night-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">  <!-- AJOUTER CECI -->
+            <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mb-6">
+                Prêt à transformer votre <span class="text-terracotta-500">intérieur ?</span>
+            </h2>
+            <p class="text-white/70 text-lg max-w-2xl mx-auto mb-10">
+                Nos conseillers sont disponibles 7j/7 pour vous guider dans vos choix.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="https://wa.me/22900000000" class="bg-terracotta-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-terracotta-600 transition flex items-center gap-2 shadow-lg hover:shadow-xl">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    WhatsApp direct
+                </a>
+                <a href="tel:+22900000000" class="bg-white/10 backdrop-blur text-white px-8 py-4 rounded-full font-semibold border-2 border-white/20 hover:bg-white/20 transition flex items-center gap-2">
+                    <i class="fas fa-phone-alt"></i>
+                    Appel rapide
+                </a>
+                <a href="#" class="bg-white text-night-900 px-8 py-4 rounded-full font-semibold hover:bg-sand-100 transition flex items-center gap-2">
+                    <i class="fas fa-envelope"></i>
+                    Formulaire
+                </a>
+            </div>
         </div>
-        <div class="absolute bottom-0 left-0 right-0 p-10 z-10">
-          <div class="font-display font-black text-white leading-none tracking-tight mb-3" style="font-size:88px">–30%</div>
-          <div class="text-white/70 text-lg mb-8 font-light">Sur toute la gamme Rideaux · Jusqu'à fin du mois</div>
-          <a href="https://wa.me/22900000000?text=Promo rideaux -30%" class="inline-flex items-center gap-3 px-8 py-4 bg-white text-amber font-bold rounded-xl hover:bg-ivory transition-colors text-sm shadow-xl">
-            Profiter de l'offre →
-          </a>
+    </section>
+
+      <!-- ===== AVANTAGES ===== -->
+      <section class="py-16 bg-sand-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <!-- Avantage 1 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-terracotta-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-truck text-2xl text-terracotta-600"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg">Livraison gratuite</h3>
+                    <p class="text-sm text-night-500">Dès 50 000 F d'achat</p>
+                </div>
+                
+                <!-- Avantage 2 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-saffron-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-undo-alt text-2xl text-saffron-600"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg">Retours faciles</h3>
+                    <p class="text-sm text-night-500">Satisfait ou remboursé</p>
+                </div>
+                
+                <!-- Avantage 3 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-safari-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-safari-600"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg">Paiement sécurisé</h3>
+                    <p class="text-sm text-night-500">Cartes, mobile money</p>
+                </div>
+                
+                <!-- Avantage 4 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-terracotta-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-headset text-2xl text-terracotta-600"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-lg">Support 7j/7</h3>
+                    <p class="text-sm text-night-500">Réponse sous 24h</p>
+                </div>
+            </div>
         </div>
-        <div class="absolute top-1/2 right-10 -translate-y-1/2 text-[120px] opacity-30">🪟</div>
-      </div>
+    </section>
 
-      <!-- Small promos -->
-      <div class="lg:col-span-2 flex flex-col gap-5">
-        <div class="promo-hover relative rounded-3xl overflow-hidden cursor-pointer flex-1 reveal delay-1" style="min-height:190px;background:linear-gradient(145deg,#D4EAE0,#A8D4C0)">
-          <div class="absolute top-1/2 right-6 -translate-y-1/2 text-8xl opacity-25">🛏️</div>
-          <div class="p-8 relative z-10 h-full flex flex-col justify-end">
-            <div class="text-3xl mb-2">🛏️</div>
-            <div class="font-display font-black text-2xl text-ink-soft mb-1">Collection Draps</div>
-            <div class="text-sm text-emerald font-semibold">–20% sur les draps Satin · Ce weekend</div>
-          </div>
+    <!-- ===== ATELIER — SAVOIR-FAIRE ===== -->
+    <section class="relative py-12 md:py-16 bg-gradient-to-b from-night-900 to-night-800 text-white overflow-hidden">
+        <!-- Éléments décoratifs -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-96 h-96 bg-terracotta-500 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-sage-500 rounded-full blur-3xl animate-float-slow"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/5 rounded-full"></div>
         </div>
-        <div class="promo-hover relative rounded-3xl overflow-hidden cursor-pointer flex-1 reveal delay-2" style="min-height:190px;background:linear-gradient(145deg,#FDF5E0,#EDD9A3)">
-          <div class="absolute top-1/2 right-6 -translate-y-1/2 text-8xl opacity-25">🏺</div>
-          <div class="p-8 relative z-10 h-full flex flex-col justify-end">
-            <div class="text-3xl mb-2">🏺</div>
-            <div class="font-display font-black text-2xl text-ink-soft mb-1">Pack Décoration</div>
-            <div class="text-sm text-gold font-semibold">3 articles pour 25 000 F · Économisez 8 000 F</div>
-          </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                <!-- Contenu texte -->
+                <div class="space-y-8 reveal fade-left">
+                    <div class="inline-flex items-center gap-3">
+                        <span class="w-12 h-0.5 bg-terracotta-500"></span>
+                        <span class="text-terracotta-400 text-sm uppercase tracking-[0.3em] font-semibold">L'atelier</span>
+                    </div>
+                    
+                    <h2 class="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold">
+                        Ce qui ne <span class="text-terracotta-500 relative inline-block">s'achète
+                            <span class="absolute -bottom-2 left-0 w-full h-1 bg-terracotta-500/30 rounded-full"></span>
+                        </span> pas
+                    </h2>
+                    
+                    <p class="text-white/70 text-lg md:text-xl leading-relaxed max-w-xl">
+                        Le temps, le geste, la rencontre avec la matière. Derrière chaque pièce, 
+                        il y a des mains qui savent regarder, des yeux qui savent toucher.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-8 pt-6">
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-terracotta-500/20 transition-colors duration-300">
+                                <i class="ph ph-hands-clapping text-2xl text-terracotta-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white/50">Artisans</div>
+                                <div class="font-display text-2xl text-white">15 collaborateurs</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-terracotta-500/20 transition-colors duration-300">
+                                <i class="ph ph-clock text-2xl text-terracotta-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-white/50">Depuis</div>
+                                <div class="font-display text-2xl text-white">2024</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-6">
+                        <a href="#contact" class="inline-flex items-center gap-3 text-white group">
+                            <span class="text-lg">Découvrir l'atelier</span>
+                            <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
+                            <span class="w-12 h-0.5 bg-terracotta-500 group-hover:w-20 transition-all duration-300"></span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Image avec effets -->
+                <div class="relative reveal fade-right">
+                    <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop" 
+                            alt="Atelier" 
+                            class="w-full h-full object-cover hover:scale-110 transition duration-700">
+                    </div>
+                    
+                    <!-- Badge flottant -->
+                    <div class="absolute -bottom-8 -left-8 bg-white/10 backdrop-blur-md text-white p-6 rounded-2xl shadow-2xl border border-white/10 animate-float">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-terracotta-500 rounded-xl flex items-center justify-center text-white">
+                                <i class="fab fa-whatsapp text-2xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm opacity-70">Conseil privé</div>
+                                <div class="text-xl font-display font-semibold">+229 00 00 00 00</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Badge qualité -->
+                    <div class="absolute top-8 right-8 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-star text-saffron-500"></i>
+                            <span class="font-semibold">Savoir-faire unique</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════
-     WHY US
-═══════════════════════════════════ -->
-<section class="py-28 px-6 md:px-14 bg-ivory-dark">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <div class="inline-flex items-center gap-2 mb-4">
-        <span class="w-6 h-0.5 bg-emerald rounded-full"></span>
-        <span class="text-xs font-bold tracking-[.18em] uppercase text-emerald">Pourquoi nous</span>
-        <span class="w-6 h-0.5 bg-emerald rounded-full"></span>
-      </div>
-      <h2 class="font-display font-black text-ink leading-none tracking-tight" style="font-size:clamp(36px,4vw,64px)">
-        Ce qui nous <em class="italic text-emerald">distingue</em>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <div class="why-card group bg-white rounded-3xl p-8 border border-ivory-dark hover:border-amber hover:shadow-xl hover:shadow-amber/10 reveal">
-        <div class="w-14 h-14 rounded-2xl bg-amber-pale flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">🏆</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Qualité Garantie</div>
-        <div class="text-sm text-ink-muted leading-relaxed">Chaque produit passe un contrôle qualité strict. Nous ne référençons que ce qui mérite votre confiance.</div>
-      </div>
-      <div class="why-card group bg-white rounded-3xl p-8 border border-ivory-dark hover:border-emerald hover:shadow-xl hover:shadow-emerald/10 reveal delay-1">
-        <div class="w-14 h-14 rounded-2xl bg-emerald-light flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">💰</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Prix Imbattables</div>
-        <div class="text-sm text-ink-muted leading-relaxed">Les meilleurs prix du marché avec des promotions régulières. On s'aligne ou on rembourse la différence.</div>
-      </div>
-      <div class="why-card group bg-white rounded-3xl p-8 border border-ivory-dark hover:border-gold hover:shadow-xl hover:shadow-gold/10 reveal delay-2">
-        <div class="w-14 h-14 rounded-2xl bg-gold-pale flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">⚡</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Livraison Express</div>
-        <div class="text-sm text-ink-muted leading-relaxed">Commandes traitées le jour même. Livraison à domicile rapide et fiable dans toute la zone.</div>
-      </div>
-      <div class="why-card group bg-white rounded-3xl p-8 border border-ivory-dark hover:border-[#25D366] hover:shadow-xl hover:shadow-green-200 reveal">
-        <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">💬</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Support WhatsApp</div>
-        <div class="text-sm text-ink-muted leading-relaxed">7j/7 sur WhatsApp. Conseils personnalisés, suivi de commande et SAV ultra-réactif.</div>
-      </div>
-      <div class="why-card group bg-white rounded-3xl p-8 border border-ivory-dark hover:border-blue-400 hover:shadow-xl hover:shadow-blue-100 reveal delay-1">
-        <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">🎨</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Large Catalogue</div>
-        <div class="text-sm text-ink-muted leading-relaxed">200+ produits dans 4 univers distincts. Nouvelles collections régulièrement ajoutées.</div>
-      </div>
-      <div class="why-card group bg-white rounded-3xl p-8 border border-ivory-dark hover:border-rouge hover:shadow-xl hover:shadow-red-100 reveal delay-2">
-        <div class="w-14 h-14 rounded-2xl bg-rouge-pale flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">🛡️</div>
-        <div class="font-display font-bold text-xl text-ink mb-3">Satisfait ou Repris</div>
-        <div class="text-sm text-ink-muted leading-relaxed">Pas satisfait ? On reprend le produit. Votre confiance est notre priorité absolue.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════
-     NEWSLETTER — AMBER
-═══════════════════════════════════ -->
-<section class="py-20 px-6 md:px-14 bg-ink noise relative overflow-hidden reveal">
-    <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-amber/10 blur-3xl pointer-events-none"></div>
-    <div class="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-emerald/10 blur-3xl pointer-events-none"></div>
-    <div class="max-w-screen-xl mx-auto relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
-      <div>
-        <h3 class="font-display font-black text-white leading-none tracking-tight mb-3" style="font-size:clamp(32px,3.5vw,56px)">
-          Offres exclusives <em class="italic text-amber-light font-black">en avant-première.</em>
-        </h3>
-        <p class="text-white/50 text-base font-light max-w-md leading-relaxed">Inscrivez-vous et recevez nos promotions et nouvelles collections avant tout le monde.</p>
-      </div>
-      <form onsubmit="submitNL(event)" class="flex flex-col gap-3 min-w-[340px]">
-        <div class="flex">
-          <input type="email" id="nlEmail" placeholder="votre@email.com" required class="flex-1 px-5 py-4 bg-white/8 border border-white/15 rounded-l-xl text-white placeholder-white/30 outline-none focus:border-amber text-sm transition-colors" style="background:rgba(255,255,255,.07)">
-          <button type="submit" id="nlBtn" class="px-7 py-4 bg-amber text-white font-semibold rounded-r-xl hover:bg-amber/90 transition-colors text-sm whitespace-nowrap">S'inscrire →</button>
-        </div>
-        <p class="text-white/25 text-xs text-center">🔒 Aucun spam. Désinscription en un clic.</p>
-      </form>
-    </div>
-  </section>
+    </section>
 
   
-<!-- ═══════════════════════════════════
-     TÉMOIGNAGES
-═══════════════════════════════════ -->
-<section class="py-28 px-6 md:px-14 bg-white" id="avis">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="flex items-end justify-between mb-14 reveal">
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="w-6 h-0.5 bg-gold rounded-full"></span>
-          <span class="text-xs font-bold tracking-[.18em] uppercase text-gold">Témoignages</span>
+    <!-- ===== COLLECTION EXCLUSIVE ===== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Header avec style différent -->
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-4xl md:text-5xl font-display font-bold mt-4 mb-6">
+                Collection <span class="gradient-text">Essentielle</span>
+            </h2>
+            <p class="text-night-600">Des pièces intemporelles, sélectionnées pour leur qualité exceptionnelle.</p>
         </div>
-        <h2 class="font-display font-black text-ink leading-none tracking-tight" style="font-size:clamp(36px,4vw,64px)">
-          Ils parlent de <em class="italic text-gold">nous</em>
-        </h2>
-      </div>
-      <div class="hidden md:flex flex-col items-end gap-1">
-        <div class="flex gap-0.5 text-gold text-2xl">★★★★★</div>
-        <div class="font-display font-black text-3xl text-ink">4.9/5</div>
-        <div class="text-xs text-ink-muted">150+ avis vérifiés</div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <!-- T1 -->
-      <div class="testi-card bg-ivory rounded-3xl p-8 border border-ivory-dark hover:shadow-2xl hover:shadow-amber/10 relative reveal">
-        <div class="absolute top-6 right-6 text-[11px] font-semibold text-emerald bg-emerald-light px-3 py-1 rounded-full">✓ Vérifié</div>
-        <div class="font-display italic font-black text-6xl text-amber/20 leading-none mb-3">"</div>
-        <div class="flex gap-0.5 text-gold text-sm mb-4">★★★★★</div>
-        <p class="text-ink-soft leading-relaxed mb-7 text-[15px] font-light">Commande reçue en 24h, qualité vraiment exceptionnelle. Les rideaux sont exactement comme sur les photos. Service client au top !</p>
-        <div class="flex items-center gap-3 pt-5 border-t border-ivory-dark">
-          <div class="w-11 h-11 rounded-2xl bg-amber flex items-center justify-center font-display font-bold italic text-white text-lg">A</div>
-          <div>
-            <div class="font-semibold text-ink-soft text-sm">Aminata Coulibaly</div>
-            <div class="text-xs text-ink-muted mt-0.5">📍 Cotonou · Cliente fidèle</div>
-          </div>
+        
+        <!-- Grille différente : 3 colonnes avec mise en avant -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Carte premium 1 -->
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                <div class="relative h-80 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1617104551722-3b2d513664dd?w=800&auto=format&fit=crop" 
+                        alt="Produit" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-night-900/60 via-transparent to-transparent"></div>
+                    
+                    <!-- Badges repositionnés -->
+                    <span class="absolute top-4 left-4 bg-terracotta-500 text-white px-4 py-1.5 rounded-full text-xs font-semibold z-10">Exclusivité</span>
+                    
+                    <!-- Actions flottantes -->
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-xs text-terracotta-500 font-semibold uppercase tracking-wider">Rideaux</span>
+                            <h3 class="font-display font-bold text-xl mt-1">Velours Céleste</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold text-night-900">24 500 F</span>
+                            <span class="text-sm text-night-400 line-through block">35 000 F</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-center gap-1 text-saffron-500">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            <span class="text-night-400 text-sm ml-1">(45)</span>
+                        </div>
+                        
+                        <a href="#" class="text-terracotta-500 font-semibold text-sm flex items-center gap-1 hover:gap-3 transition-all">
+                            Détails <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- WhatsApp direct dans la carte -->
+                    <a href="#" class="mt-4 w-full bg-sand-100 text-night-900 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-terracotta-500 hover:text-white transition group">
+                        <i class="fab fa-whatsapp text-terracotta-500 group-hover:text-white"></i>
+                        <span class="font-medium">Commander sur WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Carte premium 2 -->
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                <div class="relative h-80 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1616628188859-7f11e9a7a7e9?w=800&auto=format&fit=crop" 
+                        alt="Produit" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-night-900/60 via-transparent to-transparent"></div>
+                    
+                    <span class="absolute top-4 left-4 bg-safari-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold z-10">Nouveauté</span>
+                    
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-xs text-safari-600 font-semibold uppercase tracking-wider">Draps</span>
+                            <h3 class="font-display font-bold text-xl mt-1">Parure 5 pièces</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold text-night-900">32 000 F</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-center gap-1 text-saffron-500">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <span class="text-night-400 text-sm ml-1">(32)</span>
+                        </div>
+                        
+                        <a href="#" class="text-terracotta-500 font-semibold text-sm flex items-center gap-1 hover:gap-3 transition-all">
+                            Détails <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <a href="#" class="mt-4 w-full bg-sand-100 text-night-900 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-terracotta-500 hover:text-white transition group">
+                        <i class="fab fa-whatsapp text-terracotta-500 group-hover:text-white"></i>
+                        <span class="font-medium">Commander sur WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Carte premium 3 -->
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                <div class="relative h-80 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&auto=format&fit=crop" 
+                        alt="Produit" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-night-900/60 via-transparent to-transparent"></div>
+                    
+                    <span class="absolute top-4 left-4 bg-saffron-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold z-10">-20%</span>
+                    
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                            <i class="far fa-heart"></i>
+                        </button>
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-xs text-saffron-600 font-semibold uppercase tracking-wider">Quincaillerie</span>
+                            <h3 class="font-display font-bold text-xl mt-1">Poignée design</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold text-night-900">8 500 F</span>
+                            <span class="text-sm text-night-400 line-through block">10 500 F</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-center gap-1 text-saffron-500">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            <span class="text-night-400 text-sm ml-1">(18)</span>
+                        </div>
+                        
+                        <a href="#" class="text-terracotta-500 font-semibold text-sm flex items-center gap-1 hover:gap-3 transition-all">
+                            Détails <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                    <a href="#" class="mt-4 w-full bg-sand-100 text-night-900 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-terracotta-500 hover:text-white transition group">
+                        <i class="fab fa-whatsapp text-terracotta-500 group-hover:text-white"></i>
+                        <span class="font-medium">Commander sur WhatsApp</span>
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
-      <!-- T2 -->
-      <div class="testi-card bg-ivory rounded-3xl p-8 border border-ivory-dark hover:shadow-2xl hover:shadow-emerald/10 relative reveal delay-1">
-        <div class="absolute top-6 right-6 text-[11px] font-semibold text-emerald bg-emerald-light px-3 py-1 rounded-full">✓ Vérifié</div>
-        <div class="font-display italic font-black text-6xl text-emerald/20 leading-none mb-3">"</div>
-        <div class="flex gap-0.5 text-gold text-sm mb-4">★★★★★</div>
-        <p class="text-ink-soft leading-relaxed mb-7 text-[15px] font-light">WhatsApp ultra-réactif, réponse en moins de 2 minutes ! Les draps satin sont d'une douceur incroyable. Je recommande à 100%.</p>
-        <div class="flex items-center gap-3 pt-5 border-t border-ivory-dark">
-          <div class="w-11 h-11 rounded-2xl bg-emerald flex items-center justify-center font-display font-bold italic text-white text-lg">K</div>
-          <div>
-            <div class="font-semibold text-ink-soft text-sm">Kofi Mensah</div>
-            <div class="text-xs text-ink-muted mt-0.5">📍 Porto-Novo</div>
-          </div>
+        
+        <!-- Lien vers toute la collection -->
+        <div class="text-center mt-8">
+            <a href="#" class="inline-flex items-center gap-3 text-night-900 font-semibold group">
+                <span>Découvrir toute la collection</span>
+                <i class="fas fa-arrow-right group-hover:translate-x-2 transition"></i>
+                <span class="w-12 h-0.5 bg-terracotta-500 group-hover:w-20 transition-all"></span>
+            </a>
         </div>
-      </div>
-      <!-- T3 -->
-      <div class="testi-card bg-ivory rounded-3xl p-8 border border-ivory-dark hover:shadow-2xl hover:shadow-gold/10 relative reveal delay-2">
-        <div class="absolute top-6 right-6 text-[11px] font-semibold text-emerald bg-emerald-light px-3 py-1 rounded-full">✓ Vérifié</div>
-        <div class="font-display italic font-black text-6xl text-gold/20 leading-none mb-3">"</div>
-        <div class="flex gap-0.5 text-gold text-sm mb-4">★★★★★</div>
-        <p class="text-ink-soft leading-relaxed mb-7 text-[15px] font-light">Mon salon a été totalement transformé. Prix imbattables, qualité au top. Je reviens régulièrement pour mes nouvelles décorations !</p>
-        <div class="flex items-center gap-3 pt-5 border-t border-ivory-dark">
-          <div class="w-11 h-11 rounded-2xl bg-gold flex items-center justify-center font-display font-bold italic text-white text-lg">F</div>
-          <div>
-            <div class="font-semibold text-ink-soft text-sm">Fatou Diallo</div>
-            <div class="text-xs text-ink-muted mt-0.5">📍 Abomey-Calavi</div>
-          </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-night-800 text-white/70 mt-8 md:mt-10 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+            <!-- About -->
+            <div>
+                <div class="text-2xl font-['Clash_Display'] font-bold text-white mb-6">
+                    SEGNON<span class="text-terracotta-500">SHOP</span>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed mb-6">
+                    Votre boutique premium de rideaux, draps, quincaillerie et décoration. L'élégance africaine réinventée.
+                </p>
+                <div class="flex gap-3">
+                    <a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-terracotta-500 hover:text-white transition">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Links -->
+            <div>
+                <h4 class="text-white font-bold mb-6">Liens rapides</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Accueil</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Collections</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Nouveautés</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Promotions</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Contact</a></li>
+                </ul>
+            </div>
+            
+            <!-- Categories -->
+            <div>
+                <h4 class="text-white font-bold mb-6">Catégories</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Rideaux</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Draps</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Quincaillerie</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Décoration</a></li>
+                    <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Sur mesure</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact -->
+            <div>
+                <h4 class="text-white font-bold mb-6">Contact</h4>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1"></i>
+                        <span>Cotonou, Bénin</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-phone-alt mt-1"></i>
+                        <span>+229 00 00 00 00</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-envelope mt-1"></i>
+                        <span>contact@segnonshop.com</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-clock mt-1"></i>
+                        <span>Lun - Sam : 8h - 19h</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-
-
-<!-- ═══════════════════════════════════
-     FOOTER
-═══════════════════════════════════ -->
-<footer class="bg-ink-soft pt-20 pb-10 px-6 md:px-14">
-  <div class="max-w-screen-xl mx-auto">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
-
-      <!-- Brand -->
-      <div class="lg:col-span-1">
-        <a href="#" class="flex items-center gap-3 mb-5">
-          <div class="w-9 h-9 bg-amber rounded-xl flex items-center justify-center text-white font-display font-bold text-lg italic">S</div>
-          <span class="font-display font-bold text-xl tracking-tight text-white">Segnon<span class="text-amber">Shop</span></span>
-        </a>
-        <p class="text-white/40 text-sm leading-relaxed mb-7 max-w-[240px] font-light">Votre boutique premium de rideaux, draps, quincaillerie et décoration intérieure au Bénin.</p>
-        <div class="flex gap-3">
-          <a href="#" class="w-9 h-9 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center text-white/50 hover:bg-amber hover:border-amber hover:text-white transition-all text-sm">f</a>
-          <a href="#" class="w-9 h-9 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center text-white/50 hover:bg-amber hover:border-amber hover:text-white transition-all text-sm">in</a>
-          <a href="https://wa.me/22900000000" class="w-9 h-9 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center text-white/50 hover:bg-[#25D366] hover:border-[#25D366] hover:text-white transition-all text-sm">💬</a>
+        
+        <!-- Bottom -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 text-sm">
+            <div>© 2025 Segnon Shop. Tous droits réservés.</div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition">Mentions légales</a>
+                <a href="#" class="hover:text-white transition">Confidentialité</a>
+                <a href="#" class="hover:text-white transition">CGV</a>
+            </div>
         </div>
-      </div>
+    </footer>
 
-      <!-- Nav -->
-      <div>
-        <div class="text-[11px] font-bold uppercase tracking-[.18em] text-white/30 mb-5">Navigation</div>
-        <ul class="flex flex-col gap-3">
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Accueil</a></li>
-          <li><a href="#categories" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Catégories</a></li>
-          <li><a href="#produits" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Produits</a></li>
-          <li><a href="#promos" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Promotions</a></li>
-          <li><a href="#avis" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Avis clients</a></li>
-          <li><a href="#contact" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Contact</a></li>
-        </ul>
-      </div>
 
-      <!-- Produits -->
-      <div>
-        <div class="text-[11px] font-bold uppercase tracking-[.18em] text-white/30 mb-5">Produits</div>
-        <ul class="flex flex-col gap-3">
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Rideaux Voilage</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Rideaux Occultants</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Draps Satin</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Draps Coton</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Tringles & Rails</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Coussins & Tapis</a></li>
-        </ul>
-      </div>
 
-      <!-- Infos -->
-      <div>
-        <div class="text-[11px] font-bold uppercase tracking-[.18em] text-white/30 mb-5">Informations</div>
-        <ul class="flex flex-col gap-3">
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>À propos</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Livraison & Retours</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Guide des tailles</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>FAQ</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Mentions légales</a></li>
-          <li><a href="#" class="text-sm text-white/50 hover:text-amber transition-colors flex items-center gap-2 group"><span class="w-0 h-px bg-amber transition-all group-hover:w-3"></span>Confidentialité</a></li>
-        </ul>
-      </div>
+    <!-- Back to top -->
+    <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+            class="fixed bottom-6 right-6 w-12 h-12 bg-terracotta-500 text-white rounded-xl flex items-center justify-center shadow-lg opacity-0 translate-y-4 transition-all duration-300 hover:bg-terracotta-600 z-50">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
-    </div>
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-10">
-      <div class="text-white/25 text-sm">© 2026 Segnon Shop. Tous droits réservés.</div>
-      <div class="flex gap-6">
-        <a href="#" class="text-white/25 text-sm hover:text-white/50 transition-colors">CGV</a>
-        <a href="#" class="text-white/25 text-sm hover:text-white/50 transition-colors">Confidentialité</a>
-        <a href="#" class="text-white/25 text-sm hover:text-white/50 transition-colors">Mentions légales</a>
-      </div>
-    </div>
-  </div>
-</footer>
+    <!-- Scripts -->
+    <script>
+        // Back to top visibility
+        window.addEventListener('scroll', function() {
+            const btt = document.getElementById('backToTop');
+            if (window.scrollY > 500) {
+                btt.style.opacity = '1';
+                btt.style.transform = 'translateY(0)';
+            } else {
+                btt.style.opacity = '0';
+                btt.style.transform = 'translateY(20px)';
+            }
+        });
 
-<!-- Back to top -->
-<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})"
-  class="fixed bottom-7 right-7 w-12 h-12 bg-amber text-white rounded-xl flex items-center justify-center text-lg font-bold shadow-xl shadow-amber/30 opacity-0 translate-y-4 transition-all duration-300 hover:bg-amber/90 hover:-translate-y-1 z-50">
-  ↑
-</button>
+        // Countdown timer
+        function updateTimer() {
+            const days = document.getElementById('days');
+            const hours = document.getElementById('hours');
+            const minutes = document.getElementById('minutes');
+            const seconds = document.getElementById('seconds');
 
-<script>
-// ── CURSOR ──
-const dot = document.getElementById('c-dot'), ring = document.getElementById('c-ring');
-let cx = 0, cy = 0;
-document.addEventListener('mousemove', e => {
-  cx = e.clientX; cy = e.clientY;
-  dot.style.left = cx + 'px'; dot.style.top = cy + 'px';
-  setTimeout(() => { ring.style.left = cx + 'px'; ring.style.top = cy + 'px'; }, 70);
-});
-document.querySelectorAll('a, button, .cat-card, .prod-card, .why-card, .testi-card, .promo-hover').forEach(el => {
-  el.addEventListener('mouseenter', () => { dot.classList.add('big'); ring.style.transform = 'translate(-50%,-50%) scale(1.6)'; ring.style.borderColor = 'rgba(181,101,29,.6)'; });
-  el.addEventListener('mouseleave', () => { dot.classList.remove('big'); ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(181,101,29,.4)'; });
-});
+            if (days && hours && minutes && seconds) {
+                let d = parseInt(days.textContent);
+                let h = parseInt(hours.textContent);
+                let m = parseInt(minutes.textContent);
+                let s = parseInt(seconds.textContent);
 
-// ── NAVBAR ──
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) { nav.classList.add('nav-glass', 'shadow-sm'); }
-  else { nav.classList.remove('nav-glass', 'shadow-sm'); }
-  const btt = document.getElementById('btt');
-  if (window.scrollY > 500) { btt.style.opacity = '1'; btt.style.transform = 'translateY(0)'; }
-  else { btt.style.opacity = '0'; btt.style.transform = 'translateY(1rem)'; }
-});
+                s--;
+                if (s < 0) {
+                    s = 59;
+                    m--;
+                    if (m < 0) {
+                        m = 59;
+                        h--;
+                        if (h < 0) {
+                            h = 23;
+                            d--;
+                            if (d < 0) {
+                                d = 7;
+                            }
+                        }
+                    }
+                }
 
-// ── TICKER — clone content ──
-const tpl = document.getElementById('tpl');
-const ticker = document.querySelector('.ticker-wrap');
-if (tpl && ticker) {
-  const content = tpl.innerHTML;
-  ticker.innerHTML = content + content;
-}
+                days.textContent = d.toString().padStart(2, '0');
+                hours.textContent = h.toString().padStart(2, '0');
+                minutes.textContent = m.toString().padStart(2, '0');
+                seconds.textContent = s.toString().padStart(2, '0');
+            }
+        }
 
-// ── REVEAL ──
-const revObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); revObs.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+        setInterval(updateTimer, 1000);
 
-// ── TABS ──
-function tabActive(el) {
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.remove('bg-ink', 'text-white', 'border-transparent');
-    b.classList.add('border', 'border-ink/20', 'text-ink-muted');
-  });
-  el.classList.add('bg-ink', 'text-white');
-  el.classList.remove('border', 'border-ink/20', 'text-ink-muted');
-}
-
-// ── FORMS ──
-function submitForm(e) {
-  e.preventDefault();
-  const btn = document.getElementById('formBtn');
-  btn.innerHTML = '✅ Message envoyé !';
-  btn.style.background = '#1B5E42';
-  setTimeout(() => { btn.innerHTML = '<span>✉️</span> Envoyer le message'; btn.style.background = ''; e.target.reset(); }, 3500);
-}
-function submitNL(e) {
-  e.preventDefault();
-  const btn = document.getElementById('nlBtn');
-  btn.textContent = '✅ Inscrit !';
-  btn.style.background = '#1B5E42';
-  setTimeout(() => { btn.textContent = "S'inscrire →"; btn.style.background = ''; e.target.reset(); }, 3000);
-}
-</script>
+        // Tabs functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('bg-terracotta-500', 'text-white');
+                    b.classList.add('text-night-600');
+                });
+                this.classList.add('bg-terracotta-500', 'text-white');
+                this.classList.remove('text-night-600');
+            });
+        });
+    </script>
 </body>
 </html>
