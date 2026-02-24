@@ -14,7 +14,6 @@ use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\QrCode as EndroidQr;
 use App\Services\MonerooPaymentService;
 
-
 class ShopPaymentController extends Controller {
 
     public function show(Order $order){

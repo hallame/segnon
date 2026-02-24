@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\SliderController;
-use App\Http\Controllers\SectionController;
 use App\Http\Controllers\AdminPartnerController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PaymentMethodController;
@@ -33,16 +31,11 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\PartnerRegisterController;
 
 use App\Http\Controllers\Partners\PartnerController;
-use App\Http\Controllers\Partners\PartnerHotelController;
 use App\Http\Controllers\Partners\PartnerSettingController;
 use App\Http\Controllers\Partners\PartnerSubmissionController;
-use App\Http\Controllers\Partners\PartnerEventReportController;
 use App\Http\Controllers\Partners\PartnerProfileController;
-use App\Http\Controllers\Partners\PartnerBookingController;
-use App\Http\Controllers\Partners\PartnerEventController;
 use App\Http\Controllers\Partners\PartnerOrderController;
 use App\Http\Controllers\Partners\PartnerProductController;
-use App\Http\Controllers\Partners\PartnerRoomController;
 use App\Http\Controllers\Partners\PartnerSubscriptionController;
 
 Route::post('/payments/moneroo/webhook', [MonerooWebhookController::class, 'handle'])->name('payments.moneroo.webhook');
@@ -60,6 +53,8 @@ Route::middleware(['web', 'throttle:20,1'])->group(function () {
 Route::view('/mbot', 'frontend.bot')->name('mbot');
 ////// FRONTEND CONTROLLER
 Route::get('/', [FrontendController::class, 'home'])->name('home');
+Route::get('/segnon', [FrontendController::class, 'segnon'])->name('segnon');
+
 Route::get('/pricing', [FrontendController::class, 'pricing'])->name('shop.pricing');
 Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
 Route::post('/contact/send', [FrontendController::class, 'sendContact'])->name('contact.send');
@@ -239,26 +234,6 @@ Route::middleware(['auth', 'user.active', 'verified','admin.access','permission:
     Route::delete('faqs/{faq}',   [AdminFaqController::class, 'destroy'])->name('faqs.destroy');
     Route::patch('faqs/{faq}/toggle', [AdminFaqController::class, 'toggle'])->name('faqs.toggle');
     Route::post('faqs/reorder', [AdminFaqController::class, 'reorder'])->name('faqs.reorder');
-
-
-    ////////// Sections Controller////////////
-    Route::get('/sections', [SectionController::class, 'sections'])->name('sections');
-    Route::get('/home/sections', [SectionController::class, 'sections'])->name('home.sections');
-    Route::get('/section-add-form', [SectionController::class, 'addForm'])->name('section.add.form');
-    Route::post('/section-add', [SectionController::class, 'add'])->name('section.add');
-    Route::post('/section/status-update/{id}', [SectionController::class, 'updateStatus']);
-    Route::delete('/section-delete/{id}', [SectionController::class, 'delete'])->name('section.delete');
-    Route::get('/section/edit/{id}', [SectionController::class, 'edit'])->name('section.edit');
-    Route::put('/section-update/{id}', [SectionController::class, 'update'])->name('section.update');
-
-    ////////// Sliders Controller////////////
-    Route::get('/sliders', [SliderController::class, 'sliders'])->name('sliders');
-    Route::get('/home/sliders', [SliderController::class, 'sliders'])->name('home.sliders');
-    Route::post('/sliders/store', [SliderController::class, 'store'])->name('sliders.store');
-    Route::post('/sliders/status/{id}', [SliderController::class, 'updateStatus']);
-    Route::delete('/slider-delete/{id}', [SliderController::class, 'delete'])->name('sliders.delete');
-    Route::get('/slider/edit/{id}', [SliderController::class, 'edit'])->name('sliders.edit');
-    Route::put('/slider-update/{id}', [SliderController::class, 'update'])->name('sliders.update');
 
     ////////// PRODUCT Methods Controller ////////////
     Route::get   ('/products/all',                  [AdminProductController::class,'index'])->name('products.index');

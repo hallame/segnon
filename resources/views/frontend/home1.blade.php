@@ -1,1272 +1,891 @@
-@extends('frontend.layouts.master')
-@section('title', 'Marketplace moderne de vendeurs et créateurs')
-@section('meta_title', 'Marketplace moderne pour vendeurs, créateurs et marques')
-@section('meta_description', "Vendeurs, créateurs et marques connectés à des clients partout dans le monde : pièces singulières, séries limitées et essentiels du quotidien revisités.")
-@section('meta_image', asset('assets/images/mk.png'))
-@section('content')
-    <!-- HERO -->
-    <section class="relative overflow-hidden bg-slate-950 text-slate-50 min-h-[95dvh] flex items-center">
-       
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    
+    <!-- SEO -->
+    <title>Segnon Shop — L'Élégance Africaine</title>
+    <meta name="description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception. Des pièces uniques qui racontent une histoire.">
+    <meta name="keywords" content="rideaux, draps, quincaillerie, décoration, maison, afrique, artisanat, luxe">
+    <meta name="author" content="Segnon Shop">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://segnonshop.com/">
+    <meta property="og:title" content="Segnon Shop — L'Élégance Africaine">
+    <meta property="og:description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=1200">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Segnon Shop — L'Élégance Africaine">
+    <meta name="twitter:description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=1200">
+    
+    <!-- Favicon (placeholders - à remplacer par vos fichiers) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Couleur du thème -->
+    <meta name="theme-color" content="#0066ff">
+    <meta name="msapplication-TileColor" content="#0066ff">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration Tailwind personnalisée - Palette Bleu Nuit & Or -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            50: '#e6f0ff',
+                            100: '#cce0ff',
+                            200: '#99c2ff',
+                            300: '#66a3ff',
+                            400: '#3385ff',
+                            500: '#0066ff',    // Bleu vif (primaire)
+                            600: '#0052cc',
+                            700: '#003d99',
+                            800: '#002966',
+                            900: '#001433',
+                        },
+                        'secondary': {
+                            50: '#fff9e6',
+                            100: '#fff3cc',
+                            200: '#ffe799',
+                            300: '#ffdb66',
+                            400: '#ffcf33',
+                            500: '#ffc300',    // Or (accent)
+                            600: '#cc9c00',
+                            700: '#997500',
+                            800: '#664e00',
+                            900: '#332700',
+                        },
+                        'dark': {
+                            50: '#e6e8eb',
+                            100: '#ccd0d6',
+                            200: '#99a1ad',
+                            300: '#667285',
+                            400: '#33435c',
+                            500: '#001433',    // Bleu nuit profond
+                            600: '#001029',
+                            700: '#000c1f',
+                            800: '#000814',
+                            900: '#00040a',
+                        },
+                        'light': {
+                            50: '#fcfcfd',
+                            100: '#f9fafb',
+                            200: '#f3f5f7',
+                            300: '#edf0f3',
+                            400: '#e7ebef',
+                            500: '#e1e6eb',    // Gris clair
+                            600: '#b4b8bc',
+                            700: '#878a8d',
+                            800: '#5a5c5e',
+                            900: '#2d2e2f',
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['Clash Display', 'system-ui', 'sans-serif'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'gradient': 'gradient 8s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        }
+                    },
+                    backgroundSize: {
+                        '300%': '300%',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Styles personnalisés -->
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #0066ff 0%, #ffc300 50%, #001433 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        * {
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-light-100 text-dark-900">
 
-        {{-- Effet 3D Minimaliste & Élégant --}}
-        <div class="pointer-events-none absolute inset-0 overflow-hidden">
-
-            <!-- Orb géométrique central (effet 3D) -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]">
-                <!-- Anneau externe rotatif -->
-                <div class="absolute inset-0 rounded-full border border-emerald-500/20 animate-spin-slow"></div>
-
-                <!-- Anneau moyen -->
-                <div class="absolute inset-12 rounded-full border border-amber-500/15 animate-spin-slow-reverse"></div>
-
-                <!-- Anneau interne -->
-                <div class="absolute inset-24 rounded-full border border-cyan-500/10 animate-spin-slow"></div>
-
-                <!-- Points orbitaux -->
-                <div class="absolute inset-0">
-                    @for($i = 0; $i < 12; $i++)
-                        @php
-                            $angle = ($i / 12) * 360;
-                            $rad = deg2rad($angle);
-                            $x = cos($rad) * 280;
-                            $y = sin($rad) * 280;
-                        @endphp
-                        <div class="absolute w-2 h-2 rounded-full bg-emerald-400/70 animate-pulse"
-                            style="
-                                left: calc(50% + {{ $x }}px);
-                                top: calc(50% + {{ $y }}px);
-                                transform: translate(-50%, -50%);
-                                animation-delay: {{ $i * 0.2 }}s;
-                            ">
-                            <div class="absolute -inset-1 rounded-full bg-emerald-400/20 animate-ping"
-                                style="animation-delay: {{ $i * 0.2 }}s"></div>
-                        </div>
-                    @endfor
+    <!-- ===== TOP BAR ===== -->
+    <div class="bg-dark-800 text-white py-2 px-4 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-2">
+                <div class="flex items-center gap-4">
+                    <span class="flex items-center gap-1"><i class="fas fa-truck text-secondary-500"></i> Livraison gratuite</span>
+                    <span class="hidden md:inline w-1 h-1 bg-light-400 rounded-full"></span>
+                    <span class="flex items-center gap-1"><i class="fas fa-gift text-secondary-500"></i> -20%</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="#" class="hover:text-secondary-500 transition"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="hover:text-secondary-500 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-secondary-500 transition"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
-
-            <!-- Éclats de lumière directionnels -->
-            <div class="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-emerald-500/10 to-transparent blur-3xl"></div>
-            <div class="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-gradient-to-tl from-amber-500/10 to-transparent blur-3xl"></div>
-
-            <!-- Gradient de transition bas -->
-            <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
         </div>
+    </div>
 
-        <style>
-            @keyframes spin-slow {
-                from { transform: translate(-50%, -50%) rotate(0deg); }
-                to { transform: translate(-50%, -50%) rotate(360deg); }
-            }
+    <!-- ===== NAVBAR ===== -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-light-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="/" class="text-3xl font-['Clash_Display'] font-bold tracking-tight">
+                    SEGNON<span class="text-primary-500">.</span>
+                </a>
 
-            @keyframes spin-slow-reverse {
-                from { transform: translate(-50%, -50%) rotate(360deg); }
-                to { transform: translate(-50%, -50%) rotate(0deg); }
-            }
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <a href="#accueil" class="px-4 py-2 text-dark-600 hover:text-primary-500 font-medium transition relative group">
+                        Accueil
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#collections" class="px-4 py-2 text-dark-600 hover:text-primary-500 font-medium transition relative group">
+                        Collections
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#produits" class="px-4 py-2 text-dark-600 hover:text-primary-500 font-medium transition relative group">
+                        Nouveautés
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#promos" class="px-4 py-2 text-dark-600 hover:text-primary-500 font-medium transition relative group">
+                        Promos
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                    <a href="#contact" class="px-4 py-2 text-dark-600 hover:text-primary-500 font-medium transition relative group">
+                        Contact
+                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-primary-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                    </a>
+                </div>
 
-            .animate-spin-slow {
-                animation: spin-slow 20s linear infinite;
-            }
+                <!-- Actions -->
+                <div class="flex items-center gap-2">
+                    <button class="p-2 hover:bg-light-200 rounded-full transition">
+                        <i class="fas fa-search text-dark-600"></i>
+                    </button>
+                    <button class="p-2 hover:bg-light-200 rounded-full transition relative">
+                        <i class="far fa-heart text-dark-600"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 rounded-full text-white text-[10px] flex items-center justify-center">3</span>
+                    </button>
+                    <button class="p-2 hover:bg-light-200 rounded-full transition relative">
+                        <i class="fas fa-shopping-bag text-dark-600"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
+                    </button>
+                    <a href="https://wa.me/22900000000" class="hidden md:flex items-center gap-2 bg-primary-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-primary-600 transition shadow-lg hover:shadow-xl ml-2">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                    <button class="lg:hidden p-2 hover:bg-light-200 rounded-full transition">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-            .animate-spin-slow-reverse {
-                animation: spin-slow-reverse 25s linear infinite;
-            }
-
-            /* Effet de parallaxe subtil */
-            @media (min-width: 768px) {
-                .min-h-[95dvh] {
-                    transform-style: preserve-3d;
-                    perspective: 1000px;
-                }
-
-                .pointer-events-none {
-                    transform: translateZ(-20px);
-                }
-            }
-        </style>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:py-10 relative">
-            <div class="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-10 lg:gap-16 items-center">
-                {{-- LEFT --}}
-                <div class="space-y-6 lg:space-y-7">
-                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-slate-900/70 px-4 py-1.5 text-[11px] font-semibold tracking-[0.22em] uppercase">
-                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Vendeurs & créateurs
+    <!-- ===== HERO SECTION ===== -->
+    <section id="accueil" class="relative bg-gradient-to-br from-light-200 via-white to-secondary-50 overflow-hidden">
+        <!-- Formes décoratives -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float-slow"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 lg:py-24">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="space-y-8 text-center lg:text-left">
+                    
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-['Clash_Display'] font-bold leading-[1.1] tracking-tight">
+                        <span class="block text-dark-900">L'élégance</span>
+                        <span class="gradient-text">africaine</span>
+                        <span class="block text-dark-900">réinventée</span>
+                    </h1>
+                    
+                    <p class="text-lg text-dark-500 max-w-xl mx-auto lg:mx-0">
+                        Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception. 
+                        Des pièces uniques qui racontent une histoire.
+                    </p>
+                    
+                    <!-- CTA Group -->
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                        <a href="#collections" class="group bg-primary-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-primary-600 transition flex items-center gap-2 shadow-lg hover:shadow-xl">
+                            Explorer
+                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
+                        </a>
+                        <a href="https://wa.me/22900000000" class="group bg-white text-dark-900 px-8 py-4 rounded-full font-semibold border-2 border-light-400 hover:border-primary-500 transition flex items-center gap-2">
+                            <i class="fab fa-whatsapp text-primary-500"></i>
+                            WhatsApp direct
+                        </a>
                     </div>
-
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-light-300 max-w-md mx-auto lg:mx-0">
+                        <div>
+                            <div class="text-2xl font-['Clash_Display'] font-bold text-primary-500">5000+</div>
+                            <div class="text-xs text-dark-400">Clients</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-['Clash_Display'] font-bold text-secondary-600">200+</div>
+                            <div class="text-xs text-dark-400">Produits</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-['Clash_Display'] font-bold text-primary-600">4.9/5</div>
+                            <div class="text-xs text-dark-400">Avis</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Content - Images Grid -->
+                <div class="grid grid-cols-2 gap-4 relative">
+                    <!-- Image 1 -->
                     <div class="space-y-4">
-
-                        <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
-                            La marketplace professionnelle
-                            <br class="hidden sm:block">
-                            pour vendre vos produits en ligne,
-                            <span class="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">
-                                en toute simplicité.
-                            </span>
-                        </h1>
-
-                        <p class="text-sm sm:text-[15px] text-slate-300 max-w-xl">
-                            Une seule plateforme pour centraliser vos produits, présenter votre univers,
-                            gérer vos commandes et toucher plus de clients, sans complexité technique.
-                        </p>
-                    </div>
-
-
-                    <div class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar">
-                        <a href="{{ route('shop.products.index') }}"
-                        class="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full
-                                bg-amber-400 px-3 py-2 text-[12px] font-semibold text-slate-900
-                                shadow-[0_18px_45px_rgba(15,23,42,0.45)]
-                                hover:bg-amber-300 transition
-                                sm:px-4 sm:py-2.5 sm:text-[13px] sm:gap-2">
-                            <i class="ri-compass-3-line text-[15px] sm:text-base"></i>
-                            Voir la sélection
-                        </a>
-
-                        <a href="{{ route('partners.register') }}?module=shop"
-                        class="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full
-                                border border-emerald-300/60 bg-slate-900/60 px-3 py-2 text-[12px] font-semibold text-emerald-100
-                                hover:bg-emerald-900/40 hover:border-emerald-200 transition
-                                sm:px-4 sm:py-2.5 sm:text-[13px] sm:gap-2 ">
-                            <i class="ri-store-3-line text-[15px] sm:text-base"></i>
-                            Ouvrir ma boutique
-                        </a>
-                    </div>
-
-
-
-                     <div class="mt-5 flex flex-wrap items-center gap-4 text-[11px] text-slate-400">
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-800">
-                                <i class="ri-shield-check-line text-xs text-emerald-300"></i>
-                            </span>
-                            <span>Paiements sécurisés & commandes suivies</span>
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover:scale-105 transition duration-300">
+                            <img src="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=800&auto=format&fit=crop" 
+                                 alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-800">
-                                <i class="ri-global-line text-xs text-amber-300"></i>
-                            </span>
-                            <span>Vendeurs & artisans de plusieurs pays</span>
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover:scale-105 transition duration-300">
+                            <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop" 
+                                 alt="Draps" class="w-full h-48 object-cover hover:scale-110 transition duration-700">
                         </div>
                     </div>
-                </div>
-
-                {{-- RIGHT --}}
-                <div class="lg:pl-4">
-                    <div class="relative max-w-md mx-auto overflow-hidden">
-                        <div class="space-y-2">
-                            {{-- Carte principale --}}
-                            <article class="relative rounded-3xl bg-slate-900/80 shadow-2xl overflow-hidden">
-                                @php
-                                    $colors = [
-                                        'from-emerald-500 to-emerald-600',
-                                        'from-amber-400 to-orange-500',
-                                        'from-sky-500 to-indigo-500',
-                                        'from-purple-500 to-fuchsia-500',
-                                        'from-rose-500 to-pink-600',
-                                        'from-teal-400 to-cyan-500',
-                                        'from-lime-400 to-green-500',
-                                        'from-red-500 to-orange-600',
-                                        'from-violet-500 to-indigo-600',
-                                        'from-blue-500 to-cyan-600',
-                                    ];
-
-                                @endphp
-
-                                <div class="flex items-center justify-between gap-2 p-2 pb-0">
-                                    {{-- Avatars vendeurs récents --}}
-                                    <div class="flex items-center gap-2.5">
-                                        <div class="flex -space-x-2">
-                                            @forelse($topVendors as $idx => $vendor)
-                                                @php
-                                                    $name = trim((string) $vendor->name);
-                                                    $parts = preg_split('/\s+/', $name);
-                                                    if (count($parts) >= 2) {
-                                                        $initials = mb_substr($parts[0], 0, 1) . mb_substr($parts[1], 0, 1);
-                                                    } else {
-                                                        $initials = mb_substr($name, 0, 2);
-                                                    }
-                                                    $initials = mb_strtoupper($initials);
-                                                    $gradient = $colors[$idx % count($colors)];
-
-                                                @endphp
-
-                                                <a href="{{ route('shop.vendors.show', $vendor) }}" aria-label="Voir la boutique {{ $vendor->name }}"
-                                                    class="group relative block h-8 w-8 rounded-full border border-slate-900/80 bg-slate-900 overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-md transition">
-                                                    @if(!empty($vendor->image) && file_exists(public_path('storage/'.$vendor->image)))
-                                                        <img src="{{ asset('storage/'.$vendor->image) }}"
-                                                            alt="{{ $vendor->name }}"
-                                                            class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200">
-                                                    @else
-                                                        <span class="flex h-full w-full items-center justify-center text-[11px] font-semibold text-emerald-50 bg-gradient-to-br {{ $gradient }}">
-                                                            {{ $initials }}
-                                                        </span>
-                                                    @endif
-
-                                                    {{-- Tooltip nom boutique --}}
-                                                    <span class="pointer-events-none absolute left-1/2 -bottom-7 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0.5 transition
-                                                                whitespace-nowrap rounded-full bg-slate-900 text-[10px] text-slate-50 px-2 py-0.5 border border-slate-700 shadow-lg z-10">
-                                                        {{ \Illuminate\Support\Str::limit($vendor->name, 18) }}
-                                                    </span>
-                                                </a>
-                                            @empty
-                                                <span class="h-8 w-8 rounded-full border border-slate-900/80 bg-slate-700 flex items-center justify-center text-[11px] font-semibold text-slate-100">
-                                                    MK
-                                                </span>
-                                            @endforelse
-                                        </div>
-                                    </div>
-
-                                    {{-- <span class="inline-flex items-center gap-0.5">
-                                        <i class="ri-star-fill text-yellow-400"></i>
-                                        <i class="ri-star-fill text-yellow-400"></i>
-                                        <i class="ri-star-fill text-yellow-400"></i>
-                                        <i class="ri-star-fill text-yellow-400"></i>
-                                        <i class="ri-star-fill text-yellow-400"></i>
-                                    </span> --}}
-
-                                    <span class="flex items-center gap-1">
-                                        <i class="ri-trophy-fill text-amber-400 animate-bounce"></i>
-                                        <span class="relative flex h-3 w-3">
-                                            <span class="absolute h-full w-full rounded-full bg-green-400 animate-ping opacity-50"></span>
-                                            <span class="relative h-3 w-3 rounded-full bg-green-500"></span>
-                                        </span>
-                                    </span>
-
-
-
-
-
-                                    <div class="ml-auto text-right text-[11px]">
-                                        <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px]">
-                                            <span class="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-800">
-                                                <i class="ri-flashlight-line text-[10px]"></i>
-                                            </span>
-                                            Disponibles
-                                        </span>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="relative min-h-[300px] overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 rounded-3xl  shadow-2xl shadow-slate-900/50 group">
-
-                                    <!-- Galaxy background effect -->
-                                    <div class="absolute inset-0 z-0 overflow-hidden">
-                                        <!-- Star field -->
-                                        <div class="absolute inset-0">
-                                            @for($i = 0; $i < 50; $i++)
-                                                <div class="star absolute rounded-full bg-white/30"
-                                                    style="
-                                                        width: {{ rand(1, 3) }}px;
-                                                        height: {{ rand(1, 3) }}px;
-                                                        top: {{ rand(0, 100) }}%;
-                                                        left: {{ rand(0, 100) }}%;
-                                                        animation: twinkle {{ rand(3, 8) }}s ease-in-out infinite;
-                                                        animation-delay: {{ $i * 9 }}s;
-                                                    ">
-                                                </div>
-                                            @endfor
-                                        </div>
-                                    </div>
-
-                                    <!-- Multi-Sphere Container -->
-                                    <div class="relative h-[200px] md:h-[300px] flex items-center justify-center z-10" id="sphere-container">
-
-                                        <!-- Central glowing sphere -->
-                                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-gradient-to-r from-amber-500/20 to-purple-500/20 blur-2xl animate-pulse-slow opacity-70"></div>
-
-                                        <!-- Product spheres (orbiting) -->
-                                        @foreach($trends->take(8) as $index => $product)
-                                            @php
-                                                $img = $product->featured_image;
-                                                //Position orbitale calculée
-
-                                                $angle = ($index / 8) * 360;
-                                                $orbitRadius = 140;
-                                                $x = cos(deg2rad($angle)) * $orbitRadius;
-                                                $z = sin(deg2rad($angle)) * $orbitRadius;
-                                                // CHANGER CETTE LIGNE : Supprimer le $y
-                                                $y = 0; // REMPLACER par 0 pour centrer verticalement
-                                                $scale = 0.8 + sin(deg2rad($angle)) * 0.2;
-                                                $rotation = $angle * 2;
-                                            @endphp
-
-                                            <!-- Product Sphere -->
-                                            <div class="product-sphere absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform-style-preserve-3d transition-all duration-1000 ease-out"
-                                                data-index="{{ $index }}"
-                                                style="
-                                                    transform: translate(-50%, -50%)
-                                                                translate3d({{ $x }}px, {{ $y }}px, {{ $z }}px)
-                                                                scale({{ $scale }})
-                                                                rotateY({{ $rotation }}deg);
-                                                    z-index: {{ round($scale * 100) }};
-                                                    ">
-
-                                                <a href="{{ route('shop.products.show', $product) }}"
-                                                    class="group block relative w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden cursor-pointer transform-style-preserve-3d transition-all duration-500 hover:!scale-110 md:hover:!scale-115 hover:!z-50">
-
-
-
-                                                    <!-- Outer glow -->
-                                                    <div class="absolute -inset-3 bg-gradient-to-r from-amber-500/30 via-purple-500/20 to-cyan-500/30 rounded-2xl blur-lg opacity-0 group-hover:opacity-70 transition-opacity duration-500"></div>
-
-                                                    <!-- Sphere container -->
-                                                    <div class="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-sm">
-
-                                                        <!-- Image avec effet glassmorphism -->
-                                                        <div class="absolute inset-0 overflow-hidden">
-                                                            <img src="{{ $img }}"
-                                                                alt="{{ $product->name }}"
-                                                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-3"
-                                                                loading="lazy">
-
-                                                            <!-- Gradient overlay -->
-                                                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/60 to-transparent"></div>
-
-                                                            <!-- Shine effect -->
-                                                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                        </div>
-
-                                                        <!-- Content overlay -->
-                                                        <div class="relative z-20 h-full flex flex-col justify-between p-3">
-
-                                                            <!-- Product info (appears on hover) -->
-                                                            <div class="transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                                                                <h3 class="text-xs font-bold text-white line-clamp-2 mb-1 drop-shadow-lg">
-                                                                    {{ \Illuminate\Support\Str::limit($product->name, 20) }}
-                                                                </h3>
-                                                                <div class="flex items-center justify-between">
-                                                                    <span class="text-sm font-bold text-amber-300 drop-shadow-lg">
-                                                                        {{ number_format($product->price, 0, ',', ' ') }} {{ $currency }}
-                                                                    </span>
-                                                                    <span class="inline-flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30">
-                                                                        <i class="ri-arrow-right-up-line text-[10px] md:text-xs text-emerald-300"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Seller info (visible toujours) -->
-                                                        <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 z-20 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
-                                                            <div class="flex items-center gap-2 bg-slate-900/80 backdrop-blur-sm rounded-full px-3 py-1.5 border border-slate-700/50 shadow-lg whitespace-nowrap">
-                                                                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                                                                <span class="text-[10px] md:text-xs text-slate-300">
-                                                                    @if($product->account)
-                                                                        {{ \Illuminate\Support\Str::limit($product->account->name, 15) }}
-                                                                    @endif
-                                                                </span>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Reflection effect -->
-                                                        <div class="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent opacity-50 rounded-t-2xl"></div>
-                                                    </div>
-
-                                                    <!-- Orbital trail effect -->
-                                                    <div class="absolute -inset-1 rounded-full border border-amber-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                                </a>
-                                            </div>
-                                        @endforeach
-                                    </div>
-
-                                    <!-- Simple indicator for mobile -->
-                                    {{-- <div class="absolute top-4 left-1/2 -translate-x-1/2 z-20">
-                                        <div class="flex items-center gap-2 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 backdrop-blur-xl rounded-full px-4 py-2 border border-amber-400/30 shadow-lg shadow-amber-900/20">
-                                            <i class="ri-sparkling-2-fill text-amber-300 text-sm"></i>
-                                            <span class="text-xs font-semibold text-amber-100">L'Exclusif</span>
-                                            <i class="ri-fire-fill text-orange-300 text-sm ml-1"></i>
-                                        </div>
-                                    </div> --}}
-                                </div>
-
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function() {
-                                        const container = document.getElementById('sphere-container');
-                                        const spheres = document.querySelectorAll('.product-sphere');
-
-                                        // Configuration simplifiée
-
-                                        const isMobile = window.innerWidth < 768;
-                                        const config = {
-                                            orbitRadius: isMobile ? 140 : 190,
-                                            orbitSpeed: 0.8,
-                                            rotationSpeed: 0.5,
-                                            inertia: 0.92,
-                                            sensitivity: 1.2,
-                                            autoOrbit: true,
-                                            verticalAmplitude: 40
-                                        };
-
-
-                                        let currentRotation = { x: 0, y: 0 };
-                                        let targetRotation = { x: -10, y: 0 }; // Légère inclinaison initiale
-                                        let velocity = { x: 0, y: 0 };
-                                        let isOrbiting = config.autoOrbit;
-                                        let orbitAngle = 0;
-                                        let animationId = null;
-                                        let isDragging = false;
-                                        let lastMouse = { x: 0, y: 0 };
-
-                                        // Initialisation
-                                        function initSpheres() {
-                                            updateSpheres();
-
-                                            if (isOrbiting) {
-                                                startOrbit();
-                                            }
-
-                                            // Sphere hover effects
-                                            spheres.forEach(sphere => {
-                                                const link = sphere.querySelector('a');
-
-                                                link.addEventListener('mouseenter', () => {
-                                                    sphere.style.zIndex = '100';
-                                                });
-
-                                                link.addEventListener('mouseleave', () => {
-                                                    const index = parseInt(sphere.getAttribute('data-index'));
-                                                    sphere.style.zIndex = index.toString();
-                                                });
-                                            });
-                                        }
-
-                                        // Update sphere positions
-                                        function updateSpheres() {
-                                            spheres.forEach((sphere, index) => {
-                                                const angle = ((index / spheres.length) * 360) + orbitAngle;
-                                                const x = Math.cos(deg2rad(angle)) * config.orbitRadius;
-                                                const z = Math.sin(deg2rad(angle)) * config.orbitRadius;
-                                                const y = 0;
-                                                // const y = Math.sin(deg2rad(angle * 2)) * config.verticalAmplitude;
-                                                const scale = 0.8 + Math.sin(deg2rad(angle)) * 0.2;
-
-                                                // Opacité dynamique selon la position Z
-                                                const depth = (z + config.orbitRadius) / (config.orbitRadius * 2);
-                                                sphere.style.opacity = 0.7 + depth * 0.3;
-
-                                                // Transformation
-
-                                                sphere.style.transform = `
-                                                    translate(-50%, -50%)
-                                                    translate3d(${x}px, ${y}px, ${z}px)
-                                                    scale(${scale})
-                                                    rotateY(${currentRotation.y * 0.5}deg)
-                                                    rotateX(${currentRotation.x * 0.3}deg)
-                                                    `;
-
-
-
-                                                // sphere.style.transform = `
-                                                //     translate3d(${x}px, ${y}px, ${z}px)
-                                                //     scale(${scale})
-                                                //     rotateY(${currentRotation.y * 0.5}deg)
-                                                //     rotateX(${currentRotation.x * 0.3}deg)
-                                                // `;
-                                            });
-
-                                            // Rotation de la scène
-                                            container.style.transform = `
-                                                rotateX(${currentRotation.x}deg)
-                                                rotateY(${currentRotation.y}deg)
-                                            `;
-
-                                            container.style.transform = `
-                                                translateY(-10px)
-                                                rotateX(${currentRotation.x}deg)
-                                                rotateY(${currentRotation.y}deg)
-                                            `;
-
-                                        }
-
-                                        // Orbit animation
-                                        function startOrbit() {
-                                            function orbit() {
-                                                if (isOrbiting && !isDragging) {
-                                                    orbitAngle += config.orbitSpeed * 0.1;
-                                                    updateSpheres();
-                                                }
-                                                requestAnimationFrame(orbit);
-                                            }
-                                            orbit();
-                                        }
-
-                                        // Mouse drag interaction
-                                        container.addEventListener('mousedown', function(e) {
-                                            isDragging = true;
-                                            lastMouse.x = e.clientX;
-                                            lastMouse.y = e.clientY;
-                                            container.style.cursor = 'grabbing';
-
-                                            document.addEventListener('mousemove', onMouseMove);
-                                            document.addEventListener('mouseup', function onMouseUp() {
-                                                isDragging = false;
-                                                container.style.cursor = 'grab';
-                                                document.removeEventListener('mousemove', onMouseMove);
-                                                document.removeEventListener('mouseup', onMouseUp);
-                                            });
-                                        });
-
-                                        function onMouseMove(e) {
-                                            if (!isDragging) return;
-
-                                            const deltaX = e.clientX - lastMouse.x;
-                                            const deltaY = e.clientY - lastMouse.y;
-
-                                            velocity.y = deltaX * config.sensitivity;
-                                            velocity.x = deltaY * config.sensitivity;
-
-                                            lastMouse.x = e.clientX;
-                                            lastMouse.y = e.clientY;
-                                        }
-
-                                        // Touch support
-                                        container.addEventListener('touchstart', function(e) {
-                                            if (e.touches.length === 1) {
-                                                isDragging = true;
-                                                lastMouse.x = e.touches[0].clientX;
-                                                lastMouse.y = e.touches[0].clientY;
-
-                                                document.addEventListener('touchmove', onTouchMove, { passive: true });
-                                                document.addEventListener('touchend', function onTouchEnd() {
-                                                    isDragging = false;
-                                                    document.removeEventListener('touchmove', onTouchMove);
-                                                    document.removeEventListener('touchend', onTouchEnd);
-                                                }, { passive: true });
-                                            }
-                                        }, { passive: true });
-
-                                        function onTouchMove(e) {
-                                            if (!isDragging || e.touches.length !== 1) return;
-
-                                            const deltaX = e.touches[0].clientX - lastMouse.x;
-                                            const deltaY = e.touches[0].clientY - lastMouse.y;
-
-                                            velocity.y = deltaX * config.sensitivity * 0.8;
-                                            velocity.x = deltaY * config.sensitivity * 0.8;
-
-                                            lastMouse.x = e.touches[0].clientX;
-                                            lastMouse.y = e.touches[0].clientY;
-                                        }
-
-                                        // Animation loop with inertia
-                                        function animate() {
-                                            // Apply inertia
-                                            velocity.x *= config.inertia;
-                                            velocity.y *= config.inertia;
-
-                                            // Update rotation
-                                            currentRotation.x += velocity.x;
-                                            currentRotation.y += velocity.y;
-
-                                            // Smooth rotation towards target
-                                            currentRotation.x += (targetRotation.x - currentRotation.x) * 0.05;
-                                            currentRotation.y += (targetRotation.y - currentRotation.y) * 0.05;
-
-                                            updateSpheres();
-                                            animationId = requestAnimationFrame(animate);
-                                        }
-
-                                        // Utility function
-                                        function deg2rad(degrees) {
-                                            return degrees * (Math.PI / 180);
-                                        }
-
-                                        // Pause orbit on hover
-                                        container.addEventListener('mouseenter', () => {
-                                            isOrbiting = false;
-                                        });
-
-                                        container.addEventListener('mouseleave', () => {
-                                            isOrbiting = config.autoOrbit;
-                                        });
-
-                                        // Initialize
-                                        initSpheres();
-                                        animate();
-
-                                        // Auto-rotate on idle
-                                        let idleTimeout;
-                                        function resetIdleTimer() {
-                                            clearTimeout(idleTimeout);
-                                            idleTimeout = setTimeout(() => {
-                                                if (!isDragging) {
-                                                    velocity.y = -0.5; // Légère rotation automatique
-                                                }
-                                            }, 3000);
-                                        }
-
-                                        document.addEventListener('mousemove', resetIdleTimer);
-                                        document.addEventListener('touchstart', resetIdleTimer);
-                                        resetIdleTimer();
-                                    });
-                                </script>
-
-                                <style>
-                                    /* Reset pour éliminer l'espace vide */
-                                    #sphere-container {
-                                        perspective: 1000px;
-                                        transform-style: preserve-3d;
-                                        width: 100%;
-                                        height: 300px;
-                                        margin: 0;
-                                        padding: 0;
-                                        transform: translateY(-20px); /* Soulève légèrement le système orbital */
-
-                                    }
-
-                                    .product-sphere {
-                                        transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                                                    opacity 0.8s ease,
-                                                    z-index 0.3s ease;
-                                        margin: 0;
-                                        padding: 0;
-                                        will-change: transform, opacity;
-                                    }
-
-                                    /* Animations */
-                                    @keyframes twinkle {
-                                        0%, 100% { opacity: 0.3; transform: scale(1); }
-                                        50% { opacity: 1; transform: scale(1.2); }
-                                    }
-
-                                    @keyframes pulse-slow {
-                                        0%, 100% { opacity: 0.5; }
-                                        50% { opacity: 0.8; }
-                                    }
-
-                                    .animate-pulse-slow {
-                                        animation: pulse-slow 4s ease-in-out infinite;
-                                    }
-
-                                    .star {
-                                        animation: twinkle var(--duration) ease-in-out infinite;
-                                    }
-
-                                    @media (max-width: 768px) {
-                                        /* #sphere-container {
-                                            height: 300px !important;
-                                        }
-                                        .product-sphere {
-                                            transform-origin: center center;
-                                        } */
-                                    }
-
-                                    @media (max-width: 640px) {
-                                        /* #sphere-container {
-                                            height: 180px !important;
-                                            transform: scale(0.9) translateY(-10px);
-                                        } */
-                                        .product-sphere h3 {
-                                            font-size: 9px !important;
-                                        }
-
-                                        .product-sphere .text-sm {
-                                            font-size: 10px !important;
-                                        }
-                                    }
-
-
-
-                                    /* Optimisations de performance */
-                                    .product-sphere img {
-                                        will-change: transform;
-                                        image-rendering: -webkit-optimize-contrast;
-                                        backface-visibility: hidden;
-                                    }
-
-                                    /* Scrollbar personnalisée */
-                                    ::-webkit-scrollbar {
-                                        width: 6px;
-                                    }
-
-                                    ::-webkit-scrollbar-track {
-                                        background: rgba(15, 23, 42, 0.2);
-                                    }
-
-                                    ::-webkit-scrollbar-thumb {
-                                        background: linear-gradient(to bottom, #fbbf24, #f59e0b);
-                                        border-radius: 3px;
-                                    }
-
-                                    /* Fix pour l'espace vide */
-                                    .group {
-                                        overflow: hidden;
-                                    }
-
-                                    /* Amélioration du hover */
-                                    .product-sphere a:hover {
-                                        transform: scale(1.15) !important;
-                                        filter: brightness(1.2) drop-shadow(0 10px 20px rgba(251, 191, 36, 0.2));
-                                    }
-
-                                    /* Smooth transitions */
-                                    .product-sphere,
-                                    .product-sphere a {
-                                        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                                    }
-                                </style>
-
-                            </article>
-
-                            {{-- Bandeau statistiques --}}
-                            <div class="rounded-2xl bg-gradient-to-r from-slate-900/90 to-slate-800/90 backdrop-blur-sm border border-slate-700/50 px-5 py-3 flex items-center justify-between shadow-xl">
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold text-emerald-300">4,9</div>
-                                    <div class="text-[10px] text-slate-400 uppercase tracking-wider">Satisfaction</div>
-                                </div>
-                                <div class="h-8 w-px bg-gradient-to-b from-transparent via-slate-700 to-transparent"></div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold text-amber-300">100%</div>
-                                    <div class="text-[10px] text-slate-400 uppercase tracking-wider">Suivi</div>
-                                </div>
-                                <div class="h-8 w-px bg-gradient-to-b from-transparent via-slate-700 to-transparent"></div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold text-cyan-300">24/7</div>
-                                    <div class="text-[10px] text-slate-400 uppercase tracking-wider">Support</div>
-                                </div>
+                    <!-- Image 2 -->
+                    <div class="space-y-4 mt-8">
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover:scale-105 transition duration-300">
+                            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop" 
+                                 alt="Rideaux" class="w-full h-48 object-cover hover:scale-110 transition duration-700">
+                        </div>
+                        <div class="overflow-hidden rounded-3xl shadow-xl hover:scale-105 transition duration-300">
+                            <img src="https://images.unsplash.com/photo-1532372320978-9b4b6d95f4b8?w=800&auto=format&fit=crop" 
+                                 alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
+                        </div>
+                    </div>
+                    
+                    <!-- Badge flottant -->
+                    <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-2xl p-4 animate-float hidden md:block">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center text-white text-xl">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-dark-900">4.9/5</div>
+                                <div class="text-sm text-dark-400">1500+ avis</div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </section>
 
-     <!-- UNIVERS -->
-    <section class="bg-slate-50 py-8 md:py-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-                <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-green">
-                        Univers MYLMARK
-                    </p>
-                    <h2 class="text-xl md:text-2xl font-semibold text-slate-900 mt-1">
-                        Des collections sélectives
-                    </h2>
-                    <p class="text-[13px] md:text-sm text-slate-600 max-w-xl mt-2">
-                        Plutôt déco, mode, cosmétiques ou saveurs ? Naviguez par ambiances et laissez-vous guider
-                        par ce qui vous parle.
-                    </p>
-                </div>
-                <p class="text-[11px] md:text-xs text-slate-500 max-w-xs">
-                    Chaque univers est conçu pour raconter une histoire : celle des matières et des gestes.
-                </p>
+    <!-- ===== MARQUEE BANNER ===== -->
+    <div class="bg-dark-800 text-white py-5 overflow-hidden border-y-4 border-primary-500">
+        <div class="animate-marquee whitespace-nowrap flex">
+            <div class="inline-flex items-center gap-8 mx-4">
+                <span class="text-xl font-semibold">✨ RIDEAUX PREMIUM</span>
+                <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🛏️ DRAPS DE LUXE</span>
+                <span class="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🔧 QUINCAILLERIE DESIGN</span>
+                <span class="w-2 h-2 bg-primary-400 rounded-full"></span>
+                <span class="text-xl font-semibold">🏺 DÉCORATION UNIQUE</span>
+                <span class="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                <span class="text-xl font-semibold">⭐ SATISFACTION CLIENT</span>
+                <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
             </div>
+            <div class="inline-flex items-center gap-8 mx-4">
+                <span class="text-xl font-semibold">✨ RIDEAUX PREMIUM</span>
+                <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🛏️ DRAPS DE LUXE</span>
+                <span class="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                <span class="text-xl font-semibold">🔧 QUINCAILLERIE DESIGN</span>
+                <span class="w-2 h-2 bg-primary-400 rounded-full"></span>
+                <span class="text-xl font-semibold">🏺 DÉCORATION UNIQUE</span>
+                <span class="w-2 h-2 bg-secondary-500 rounded-full"></span>
+                <span class="text-xl font-semibold">⭐ SATISFACTION CLIENT</span>
+                <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+            </div>
+        </div>
+    </div>
 
-            <div class="grid gap-3 md:grid-cols-4 text-[12px]">
-                <article class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-100 via-amber-50 to-white border border-amber-200/70 shadow-soft hover:-translate-y-1 hover:shadow-lg">
-                    <div class="absolute inset-y-0 right-0 w-16 bg-[radial-gradient(circle_at_top,rgba(249,115,22,0.35),transparent_60%)] opacity-70"></div>
-                    <div class="p-4 space-y-2 relative">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-slate-900">Bijoux & détails</h3>
-                            <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-white/80 border border-amber-200">
-                                <i class="ri-brush-line text-amber-500 text-[17px]"></i>
-                            </span>
-                        </div>
-                        <p class="text-[11px] text-slate-600">
-                            Perles, bracelets, boucles, pièces fines inspirées des savoir-faire ancestraux.
-                        </p>
-                        <p class="text-[11px] font-medium text-amber-700">
-                            +40 articles à découvrir
-                        </p>
+    <!-- ===== AVANTAGES ===== -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-truck text-2xl text-primary-600"></i>
                     </div>
-                </article>
-
-                <article class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-100 via-green-50 to-white border border-emerald-200/70 shadow-soft hover:-translate-y-1 hover:shadow-lg">
-                    <div class="absolute inset-y-0 right-0 w-16 bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.4),transparent_60%)] opacity-70"></div>
-                    <div class="p-4 space-y-2 relative">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-slate-900">Mode & silhouettes</h3>
-                            <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-white/80 border border-emerald-200">
-                                <i class="ri-t-shirt-line text-emerald-600 text-[17px]"></i>
-                            </span>
-                        </div>
-                        <p class="text-[11px] text-slate-600">
-                            Pagnes, boubous, ensembles sur-mesure pour un style qui a du sens.
-                        </p>
-                        <p class="text-[11px] font-medium text-emerald-700">
-                            Ateliers couture partenaires
-                        </p>
+                    <h3 class="font-display font-bold text-lg">Livraison gratuite</h3>
+                    <p class="text-sm text-dark-400">Dès 50 000 F d'achat</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-undo-alt text-2xl text-secondary-600"></i>
                     </div>
-                </article>
-
-                <article class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border border-slate-900/80 text-slate-50 shadow-soft hover:-translate-y-1 hover:shadow-lg">
-                    <div class="absolute inset-y-0 right-0 w-16 bg-[radial-gradient(circle_at_top,rgba(248,250,252,0.5),transparent_60%)] opacity-50"></div>
-                    <div class="p-4 space-y-2 relative">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold">Art & déco</h3>
-                            <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-800">
-                                <i class="ri-palette-line text-amber-300 text-[17px]"></i>
-                            </span>
-                        </div>
-                        <p class="text-[11px] text-slate-200">
-                            Tableaux, sculptures, textiles muraux pour des intérieurs habités.
-                        </p>
-                        <p class="text-[11px] font-medium text-emerald-200">
-                            Pièces à faible tirage
-                        </p>
+                    <h3 class="font-display font-bold text-lg">Retours faciles</h3>
+                    <p class="text-sm text-dark-400">Satisfait ou remboursé</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-primary-600"></i>
                     </div>
-                </article>
-
-                <article class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-white border border-orange-200/70 shadow-soft hover:-translate-y-1 hover:shadow-lg">
-                    <div class="absolute inset-y-0 right-0 w-16 bg-[radial-gradient(circle_at_top,rgba(248,173,49,0.45),transparent_60%)] opacity-70"></div>
-                    <div class="p-4 space-y-2 relative">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-semibold text-slate-900">Saveurs</h3>
-                            <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-white/80 border border-orange-200">
-                                <i class="ri-restaurant-line text-orange-500 text-[17px]"></i>
-                            </span>
-                        </div>
-                        <p class="text-[11px] text-slate-600">
-                            Épices, thés, soins naturels : tout ce qui vient nourrir corps & maison.
-                        </p>
-                        <p class="text-[11px] font-medium text-orange-700">
-                            Sélections saisonnières
-                        </p>
+                    <h3 class="font-display font-bold text-lg">Paiement sécurisé</h3>
+                    <p class="text-sm text-dark-400">Cartes, mobile money</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-headset text-2xl text-secondary-600"></i>
                     </div>
-                </article>
+                    <h3 class="font-display font-bold text-lg">Support 7j/7</h3>
+                    <p class="text-sm text-dark-400">Réponse sous 24h</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- PRODUITS EN AVANT -->
-    <section class="scroll-mt-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-8">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-                <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-green">
-                        Sélection MYLMARK
-                    </p>
-                    <h2 class="text-xl md:text-2xl font-semibold text-slate-900 mt-1">
-                        Une sélection qui ne ressemble qu’à vous.
-                    </h2>
-                    <p class="text-[13px] md:text-sm text-slate-600 max-w-xl mt-2">
-                        Une vitrine resserrée des pièces qui font parler d’elles : qualité, histoire, intention.
-                    </p>
-                </div>
-                <a href="{{ route('shop.products.index') }}"
-                   class="inline-flex items-center gap-1 text-[12px] font-semibold text-brand-green">
-                    Voir plus
-                    <i class="ri-arrow-right-line text-xs"></i>
-                </a>
-            </div>
-
-        <div class="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4 ">
-          @foreach ($bestSellers as $p)
-
-            @php
-                $price = $p->display_price;
-                $inStock = $p->is_in_stock;
-            @endphp
-
-            <article class="group flex flex-col rounded-2xl bg-white shadow-sm hover:shadow-2xl overflow-hidden border border-slate-100 transition-all duration-300">
-                <a href="{{ route('shop.products.show', $p) }}" class="block">
-                    <!-- Image avec effet hover -->
-                    <div class="relative h-40 overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent z-10"></div>
-                        <img src="{{ $p->featured_image }}" alt="{{ $p->name }}"
-                            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105">
-
-                        <!-- Overlay au hover -->
-                        <div class="absolute inset-0 bg-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-
-                    <!-- Contenu -->
-                    <div class="p-4 space-y-2.5">
-                        <!-- Titre et description -->
-                        <div class="space-y-1.5">
-                            <h3 class="text-sm font-semibold text-slate-900 line-clamp-1">
-                                {{ $p->name }}
-                            </h3>
-                            <p class="text-xs text-slate-500 line-clamp-2">
-                                {{ Str::limit(strip_tags($p->description), 80) }}
-                            </p>
-                        </div>
-
-                        <!-- Prix élégant -->
-                        <div class="flex items-end justify-between pt-1">
-                            <div class="min-w-0">
-                                @if($p->type === 'variable')
-                                    @if(!is_null($price))
-                                        <div class="space-y-0.5">
-                                            <div class="text-[11px] text-slate-500">À partir de</div>
-                                            <div class="text-lg font-bold text-amber-700 truncate">
-                                                {{ number_format($price, 0, ',', ' ') }} {{ $currency }}
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class="text-sm text-slate-400">Prix sur demande</div>
-                                    @endif
-                                @else
-                                    <div class="space-y-0.5">
-                                        @if($p->old_price && $p->old_price > $price)
-                                            <div class="flex items-center gap-2">
-                                                <s class="text-xs text-slate-400">
-                                                    {{ number_format($p->old_price, 0, ',', ' ') }} {{ $currency }}
-                                                </s>
-                                                @php
-                                                    $discount = round((($p->old_price - $price) / $p->old_price) * 100);
-                                                @endphp
-                                                @if($discount > 0)
-                                                    <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">
-                                                        -{{ $discount }}%
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        @endif
-                                        @if(!is_null($price))
-                                            <div class="text-lg font-bold @if($p->old_price && $p->old_price > $price) text-emerald-700 @else text-slate-900 @endif">
-                                                {{ number_format($price, 0, ',', ' ') }} {{ $currency }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endif
-                            </div>
-
-                            <!-- Badge discret -->
-                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 shrink-0">
-                                <i class="ri-shield-check-line text-sm"></i>
-                            </span>
-                        </div>
-
-                        <!-- Indicateur de disponibilité subtil -->
-                        {{-- @if(!$inStock)
-                            <div class="text-xs text-red-600 bg-red-50 px-2 py-1 rounded text-center">
-                                <i class="ri-error-warning-line align-middle"></i>
-                                <span class="align-middle">Rupture de stock</span>
-                            </div>
-                        @endif --}}
-                    </div>
-                </a>
-            </article>
-
-            {{-- <article class="flex flex-col rounded-2xl bg-white shadow-card overflow-hidden border border-slate-100/80">
-                <a href="{{ route('shop.products.show', $p) }}" class="block">
-                    <div class="relative h-40">
-                        <img src="{{ $p->featured_image }}" alt="{{ $p->name }}" class="h-full w-full object-cover">
-                    </div>
-                    <div class="p-3.5 space-y-2">
-                        <h3 class="text-[13px] font-semibold text-slate-900">
-                            {{ $p->name }}
-                        </h3>
-                        <div class="flex items-center justify-between gap-2 text-[11px] text-slate-500">
-                            <span class="flex items-center gap-1">
-                            {{ Str::limit(strip_tags($p->description), 80) }}
-                            </span>
-                        </div>
-                        <div class="flex items-center justify-between gap-2 pt-1">
-                            <div class="text-[13px] font-semibold text-amber-500">
-
-                                @if($p->type === 'variable')
-                                    @if(!is_null($price))
-                                        À partir de {{ number_format($price, 0, ',', ' ') }} {{ $currency }}
-                                    @else
-                                        Prix variable
-                                    @endif
-                                @else
-                                    @if($p->old_price)
-                                        <s>{{ number_format($p->old_price, 0, ',', ' ') }} {{ $currency }}</s>
-                                    @endif
-                                    @if(!is_null($price))
-                                        {{ number_format($price, 0, ',', ' ') }} {{ $currency }}
-                                    @endif
-                                @endif
-                            </div>
-                            <span
-                                class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] text-brand-green">
-                                <i class="ri-shield-check-line text-xs"></i>
-                            </span>
-
-                        </div>
-                    </div>
-                </a>
-            </article> --}}
-          @endforeach
-
-        </div>
-      </div>
-    </section>
-    <!-- COMMENT ÇA MARCHE -->
-    <section id="how" class="scroll-mt-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-10">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-          <div>
-            <p class="text-[11px] font-semibold uppercase tracking-[0.20em] text-brand-green">
-              Parcours d’achat simplifié
-            </p>
-            <h2 class="text-lg md:text-xl font-semibold text-slate-900 mt-1">
-              Comment fonctionne MYLMARK ?
+    <!-- ===== CATEGORIES SECTION ===== -->
+    <section id="collections" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Section Header -->
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mt-4 mb-6">
+                Explorez nos <span class="gradient-text">univers</span>
             </h2>
-            <p class="text-xs md:text-sm text-slate-600 max-w-xl mt-1.5">
-              En quelques clics, vous passez de la découverte d’un atelier au suivi de votre colis – tout en soutenant
-              directement les créateurs.
+            <p class="text-dark-500">
+                Quatre univers distincts pour sublimer chaque pièce de votre intérieur.
             </p>
-          </div>
-          <p class="text-[11px] md:text-xs text-slate-500 max-w-xs">
-            Une interface claire, des étapes guidées, des paiements sécurisés. Pas de complexité inutile.
-          </p>
         </div>
-
-        <div class="grid md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)] gap-6 md:gap-8 items-start ">
-          <div class="space-y-4">
-            <!-- Step -->
-            <div class="flex gap-3">
-              <div
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-brand-green text-lg">
-                <i class="ri-compass-3-line"></i>
-              </div>
-              <div class="space-y-1">
-                <h3 class="text-[13px] font-semibold text-slate-900">
-                  1. Découvrez des créations uniques
-                </h3>
-                <p class="text-[11px] text-slate-600">
-                  Parcourez les catégories, filtrez par pays, ambiance, gamme de prix ou type de produit. Chaque fiche
-                  raconte l’histoire de l’artisan derrière l’objet.
-                </p>
-              </div>
-            </div>
-
-            <div class="flex gap-3">
-              <div
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-brand-green text-lg">
-                <i class="ri-shopping-bag-3-line"></i>
-              </div>
-              <div class="space-y-1">
-                <h3 class="text-[13px] font-semibold text-slate-900">
-                  2. Commandez en quelques clics
-                </h3>
-                <p class="text-[11px] text-slate-600">
-                  Ajoutez vos coups de cœur au panier, choisissez votre mode de paiement (Mobile Money, carte,
-                  virement) et validez en toute confiance.
-                </p>
-              </div>
-            </div>
-
-            <div class="flex gap-3">
-              <div
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-50 text-brand-green text-lg">
-                <i class="ri-truck-line"></i>
-              </div>
-              <div class="space-y-1">
-                <h3 class="text-[13px] font-semibold text-slate-900">
-                  3. Livraison sécurisée chez vous
-                </h3>
-                <p class="text-[11px] text-slate-600">
-                  Suivez l’avancement de votre commande depuis votre espace MYLMARK. Nous travaillons avec des
-                  partenaires logistiques fiables pour acheminer vos colis.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stats card -->
-          <div
-            class="rounded-2xl bg-white shadow-card border border-slate-100/80 p-4 space-y-2 text-[11px] text-slate-700">
-
-            <div class="flex items-center justify-between rounded-full bg-emerald-50 px-3 py-2">
-              <span class="font-semibold text-brand-green">Taux de satisfaction</span>
-              <span class="font-semibold text-slate-900">4,9 / 5</span>
-            </div>
-            <div class="flex items-center justify-between rounded-full bg-emerald-50 px-3 py-2">
-              <span class="font-semibold text-brand-green">Commandes récurrentes</span>
-              <span class="font-semibold text-slate-900">+ 63%</span>
-            </div>
-            <p class="text-[11px] text-slate-500 mt-1">
-              MYLMARK est votre vitrine numérique : présentez mieux, gérez facilement, vendez efficacement.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- POURQUOI MYLMARK ? -->
-    <section class="bg-slate-900 text-slate-50 py-8 md:py-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-                <div>
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-300">
-                        Pourquoi MYLMARK ?
-                    </p>
-                    <h2 class="text-xl md:text-2xl font-semibold mt-1">
-                        Une plateforme pensée pour les clients et les vendeurs.
-                    </h2>
+        
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop" 
+                        alt="Rideaux" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 via-dark-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-primary-500 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">120+ modèles</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Rideaux</h3>
+                    <p class="text-white/70 text-sm mb-4">Voilages, occultants, sur-mesure</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
                 </div>
-                <p class="text-[11px] md:text-xs text-slate-400 max-w-xs">
-                    Une marketplace moderne, avec une expérience fluide, claire et adaptée au marché local.
-                </p>
             </div>
-
-            <div class="grid gap-4 md:grid-cols-3 text-[12px]">
-                {{-- Clients --}}
-                <article class="rounded-2xl border border-slate-700 bg-slate-900/80 p-4 space-y-2">
-                    <div class="flex items-center gap-2">
-                        <span class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center">
-                            <i class="ri-user-smile-line text-emerald-300 text-lg"></i>
-                        </span>
-                        <h3 class="font-semibold">Pour les clients</h3>
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop" 
+                        alt="Draps" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 via-dark-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-secondary-600 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">Nouveauté</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Draps</h3>
+                    <p class="text-white/70 text-sm mb-4">Coton, satin, microfibre</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
                     </div>
-                    <p class="text-slate-300">
-                        Trouver facilement ce qu’on cherche, comprendre ce qu’on achète, suivre sa commande sans stress.
-                    </p>
-                    <ul class="space-y-1 text-slate-400 text-[11px] mt-2">
-                        <li>• Paiements Mobile Money & cartes, sécurisés.</li>
-                        <li>• Suivi clair de la commande jusqu’à la réception.</li>
-                        <li>• Historique d’achats et produits favoris toujours accessibles.</li>
-                    </ul>
-                </article>
-
-                {{-- Vendeurs --}}
-                <article class="rounded-2xl border border-slate-700 bg-slate-900/80 p-4 space-y-2">
-                    <div class="flex items-center gap-2">
-                        <span class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center">
-                            <i class="ri-store-3-line text-amber-300 text-lg"></i>
-                        </span>
-                        <h3 class="font-semibold">Pour les vendeurs</h3>
+                </div>
+            </div>
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?w=800&auto=format&fit=crop" 
+                        alt="Quincaillerie" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 via-dark-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-primary-600 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">Jusqu'à -20%</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Quincaillerie</h3>
+                    <p class="text-white/70 text-sm mb-4">Tringles, crochets, rails</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
                     </div>
-                    <p class="text-slate-300">
-                        Une boutique en ligne prête à l’emploi, des outils simples et une équipe qui accompagne vraiment.
-                    </p>
-                    <ul class="space-y-1 text-slate-400 text-[11px] mt-2">
-                        <li>• Gestion des produits, stocks et commandes au même endroit.</li>
-                        <li>• Statistiques claires sur les ventes et les clients.</li>
-                        <li>• Conseils et support pour mieux vendre en ligne.</li>
-                    </ul>
-                </article>
-
-                {{-- Continent / Écosystème --}}
-                <article class="rounded-2xl border border-slate-700 bg-slate-900/80 p-4 space-y-2">
-                    <div class="flex items-center gap-2">
-                        <span class="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center">
-                            <i class="ri-earth-line text-emerald-300 text-lg"></i>
-                        </span>
-                        <h3 class="font-semibold">Pour le marché local</h3>
+                </div>
+            </div>
+            <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer hover-lift">
+                <img src="https://images.unsplash.com/photo-1532372320978-9b4b6d95f4b8?w=800&auto=format&fit=crop" 
+                        alt="Décoration" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 via-dark-900/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                    <span class="bg-secondary-500 text-white text-xs px-3 py-1 rounded-full mb-3 inline-block">Pièces uniques</span>
+                    <h3 class="text-2xl font-['Clash_Display'] font-bold mb-2">Décoration</h3>
+                    <p class="text-white/70 text-sm mb-4">Coussins, tapis, art déco</p>
+                    <div class="flex items-center gap-2 text-sm font-semibold group-hover:gap-4 transition-all">
+                        <span>Découvrir</span>
+                        <i class="fas fa-arrow-right"></i>
                     </div>
-                    <p class="text-slate-300">
-                        Digitaliser la vente, raccourcir les circuits et donner plus de place aux marques locales.
-                    </p>
-                    <ul class="space-y-1 text-slate-400 text-[11px] mt-2">
-                        <li>• Visibilité pour les boutiques et toutes marques.</li>
-                        <li>• Un outil concret pour structurer et professionnaliser la vente en ligne.</li>
-                        <li>• Une plateforme qui met en avant la valeur du travail, pas seulement le prix.</li>
-                    </ul>
-                </article>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- AVIS / TÉMOIGNAGES -->
-    <section id="reviews" class="scroll-mt-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-10">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-          <div>
-            <p class="text-[11px] font-semibold uppercase tracking-[0.20em] text-brand-green">
-              Ils parlent de MYLMARK
-            </p>
-            <h2 class="text-lg md:text-xl font-semibold text-slate-900 mt-1">
-              Avis de clients
+    <!-- ===== FEATURED PRODUCTS ===== -->
+    <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-light-100">
+        <!-- Section Header avec tabs -->
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-12">
+            <div>
+                <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mt-4">
+                    Nos <span class="gradient-text">incontournables</span>
+                </h2>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="flex flex-wrap gap-2 mt-6 lg:mt-0 p-1 bg-white rounded-2xl shadow-sm">
+                <button class="tab-btn active px-6 py-3 rounded-xl bg-primary-500 text-white font-medium transition">Tous</button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-dark-600 hover:bg-light-200 font-medium transition">Rideaux</button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-dark-600 hover:bg-light-200 font-medium transition">Draps</button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-dark-600 hover:bg-light-200 font-medium transition">Déco</button>
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Produit 1 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-primary-500 text-white text-xs px-3 py-1 rounded-full">-30%</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1617104551722-3b2d513664dd?w=800&auto=format&fit=crop" 
+                            alt="Rideau velours" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-dark-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-primary-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-primary-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-dark-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-light-200">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-primary-500 font-semibold">Rideaux</span>
+                        <div class="flex items-center gap-1 text-secondary-500 text-xs">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            <span class="text-dark-400 ml-1">(45)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Rideau Velours Premium</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-dark-900">24 500 F</span>
+                        <span class="text-sm text-dark-400 line-through">35 000 F</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Produit 2 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-secondary-600 text-white text-xs px-3 py-1 rounded-full">Nouveau</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1616628188859-7f11e9a7a7e9?w=800&auto=format&fit=crop" 
+                            alt="Drap satin" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-dark-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-primary-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-primary-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-dark-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-light-200">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-secondary-600 font-semibold">Draps</span>
+                        <div class="flex items-center gap-1 text-secondary-500 text-xs">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <span class="text-dark-400 ml-1">(32)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Parure de lit 5 pièces</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-dark-900">32 000 F</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Produit 3 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-primary-600 text-white text-xs px-3 py-1 rounded-full">Top vente</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&auto=format&fit=crop" 
+                            alt="Poignée" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-dark-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-primary-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-primary-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-dark-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-light-200">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-primary-600 font-semibold">Quincaillerie</span>
+                        <div class="flex items-center gap-1 text-secondary-500 text-xs">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            <span class="text-dark-400 ml-1">(18)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Poignée de porte design</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-dark-900">8 500 F</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Produit 4 -->
+            <div class="group bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all hover-lift">
+                <div class="relative mb-4 overflow-hidden rounded-xl">
+                    <span class="absolute top-3 left-3 z-10 bg-secondary-500 text-white text-xs px-3 py-1 rounded-full">-25%</span>
+                    <button class="absolute top-3 right-3 z-10 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition">
+                        <i class="far fa-heart text-sm"></i>
+                    </button>
+                    <img src="https://images.unsplash.com/photo-1567225591450-0605936a7f2c?w=800&auto=format&fit=crop" 
+                            alt="Miroir" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex gap-2 p-4 bg-gradient-to-t from-dark-900/90 to-transparent">
+                        <a href="#" class="flex-1 bg-primary-500 text-white text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-primary-600">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" class="flex-1 bg-white text-dark-900 text-sm py-2 rounded-lg flex items-center justify-center gap-1 hover:bg-light-200">
+                            <i class="fas fa-phone-alt"></i> Appel
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-secondary-500 font-semibold">Décoration</span>
+                        <div class="flex items-center gap-1 text-secondary-500 text-xs">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <span class="text-dark-400 ml-1">(27)</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-['Clash_Display'] font-bold text-lg">Miroir doré sculpté</h3>
+                    
+                    <div class="flex items-end gap-2">
+                        <span class="text-xl font-bold text-dark-900">18 000 F</span>
+                        <span class="text-sm text-dark-400 line-through">24 000 F</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View All Button -->
+        <div class="text-center mt-12">
+            <a href="#" class="inline-flex items-center gap-2 bg-dark-800 text-white px-8 py-4 rounded-full font-semibold hover:bg-primary-500 transition shadow-md hover:shadow-lg">
+                Voir tous les produits
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== COLLECTION EXCLUSIVE ===== -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-4xl md:text-5xl font-display font-bold mt-4 mb-6">
+                Collection <span class="gradient-text">Essentielle</span>
             </h2>
-            <p class="text-xs md:text-sm text-slate-600 max-w-xl mt-1.5">
-              Une marketplace n’a de sens que si elle crée de la confiance. Voici ce que la communauté partage à propos
-              de MYLMARK.
-            </p>
-          </div>
-          <p class="text-[11px] md:text-xs text-slate-500 max-w-xs">
-            Des retours vérifiés.
-          </p>
+            <p class="text-dark-500">Des pièces intemporelles, sélectionnées pour leur qualité exceptionnelle.</p>
         </div>
-
-        <div class="grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-6 items-start ">
-          <!-- Testimonials -->
-          <div class="space-y-3">
-            <article class="rounded-2xl bg-white shadow-card border border-slate-100/80 p-4 text-[11px]">
-              <div class="flex items-center gap-1 text-amber-400 text-xs mb-1.5">
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-half-fill"></i>
-              </div>
-              <p class="text-slate-700">
-                « J’ai commandé un set de paniers et un tableau, le suivi était très clair et les produits encore plus
-                beaux en vrai. On sent que les vendeurs sont mis au centre. »
-              </p>
-              <div class="mt-2 flex items-center justify-between text-[10px] text-slate-500">
-                <span>Alice – Cotonou, cliente</span>
-                <span>2 commandes déjà</span>
-              </div>
-            </article>
-
-            <article class="rounded-2xl bg-white shadow-card border border-slate-100/80 p-4 text-[11px]">
-              <div class="flex items-center gap-1 text-amber-400 text-xs mb-1.5">
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-              </div>
-              <p class="text-slate-700">
-                « J’avais du mal à vendre en ligne. Avec MYLMARK j’ai une boutique claire, des
-                paiements sécurisés et je garde la main sur mes prix. »
-              </p>
-              <div class="mt-2 flex items-center justify-between text-[10px] text-slate-500">
-                <span>Luc, artisan</span>
-                <span>+ 48% de ventes</span>
-              </div>
-            </article>
-
-            {{-- <article class="rounded-2xl bg-white shadow-card border border-slate-100/80 p-4 text-[11px]">
-              <div class="flex items-center gap-1 text-amber-400 text-xs mb-1.5">
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-              </div>
-              <p class="text-slate-700">
-                « J’apprécie la transparence : délais annoncés, frais de livraison clairs, et un service client qui
-                répond rapidement. »
-              </p>
-              <div class="mt-2 flex items-center justify-between text-[10px] text-slate-500">
-                <span>David – Bohicon, client MYLMARK</span>
-                <span>Livraison</span>
-              </div>
-            </article> --}}
-          </div>
-
-          <!-- Rating summary -->
-          <aside
-            class="rounded-2xl bg-gradient-to-br from-brand-green to-emerald-900 text-slate-50 shadow-card p-5 text-[11px] space-y-3">
-            <div class="flex items-center justify-between gap-3">
-              <div>
-                <div class="text-2xl font-semibold leading-none">
-                  4,9 <span class="text-xs font-medium opacity-80">/ 5</span>
+        
+        <!-- Grille 3 colonnes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                <div class="relative h-80 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1617104551722-3b2d513664dd?w=800&auto=format&fit=crop" alt="Produit" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-primary-500 text-white px-4 py-1.5 rounded-full text-xs font-semibold z-10">Exclusivité</span>
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="far fa-heart"></i></button>
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="fas fa-eye"></i></button>
+                    </div>
                 </div>
-                <p class="mt-1 text-[11px] opacity-90">
-                  Basé sur les évaluations vérifiées des clients & vendeurs actifs.
-                </p>
-              </div>
-              <div class="flex flex-col items-end gap-1">
-                <div class="flex items-center gap-0.5 text-amber-300 text-sm">
-                  <i class="ri-star-fill"></i>
-                  <i class="ri-star-fill"></i>
-                  <i class="ri-star-fill"></i>
-                  <i class="ri-star-fill"></i>
-                  <i class="ri-star-half-fill"></i>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-xs text-primary-500 font-semibold uppercase tracking-wider">Rideaux</span>
+                            <h3 class="font-display font-bold text-xl mt-1">Velours Céleste</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold text-dark-900">24 500 F</span>
+                            <span class="text-sm text-dark-400 line-through block">35 000 F</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-center gap-1 text-secondary-500"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><span class="text-dark-400 text-sm ml-1">(45)</span></div>
+                        <a href="#" class="text-primary-500 font-semibold text-sm flex items-center gap-1 hover:gap-3 transition-all">Détails <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <a href="#" class="mt-4 w-full bg-light-200 text-dark-900 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-500 hover:text-white transition group">
+                        <i class="fab fa-whatsapp text-primary-500 group-hover:text-white"></i>
+                        <span class="font-medium">Commander sur WhatsApp</span>
+                    </a>
                 </div>
-                <span class="text-[10px] opacity-80">+ 100 commandes</span>
-              </div>
             </div>
-            <ul class="space-y-1 text-[11px] opacity-90">
-              <li>• Taux de litiges très faible, suivi et médiation intégrés.</li>
-              <li>• Accompagnement dédié pour les vendeurs nouvellement inscrits.</li>
-              <li>• Fiches produits structurées pour mieux raconter l’histoire derrière chaque création.</li>
-            </ul>
-          </aside>
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                <div class="relative h-80 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1616628188859-7f11e9a7a7e9?w=800&auto=format&fit=crop" alt="Produit" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-secondary-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold z-10">Nouveauté</span>
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="far fa-heart"></i></button>
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-xs text-secondary-600 font-semibold uppercase tracking-wider">Draps</span>
+                            <h3 class="font-display font-bold text-xl mt-1">Parure 5 pièces</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold text-dark-900">32 000 F</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-center gap-1 text-secondary-500"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span class="text-dark-400 text-sm ml-1">(32)</span></div>
+                        <a href="#" class="text-primary-500 font-semibold text-sm flex items-center gap-1 hover:gap-3 transition-all">Détails <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <a href="#" class="mt-4 w-full bg-light-200 text-dark-900 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-500 hover:text-white transition group">
+                        <i class="fab fa-whatsapp text-primary-500 group-hover:text-white"></i>
+                        <span class="font-medium">Commander sur WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+            <div class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all">
+                <div class="relative h-80 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&auto=format&fit=crop" alt="Produit" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900/60 via-transparent to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-primary-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold z-10">-20%</span>
+                    <div class="absolute top-4 right-4 flex flex-col gap-2 z-10">
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="far fa-heart"></i></button>
+                        <button class="w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-xs text-primary-600 font-semibold uppercase tracking-wider">Quincaillerie</span>
+                            <h3 class="font-display font-bold text-xl mt-1">Poignée design</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-bold text-dark-900">8 500 F</span>
+                            <span class="text-sm text-dark-400 line-through block">10 500 F</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-4">
+                        <div class="flex items-center gap-1 text-secondary-500"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><span class="text-dark-400 text-sm ml-1">(18)</span></div>
+                        <a href="#" class="text-primary-500 font-semibold text-sm flex items-center gap-1 hover:gap-3 transition-all">Détails <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <a href="#" class="mt-4 w-full bg-light-200 text-dark-900 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-primary-500 hover:text-white transition group">
+                        <i class="fab fa-whatsapp text-primary-500 group-hover:text-white"></i>
+                        <span class="font-medium">Commander sur WhatsApp</span>
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="text-center mt-8">
+            <a href="#" class="inline-flex items-center gap-3 text-dark-900 font-semibold group">
+                <span>Découvrir toute la collection</span>
+                <i class="fas fa-arrow-right group-hover:translate-x-2 transition"></i>
+                <span class="w-12 h-0.5 bg-primary-500 group-hover:w-20 transition-all"></span>
+            </a>
+        </div>
     </section>
-   @include('frontend.sections.cta')
-@endsection
+
+    <!-- ===== PROMO BANNER ===== -->
+    <section class="py-16 bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-700 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="text-center lg:text-left">
+                    <span class="inline-block bg-white/20 px-4 py-2 rounded-full text-sm font-semibold mb-4">⚡ OFFRE EXCEPTIONNELLE</span>
+                    <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mb-4">Jusqu'à -50% sur une sélection</h2>
+                    <p class="text-white/90 text-lg max-w-2xl">Rideaux, draps et décoration. Livraison offerte.</p>
+                </div>
+                <div class="flex gap-3">
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]"><div class="text-3xl font-['Clash_Display'] font-bold" id="days">24</div><div class="text-xs text-white/80">Jours</div></div>
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]"><div class="text-3xl font-['Clash_Display'] font-bold" id="hours">12</div><div class="text-xs text-white/80">Heures</div></div>
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]"><div class="text-3xl font-['Clash_Display'] font-bold" id="minutes">45</div><div class="text-xs text-white/80">Minutes</div></div>
+                    <div class="bg-white/20 backdrop-blur rounded-xl p-4 text-center min-w-[80px]"><div class="text-3xl font-['Clash_Display'] font-bold" id="seconds">30</div><div class="text-xs text-white/80">Secondes</div></div>
+                </div>
+                <a href="#" class="bg-white text-dark-900 px-8 py-4 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition flex items-center gap-2 whitespace-nowrap">J'en profite <i class="fas fa-bolt"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ATELIER ===== -->
+    <section class="relative py-16 md:py-20 bg-gradient-to-b from-dark-800 to-dark-900 text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center gap-3"><span class="w-12 h-0.5 bg-secondary-500"></span><span class="text-secondary-400 text-sm uppercase tracking-[0.3em] font-semibold">L'atelier</span></div>
+                    <h2 class="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold">Ce qui ne <span class="text-secondary-500 relative inline-block">s'achète<span class="absolute -bottom-2 left-0 w-full h-1 bg-secondary-500/30 rounded-full"></span></span> pas</h2>
+                    <p class="text-white/70 text-lg md:text-xl leading-relaxed max-w-xl">Le temps, le geste, la rencontre avec la matière. Derrière chaque pièce, il y a des mains qui savent regarder, des yeux qui savent toucher.</p>
+                    <div class="flex flex-wrap gap-8 pt-6">
+                        <div class="flex items-center gap-4 group"><div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-secondary-500/20 transition"><i class="ph ph-hands-clapping text-2xl text-secondary-400"></i></div><div><div class="text-sm text-white/50">Artisans</div><div class="font-display text-2xl text-white">15 collaborateurs</div></div></div>
+                        <div class="flex items-center gap-4 group"><div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-secondary-500/20 transition"><i class="ph ph-clock text-2xl text-secondary-400"></i></div><div><div class="text-sm text-white/50">Depuis</div><div class="font-display text-2xl text-white">2024</div></div></div>
+                    </div>
+                    <div class="pt-6"><a href="#contact" class="inline-flex items-center gap-3 text-white group"><span class="text-lg">Découvrir l'atelier</span><i class="fas fa-arrow-right group-hover:translate-x-2 transition"></i><span class="w-12 h-0.5 bg-secondary-500 group-hover:w-20 transition-all"></span></a></div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl"><img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop" alt="Atelier" class="w-full h-full object-cover hover:scale-110 transition duration-700"></div>
+                    <div class="absolute -bottom-8 -left-8 bg-white/10 backdrop-blur-md text-white p-6 rounded-2xl shadow-2xl border border-white/10 animate-float"><div class="flex items-center gap-4"><div class="w-12 h-12 bg-secondary-500 rounded-xl flex items-center justify-center text-white"><i class="fab fa-whatsapp text-2xl"></i></div><div><div class="text-sm opacity-70">Conseil privé</div><div class="text-xl font-display font-semibold">+229 00 00 00 00</div></div></div></div>
+                    <div class="absolute top-8 right-8 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/10"><span class="flex items-center gap-2"><i class="fas fa-star text-secondary-500"></i><span class="font-semibold">Savoir-faire unique</span></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-secondary-600 font-semibold text-sm uppercase tracking-wider">Témoignages</span>
+                <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mt-4 mb-6">Ils nous font <span class="gradient-text">confiance</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-light-100 p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="flex items-center gap-1 text-secondary-500 text-lg mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-dark-600 mb-6 leading-relaxed">"Rideaux magnifiques, qualité exceptionnelle. Le service WhatsApp est ultra rapide, livraison en 24h. Je recommande !"</p>
+                    <div class="flex items-center gap-4"><div class="w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold text-xl">A</div><div><h4 class="font-bold text-dark-900">Aminata Diallo</h4><p class="text-sm text-dark-500">Dakar, Sénégal</p></div></div>
+                </div>
+                <div class="bg-light-100 p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="flex items-center gap-1 text-secondary-500 text-lg mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-dark-600 mb-6 leading-relaxed">"Draps d'une douceur incroyable. Prix imbattables. Je suis devenue cliente fidèle, toute ma maison est équipée Segnon Shop !"</p>
+                    <div class="flex items-center gap-4"><div class="w-12 h-12 bg-secondary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">K</div><div><h4 class="font-bold text-dark-900">Kofi Mensah</h4><p class="text-sm text-dark-500">Abidjan, Côte d'Ivoire</p></div></div>
+                </div>
+                <div class="bg-light-100 p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="flex items-center gap-1 text-secondary-500 text-lg mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="text-dark-600 mb-6 leading-relaxed">"Service client exceptionnel. Ils m'ont conseillée pour choisir mes rideaux. Le rendu est magnifique, exactement ce que je voulais."</p>
+                    <div class="flex items-center gap-4"><div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">F</div><div><h4 class="font-bold text-dark-900">Fatou Ndiaye</h4><p class="text-sm text-dark-500">Dakar, Sénégal</p></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA SECTION ===== -->
+    <section class="py-16 bg-dark-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl md:text-5xl font-['Clash_Display'] font-bold mb-6">Prêt à transformer votre <span class="text-secondary-500">intérieur ?</span></h2>
+            <p class="text-white/70 text-lg max-w-2xl mx-auto mb-10">Nos conseillers sont disponibles 7j/7 pour vous guider dans vos choix.</p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="https://wa.me/22900000000" class="bg-primary-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-primary-600 transition flex items-center gap-2 shadow-lg hover:shadow-xl"><i class="fab fa-whatsapp text-xl"></i> WhatsApp direct</a>
+                <a href="tel:+22900000000" class="bg-white/10 backdrop-blur text-white px-8 py-4 rounded-full font-semibold border-2 border-white/20 hover:bg-white/20 transition flex items-center gap-2"><i class="fas fa-phone-alt"></i> Appel rapide</a>
+                <a href="#" class="bg-white text-dark-900 px-8 py-4 rounded-full font-semibold hover:bg-light-200 transition flex items-center gap-2"><i class="fas fa-envelope"></i> Formulaire</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-dark-800 text-white/70 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+            <div><div class="text-2xl font-['Clash_Display'] font-bold text-white mb-6">SEGNON<span class="text-primary-500">SHOP</span></div><p class="text-white/60 text-sm leading-relaxed mb-6">Votre boutique premium de rideaux, draps, quincaillerie et décoration. L'élégance africaine réinventée.</p><div class="flex gap-3"><a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="fab fa-facebook-f"></i></a><a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="fab fa-instagram"></i></a><a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="fab fa-whatsapp"></i></a><a href="#" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center hover:bg-primary-500 hover:text-white transition"><i class="fab fa-tiktok"></i></a></div></div>
+            <div><h4 class="text-white font-bold mb-6">Liens rapides</h4><ul class="space-y-3 text-sm"><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Accueil</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Collections</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Nouveautés</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Promotions</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Contact</a></li></ul></div>
+            <div><h4 class="text-white font-bold mb-6">Catégories</h4><ul class="space-y-3 text-sm"><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Rideaux</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Draps</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Quincaillerie</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Décoration</a></li><li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Sur mesure</a></li></ul></div>
+            <div><h4 class="text-white font-bold mb-6">Contact</h4><ul class="space-y-3 text-sm"><li class="flex items-start gap-3"><i class="fas fa-map-marker-alt mt-1"></i><span>Cotonou, Bénin</span></li><li class="flex items-start gap-3"><i class="fas fa-phone-alt mt-1"></i><span>+229 00 00 00 00</span></li><li class="flex items-start gap-3"><i class="fas fa-envelope mt-1"></i><span>contact@segnonshop.com</span></li><li class="flex items-start gap-3"><i class="fas fa-clock mt-1"></i><span>Lun - Sam : 8h - 19h</span></li></ul></div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 text-sm"><div>© 2025 Segnon Shop. Tous droits réservés.</div><div class="flex gap-6"><a href="#" class="hover:text-white transition">Mentions légales</a><a href="#" class="hover:text-white transition">Confidentialité</a><a href="#" class="hover:text-white transition">CGV</a></div></div>
+    </footer>
+
+    <!-- Back to top -->
+    <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 w-12 h-12 bg-primary-500 text-white rounded-xl flex items-center justify-center shadow-lg opacity-0 translate-y-4 transition-all duration-300 hover:bg-primary-600 z-50"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Scripts -->
+    <script>
+        window.addEventListener('scroll', function() { const btt = document.getElementById('backToTop'); if (window.scrollY > 500) { btt.style.opacity = '1'; btt.style.transform = 'translateY(0)'; } else { btt.style.opacity = '0'; btt.style.transform = 'translateY(20px)'; } });
+        function updateTimer() { const days = document.getElementById('days'); const hours = document.getElementById('hours'); const minutes = document.getElementById('minutes'); const seconds = document.getElementById('seconds'); if (days && hours && minutes && seconds) { let d = parseInt(days.textContent); let h = parseInt(hours.textContent); let m = parseInt(minutes.textContent); let s = parseInt(seconds.textContent); s--; if (s < 0) { s = 59; m--; if (m < 0) { m = 59; h--; if (h < 0) { h = 23; d--; if (d < 0) { d = 7; } } } } days.textContent = d.toString().padStart(2, '0'); hours.textContent = h.toString().padStart(2, '0'); minutes.textContent = m.toString().padStart(2, '0'); seconds.textContent = s.toString().padStart(2, '0'); } } setInterval(updateTimer, 1000);
+        document.querySelectorAll('.tab-btn').forEach(btn => { btn.addEventListener('click', function() { document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('bg-primary-500', 'text-white'); b.classList.add('text-dark-600'); }); this.classList.add('bg-primary-500', 'text-white'); this.classList.remove('text-dark-600'); }); });
+    </script>
+</body>
+</html>

@@ -10,15 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormMail;
-use App\Models\Circuit;
 use App\Models\Contact;
-use App\Models\Country;
 use App\Models\Account;
-use App\Models\Language;
 use App\Models\Module;
 use App\Models\Product;
-use App\Models\Story;
-use App\Models\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -26,10 +21,11 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 
-
-
 class FrontendController extends Controller {
 
+    public function segnon(){
+        return view('frontend.home1');
+    }
 
     public function home() {
         $bestSellers = Product::query()
