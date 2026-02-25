@@ -1,8 +1,7 @@
 @extends('frontend.layouts.master')
-@section('title', 'Segnon Shop')
-
-
-
+@section('title', 'L\'Élégance Africaine')
+@section('meta_description', 'Découvrez l\'histoire, les valeurs et l\'expertise derrière OMIZIX. Développeur passionné par Laravel, les architectures SaaS et les applications sur mesure.')
+@section('meta_image', asset('assets/images/ormiz_tech.png'))
 @section('content')
 
     <!-- ===== HERO SECTION ===== -->
@@ -683,7 +682,6 @@
             </div>
         </div>
     </section>
-
   
     <!-- ===== COLLECTION EXCLUSIVE ===== -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -859,6 +857,5 @@
             </a>
         </div>
     </section>
-
 
 @endsection

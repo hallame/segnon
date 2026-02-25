@@ -1,38 +1,72 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <!-- SEO -->
-    <title>Segnon Shop — L'Élégance Africaine</title>
-    <meta name="description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception. Des pièces uniques qui racontent une histoire.">
-    <meta name="keywords" content="rideaux, draps, quincaillerie, décoration, maison, afrique, artisanat, luxe">
+    
+    <!-- TITLE -->
+    <title>@yield('title', 'Segnon Shop — L\'Élégance Africaine')</title>
+    
+    <!-- META DESCRIPTION -->
+    <meta name="description" content="@yield('meta_description', 'Rideaux premium, draps de luxe, quincaillerie design et décoration d\'exception. Des pièces uniques qui racontent une histoire.')">
+    
+    <!-- META KEYWORDS -->
+    <meta name="keywords" content="@yield('meta_keywords', 'rideaux, draps, quincaillerie, décoration, maison, afrique, artisanat, luxe')">
+    
+    <!-- META AUTHOR -->
     <meta name="author" content="Segnon Shop">
-    <meta name="robots" content="index, follow">
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://segnonshop.com/">
-    <meta property="og:title" content="Segnon Shop — L'Élégance Africaine">
-    <meta property="og:description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=1200">
+    <!-- META ROBOTS -->
+    <meta name="robots" content="@yield('meta_robots', 'index, follow')">
     
-    <!-- Twitter -->
+    <!-- CANONICAL -->
+    <link rel="canonical" href="{{ url()->current() }}">
+    
+    <!-- OPEN GRAPH / FACEBOOK -->
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:site_name" content="Segnon Shop">
+    <meta property="og:title" content="@yield('og_title', 'Segnon Shop — L\'Élégance Africaine')">
+    <meta property="og:description" content="@yield('og_description', 'Rideaux premium, draps de luxe, quincaillerie design et décoration d\'exception.')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-image.jpg'))">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="@yield('og_image_alt', 'Segnon Shop - Décoration et intérieur africain')">
+    <meta property="og:locale" content="fr_FR">
+    
+    <!-- TWITTER CARD -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Segnon Shop — L'Élégance Africaine">
-    <meta name="twitter:description" content="Rideaux premium, draps de luxe, quincaillerie design et décoration d'exception.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=1200">
+    <meta name="twitter:title" content="@yield('twitter_title', 'Segnon Shop — L\'Élégance Africaine')">
+    <meta name="twitter:description" content="@yield('twitter_description', 'Rideaux premium, draps de luxe, quincaillerie design et décoration d\'exception.')">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('images/twitter-image.jpg'))">
+    <meta name="twitter:image:alt" content="@yield('twitter_image_alt', 'Segnon Shop - Décoration et intérieur africain')">
     
-    <!-- Favicon / icônes -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link rel="manifest" href="/site.webmanifest">
-    
-    <!-- Couleur du thème pour navigateurs mobiles -->
+    <!-- PWA & THEME -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#f15b30">
     <meta name="msapplication-TileColor" content="#f15b30">
     
+    <!-- FAVICONS -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+    {{-- <link rel="manifest" href="{{ asset('site.webmanifest') }}"> --}}
+    
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- ICONS (Lucide) optionnel -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -206,73 +240,9 @@
     </style>
 </head>
 <body class="font-sans antialiased bg-sand-50 text-night-900">
-    <!-- ===== NAVBAR ===== -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-sand-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  <!-- AJOUTER CECI -->
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <a href="/" class="text-3xl font-['Clash_Display'] font-bold tracking-tight">
-                    SEGNON<span class="text-terracotta-500">.</span>
-                </a>
-
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center space-x-1">
-                    <a href="#accueil" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
-                        Accueil
-                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
-                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
-                    </a>
-                    <a href="#collections" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
-                        Collections
-                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
-                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
-                    </a>
-                    <a href="#produits" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
-                        Nouveautés
-                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
-                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
-                    </a>
-                    <a href="#promos" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
-                        Promos
-                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
-                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
-                    </a>
-                    <a href="#contact" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
-                        Contact
-                        <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
-                        <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
-                    </a>
-                </div>
-
-                <!-- Actions -->
-                <div class="flex items-center gap-2">
-                    <button class="p-2 hover:bg-sand-100 rounded-full transition">
-                        <i class="fas fa-search text-night-700"></i>
-                    </button>
-                    <button class="p-2 hover:bg-sand-100 rounded-full transition relative">
-                        <i class="far fa-heart text-night-700"></i>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">3</span>
-                    </button>
-                    <button class="p-2 hover:bg-sand-100 rounded-full transition relative">
-                        <i class="fas fa-shopping-bag text-night-700"></i>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
-                    </button>
-                    <a href="https://wa.me/22900000000" class="hidden md:flex items-center gap-2 bg-terracotta-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-terracotta-600 transition shadow-lg hover:shadow-xl ml-2">
-                        <i class="fab fa-whatsapp"></i>
-                        WhatsApp
-                    </a>
-                    <button class="lg:hidden p-2 hover:bg-sand-100 rounded-full transition">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-
+    @include('frontend.layouts.header')
+    @yield('content')
     @include('frontend.layouts.footer')
-
-
 
     <!-- Back to top -->
     <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
@@ -280,69 +250,6 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Scripts -->
-    <script>
-        // Back to top visibility
-        window.addEventListener('scroll', function() {
-            const btt = document.getElementById('backToTop');
-            if (window.scrollY > 500) {
-                btt.style.opacity = '1';
-                btt.style.transform = 'translateY(0)';
-            } else {
-                btt.style.opacity = '0';
-                btt.style.transform = 'translateY(20px)';
-            }
-        });
-
-        // Countdown timer
-        function updateTimer() {
-            const days = document.getElementById('days');
-            const hours = document.getElementById('hours');
-            const minutes = document.getElementById('minutes');
-            const seconds = document.getElementById('seconds');
-
-            if (days && hours && minutes && seconds) {
-                let d = parseInt(days.textContent);
-                let h = parseInt(hours.textContent);
-                let m = parseInt(minutes.textContent);
-                let s = parseInt(seconds.textContent);
-
-                s--;
-                if (s < 0) {
-                    s = 59;
-                    m--;
-                    if (m < 0) {
-                        m = 59;
-                        h--;
-                        if (h < 0) {
-                            h = 23;
-                            d--;
-                            if (d < 0) {
-                                d = 7;
-                            }
-                        }
-                    }
-                }
-
-                days.textContent = d.toString().padStart(2, '0');
-                hours.textContent = h.toString().padStart(2, '0');
-                minutes.textContent = m.toString().padStart(2, '0');
-                seconds.textContent = s.toString().padStart(2, '0');
-            }
-        }
-
-        setInterval(updateTimer, 1000);
-        // Tabs functionality
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('bg-terracotta-500', 'text-white');
-                    b.classList.add('text-night-600');
-                });
-                this.classList.add('bg-terracotta-500', 'text-white');
-                this.classList.remove('text-night-600');
-            });
-        });
-    </script>
+    @include('frontend.layouts.scripts')
 </body>
 </html>

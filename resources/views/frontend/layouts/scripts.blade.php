@@ -1,4 +1,3 @@
-<script src="{{ asset('assets/front/js/script.js') }}"></script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
 <!-- Toastr JS -->
@@ -42,26 +41,70 @@
     });
 </script>
 
+<!-- Scripts -->
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const header = document.getElementById('siteHeader');
+    // Back to top visibility
+    window.addEventListener('scroll', function() {
+        const btt = document.getElementById('backToTop');
+        if (window.scrollY > 500) {
+            btt.style.opacity = '1';
+            btt.style.transform = 'translateY(0)';
+        } else {
+            btt.style.opacity = '0';
+            btt.style.transform = 'translateY(20px)';
+        }
+    });
 
-    // === SHADOW DU HEADER SUR SCROLL ===
-    if (header) {
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 10) header.classList.add('shadow-md');
-        else header.classList.remove('shadow-md');
-      });
+    // Countdown timer
+    function updateTimer() {
+        const days = document.getElementById('days');
+        const hours = document.getElementById('hours');
+        const minutes = document.getElementById('minutes');
+        const seconds = document.getElementById('seconds');
+
+        if (days && hours && minutes && seconds) {
+            let d = parseInt(days.textContent);
+            let h = parseInt(hours.textContent);
+            let m = parseInt(minutes.textContent);
+            let s = parseInt(seconds.textContent);
+
+            s--;
+            if (s < 0) {
+                s = 59;
+                m--;
+                if (m < 0) {
+                    m = 59;
+                    h--;
+                    if (h < 0) {
+                        h = 23;
+                        d--;
+                        if (d < 0) {
+                            d = 7;
+                        }
+                    }
+                }
+            }
+
+            days.textContent = d.toString().padStart(2, '0');
+            hours.textContent = h.toString().padStart(2, '0');
+            minutes.textContent = m.toString().padStart(2, '0');
+            seconds.textContent = s.toString().padStart(2, '0');
+        }
     }
 
-    // === YEAR FOOTER ===
-    const yearSpan = document.getElementById('yearSpan');
-    if (yearSpan) {
-      yearSpan.textContent = new Date().getFullYear();
-    }
-  });
+    setInterval(updateTimer, 1000);
+    // Tabs functionality
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-terracotta-500', 'text-white');
+                b.classList.add('text-night-600');
+            });
+            this.classList.add('bg-terracotta-500', 'text-white');
+            this.classList.remove('text-night-600');
+        });
+    });
 </script>
-
 
 
 @if (env('APP_ENV') === 'production')
