@@ -7,6 +7,9 @@
 
 @section('content')
 
+
+
+
     <!-- ===== HERO SECTION ===== -->
     <section id="accueil" class="relative bg-gradient-to-br from-sand-100 via-white to-saffron-50 overflow-hidden">
         <!-- Formes décoratives -->
@@ -406,7 +409,6 @@
     </section>
 
     <!-- ===== PROMO BANNER ===== -->
-
     <section class="py-16 bg-gradient-to-r from-terracotta-600 via-saffron-600 to-safari-600 text-white relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  <!-- AJOUTER CECI -->
             <div class="flex flex-col lg:flex-row items-center justify-between gap-8 z-10">
@@ -858,6 +860,116 @@
                 <i class="fas fa-arrow-right group-hover:translate-x-2 transition"></i>
                 <span class="w-12 h-0.5 bg-terracotta-500 group-hover:w-20 transition-all"></span>
             </a>
+        </div>
+    </section>
+
+
+    <!-- ===== NOS SERVICES ===== -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-terracotta-500 font-semibold text-sm uppercase tracking-wider">Services</span>
+                <h2 class="text-4xl md:text-5xl font-display font-bold mt-4 mb-6">
+                    Un accompagnement <span class="gradient-text">sur mesure</span>
+                </h2>
+                <p class="text-night-600">De la conception à l'installation, nous sommes à vos côtés.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="text-center p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="w-20 h-20 bg-terracotta-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-ruler-combined text-3xl text-terracotta-600"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl mb-3">Conseil & sur-mesure</h3>
+                    <p class="text-night-600">Nos experts vous guident pour choisir les bonnes dimensions et matières.</p>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="text-center p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="w-20 h-20 bg-saffron-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-tools text-3xl text-saffron-600"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl mb-3">Installation à domicile</h3>
+                    <p class="text-night-600">Pose de vos rideaux et tringles par nos équipes qualifiées.</p>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="text-center p-8 rounded-2xl hover:shadow-xl transition hover-lift">
+                    <div class="w-20 h-20 bg-safari-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-clock text-3xl text-safari-600"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-xl mb-3">Suivi après-vente</h3>
+                    <p class="text-night-600">Service client disponible 7j/7 pour répondre à vos questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- ===== MARQUES PARTENAIRES ===== -->
+    {{-- <section class="py-16 bg-sand-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-saffron-600 font-semibold text-sm uppercase tracking-wider">Ils nous font confiance</span>
+                <h2 class="text-4xl md:text-5xl font-display font-bold mt-4 mb-6">
+                    Nos <span class="gradient-text">partenaires</span>
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
+                <!-- Partenaire 1 -->
+                <div class="bg-white p-6 rounded-xl flex items-center justify-center hover:shadow-md transition grayscale hover:grayscale-0">
+                    <span class="text-2xl font-display font-bold text-night-400">TISSÔT</span>
+                </div>
+                <!-- Partenaire 2 -->
+                <div class="bg-white p-6 rounded-xl flex items-center justify-center hover:shadow-md transition grayscale hover:grayscale-0">
+                    <span class="text-2xl font-display font-bold text-night-400">LINVOS</span>
+                </div>
+                <!-- Partenaire 3 -->
+                <div class="bg-white p-6 rounded-xl flex items-center justify-center hover:shadow-md transition grayscale hover:grayscale-0">
+                    <span class="text-2xl font-display font-bold text-night-400">DÉCO+</span>
+                </div>
+                <!-- Partenaire 4 -->
+                <div class="bg-white p-6 rounded-xl flex items-center justify-center hover:shadow-md transition grayscale hover:grayscale-0">
+                    <span class="text-2xl font-display font-bold text-night-400">AFRICA HOME</span>
+                </div>
+            </div>
+        </div>
+    </section> --}}
+
+    <!-- ===== FAQ ===== -->
+    <section class="py-16 bg-sand-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-terracotta-500 font-semibold text-sm uppercase tracking-wider">FAQs</span>
+                <h2 class="text-4xl md:text-5xl font-display font-bold mt-4 mb-6">
+                    Questions <span class="gradient-text">fréquentes</span>
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h3 class="font-display font-bold text-lg mb-2">Quels sont les délais de livraison ?</h3>
+                    <p class="text-night-600">Livraison sous 24h à Cotonou, 48h en province.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h3 class="font-display font-bold text-lg mb-2">Comment passer commande ?</h3>
+                    <p class="text-night-600">Par WhatsApp, téléphone ou formulaire de contact.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h3 class="font-display font-bold text-lg mb-2">Puis-je retourner un article ?</h3>
+                    <p class="text-night-600">Retour gratuit sous 14 jours, satisfait ou remboursé.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition">
+                    <h3 class="font-display font-bold text-lg mb-2">Proposez-vous du sur-mesure ?</h3>
+                    <p class="text-night-600">Oui, contactez-nous pour vos dimensions spécifiques.</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10">
+                <a href="#" class="text-terracotta-500 font-semibold hover:underline">Voir toutes les questions →</a>
+            </div>
         </div>
     </section>
 
