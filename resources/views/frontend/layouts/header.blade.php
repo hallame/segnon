@@ -1,3 +1,4 @@
+<!-- ===== NAVBAR (uniquement le header) ===== -->
 <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-sand-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
@@ -18,11 +19,7 @@
                     <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
                     <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
                 </a>
-                <a href="{{ route('shop.promo') }}" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
-                    Promos
-                    <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
-                    <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
-                </a>
+               
                 <a href="{{ route('about') }}" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
                     Notre Histoire
                     <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
@@ -37,7 +34,6 @@
 
             <!-- Actions Desktop -->
             <div class="hidden lg:flex items-center gap-2">
-            
                 <a href="{{ route('shop.cart.index') }}" class="p-2 hover:bg-sand-100 rounded-full transition relative">
                     <i class="fas fa-shopping-bag text-night-700"></i>
                     @auth
@@ -68,9 +64,15 @@
             </div>
         </div>
     </div>
+</nav>
 
-    <!-- Mobile Menu Panel -->
-    <div id="mobileMenu" class="lg:hidden fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
+<!-- ===== MOBILE MENU (en dehors du nav) ===== -->
+<div id="mobileMenu" class="lg:hidden fixed inset-0 bg-white z-[100] transform translate-x-full transition-transform duration-300 ease-in-out">
+    <!-- Overlay semi-transparent (optionnel) -->
+    <div class="absolute inset-0 bg-black/20" onclick="toggleMobileMenu()"></div>
+    
+    <!-- Contenu du menu -->
+    <div class="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white shadow-2xl">
         <div class="flex flex-col h-full">
             <!-- Header mobile menu -->
             <div class="flex items-center justify-between p-4 border-b border-sand-200">
@@ -91,9 +93,7 @@
                     <a href="{{ route('shop.products.index') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
                         Nouveautés
                     </a>
-                    <a href="{{ route('shop.promo') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
-                        Promos
-                    </a>
+                   
                     <a href="{{ route('about') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
                         Notre Histoire
                     </a>
@@ -112,11 +112,11 @@
             </div>
         </div>
     </div>
+</div>
 
-</nav>
 
 <script>
-    // Mobile Menu Toggle - Version CORRIGÉE
+    // Mobile Menu Toggle - VERSION FINALE
     function toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         const menuIcon = document.getElementById('menuIcon');
@@ -138,54 +138,59 @@
         }
     }
 
-    // Fermer le menu avec la touche Echap
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const menu = document.getElementById('mobileMenu');
-            const menuIcon = document.getElementById('menuIcon');
-            if (menu && !menu.classList.contains('translate-x-full')) {
-                menu.classList.add('translate-x-full');
-                menuIcon.classList.remove('fa-times');
-                menuIcon.classList.add('fa-bars');
-                document.body.style.overflow = 'auto';
-            }
-        }
-    });
-
-    // Fermer le menu quand on clique sur un lien
-    document.querySelectorAll('#mobileMenu a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Ne pas fermer si c'est un lien externe ou si on veut garder le menu ouvert
-            if (this.getAttribute('href').startsWith('http')) return;
-            
-            const menu = document.getElementById('mobileMenu');
-            const menuIcon = document.getElementById('menuIcon');
-            
-            setTimeout(() => {
-                if (window.innerWidth < 1024) {
+    // Attendre que le DOM soit chargé
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fermer le menu avec la touche Echap
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const menu = document.getElementById('mobileMenu');
+                const menuIcon = document.getElementById('menuIcon');
+                if (menu && !menu.classList.contains('translate-x-full')) {
                     menu.classList.add('translate-x-full');
                     menuIcon.classList.remove('fa-times');
                     menuIcon.classList.add('fa-bars');
                     document.body.style.overflow = 'auto';
                 }
-            }, 150); // Petit délai pour laisser le temps à la navigation
+            }
         });
-    });
 
-    // Gérer le redimensionnement de la fenêtre
-    window.addEventListener('resize', function() {
-        const menu = document.getElementById('mobileMenu');
-        const menuIcon = document.getElementById('menuIcon');
-        
-        if (window.innerWidth >= 1024) {
-            // Si on passe en desktop, fermer le menu mobile
-            if (menu && !menu.classList.contains('translate-x-full')) {
+        // Fermer le menu en cliquant sur l'overlay
+        document.querySelector('#mobileMenu .absolute.inset-0')?.addEventListener('click', function() {
+            toggleMobileMenu();
+        });
+
+        // Fermer le menu quand on clique sur un lien
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Ne pas fermer si c'est un lien externe
+                if (this.getAttribute('href').startsWith('http') && 
+                    !this.getAttribute('href').includes(window.location.host)) {
+                    return;
+                }
+                
+                setTimeout(() => {
+                    const menu = document.getElementById('mobileMenu');
+                    const menuIcon = document.getElementById('menuIcon');
+                    menu.classList.add('translate-x-full');
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                    document.body.style.overflow = 'auto';
+                }, 150);
+            });
+        });
+
+        // Gérer le redimensionnement
+        window.addEventListener('resize', function() {
+            const menu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            if (window.innerWidth >= 1024 && menu && !menu.classList.contains('translate-x-full')) {
                 menu.classList.add('translate-x-full');
                 menuIcon.classList.remove('fa-times');
                 menuIcon.classList.add('fa-bars');
                 document.body.style.overflow = 'auto';
             }
-        }
+        });
     });
 
     // Active link highlighting
@@ -194,15 +199,14 @@
         document.querySelectorAll('nav a[href]').forEach(link => {
             const linkPath = link.getAttribute('href');
             if (linkPath === currentPath || 
-                (currentPath === '/' && linkPath === '{{ route('home') }}')) {
+                (currentPath === '/' && linkPath === '/')) {
                 link.classList.add('text-terracotta-500');
-                // Pour les liens avec l'effet de soulignement
                 link.classList.add('font-semibold');
             }
         });
     });
 
-    // Navbar scroll effect (optionnel)
+    // Navbar scroll effect
     window.addEventListener('scroll', function() {
         const nav = document.querySelector('nav');
         if (window.scrollY > 50) {
@@ -212,3 +216,23 @@
         }
     });
 </script>
+
+<style>
+    /* Garantir que le menu est au-dessus de tout */
+    #mobileMenu {
+        z-index: 9999 !important;
+        display: block !important;
+        visibility: visible !important;
+    }
+    
+    /* Overlay semi-transparent */
+    #mobileMenu .absolute.inset-0.bg-black\/20 {
+        background-color: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(2px);
+    }
+    
+    /* Empêcher le scroll quand le menu est ouvert */
+    body:has(#mobileMenu:not(.translate-x-full)) {
+        overflow: hidden !important;
+    }
+</style>

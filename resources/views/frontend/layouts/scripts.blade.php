@@ -41,7 +41,6 @@
     });
 </script>
 
-<!-- Scripts -->
 <script>
     // Back to top visibility
     window.addEventListener('scroll', function() {

@@ -29,18 +29,26 @@
                         Des pièces uniques qui racontent une histoire.
                     </p>
                     
-                    <!-- CTA Group -->
-                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
-                        <a href="#collections" class="group bg-terracotta-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-terracotta-600 transition flex items-center gap-2 shadow-lg hover:shadow-xl">
+                    <!-- CTA Group - Simple et efficace -->
+                    <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+                        
+                        <!-- Bouton Explorer -->
+                        <a href="#collections" 
+                        class="bg-terracotta-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-terracotta-600 transition flex items-center gap-2 text-sm sm:text-base shadow-lg">
                             Explorer
-                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
+                            <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="https://wa.me/22900000000" class="group bg-white text-night-900 px-8 py-4 rounded-full font-semibold border-2 border-sand-300 hover:border-terracotta-500 transition flex items-center gap-2">
+                        
+                        <!-- Bouton WhatsApp -->
+                        <a href="https://wa.me/22900000000" 
+                        class="bg-white text-night-900 px-6 py-3 rounded-full font-semibold border-2 border-sand-300 hover:border-terracotta-500 transition flex items-center gap-2 text-sm sm:text-base">
                             <i class="fab fa-whatsapp text-terracotta-500"></i>
-                            WhatsApp direct
+                            WhatsApp
                         </a>
+                        
                     </div>
-                    
+
+
                     <!-- Stats -->
                     <div class="grid grid-cols-3 gap-4 pt-8 border-t border-sand-200 max-w-md mx-auto lg:mx-0">
                         <div>
@@ -63,22 +71,22 @@
                     <!-- Image 1 -->
                     <div class="space-y-4">
                         <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
-                            <img src="https://images.unsplash.com/photo-1618213749401-4492e2c1f7d3?w=800&auto=format&fit=crop" 
+                            <img src="{{ asset('assets/images/hero/deco3.jpg') }}" 
                                  alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
                         </div>
                         <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
-                            <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop" 
+                            <img src="{{ asset('assets/images/hero/rideau.jpg') }}" 
                                  alt="Draps" class="w-full h-48 object-cover hover:scale-110 transition duration-700">
                         </div>
                     </div>
                     <!-- Image 2 -->
                     <div class="space-y-4 mt-8">
                         <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
-                            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop" 
+                            <img src="{{ asset('assets/images/hero/draps.jpg') }}" 
                                  alt="Rideaux" class="w-full h-48 object-cover hover:scale-110 transition duration-700">
                         </div>
                         <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
-                            <img src="https://images.unsplash.com/photo-1532372320978-9b4b6d95f4b8?w=800&auto=format&fit=crop" 
+                            <img src="{{ asset('assets/images/hero/deco.jpg') }}" 
                                  alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
                         </div>
                     </div>
@@ -621,35 +629,7 @@
                         il y a des mains qui savent regarder, des yeux qui savent toucher.
                     </p>
                     
-                    <div class="flex flex-wrap gap-8 pt-6">
-                        <div class="flex items-center gap-4 group">
-                            <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-terracotta-500/20 transition-colors duration-300">
-                                <i class="ph ph-hands-clapping text-2xl text-terracotta-400"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm text-white/50">Artisans</div>
-                                <div class="font-display text-2xl text-white">15 collaborateurs</div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center gap-4 group">
-                            <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-terracotta-500/20 transition-colors duration-300">
-                                <i class="ph ph-clock text-2xl text-terracotta-400"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm text-white/50">Depuis</div>
-                                <div class="font-display text-2xl text-white">2024</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="pt-6">
-                        <a href="#contact" class="inline-flex items-center gap-3 text-white group">
-                            <span class="text-lg">Découvrir l'atelier</span>
-                            <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
-                            <span class="w-12 h-0.5 bg-terracotta-500 group-hover:w-20 transition-all duration-300"></span>
-                        </a>
-                    </div>
+                  
                 </div>
                 
                 <!-- Image avec effets -->
