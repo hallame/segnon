@@ -283,7 +283,6 @@ class FrontendController extends Controller {
     }
 
 
-
     // about
     public function about(){
         return view('frontend.about');

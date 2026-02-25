@@ -29,7 +29,6 @@
         <div>
             <h4 class="text-white font-bold mb-6">Liens rapides</h4>
             <ul class="space-y-3 text-sm">
-                <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Accueil</a></li>
                 <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Collections</a></li>
                 <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Nouveautés</a></li>
                 <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Promotions</a></li>
@@ -45,7 +44,6 @@
                 <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Draps</a></li>
                 <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Quincaillerie</a></li>
                 <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Décoration</a></li>
-                <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition">Sur mesure</a></li>
             </ul>
         </div>
         

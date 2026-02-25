@@ -112,6 +112,10 @@ class ShopController extends Controller {
         ]);
     }
 
+    public function collections(){
+        return view('frontend.collections');
+    }
+
     // Optionnel: méthode dédiée pour les catégories par slug
     public function category(Request $request, $slug) {
         $request->merge(['c' => $slug]);

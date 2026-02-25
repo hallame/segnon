@@ -116,17 +116,21 @@
 </nav>
 
 <script>
-    // Mobile Menu Toggle
+    // Mobile Menu Toggle - Version CORRIGÉE
     function toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         const menuIcon = document.getElementById('menuIcon');
         
+        if (!menu || !menuIcon) return;
+        
         if (menu.classList.contains('translate-x-full')) {
+            // Ouvrir le menu
             menu.classList.remove('translate-x-full');
             menuIcon.classList.remove('fa-bars');
             menuIcon.classList.add('fa-times');
             document.body.style.overflow = 'hidden';
         } else {
+            // Fermer le menu
             menu.classList.add('translate-x-full');
             menuIcon.classList.remove('fa-times');
             menuIcon.classList.add('fa-bars');
@@ -134,31 +138,77 @@
         }
     }
 
-
-
-    // Close mobile menu when clicking on a link
-    document.querySelectorAll('#mobileMenu a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth < 1024) {
-                setTimeout(() => {
-                    document.getElementById('mobileMenu').classList.add('translate-x-full');
-                    document.getElementById('menuIcon').classList.remove('fa-times');
-                    document.getElementById('menuIcon').classList.add('fa-bars');
-                    document.body.style.overflow = 'auto';
-                }, 100);
+    // Fermer le menu avec la touche Echap
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const menu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            if (menu && !menu.classList.contains('translate-x-full')) {
+                menu.classList.add('translate-x-full');
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
             }
+        }
+    });
+
+    // Fermer le menu quand on clique sur un lien
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Ne pas fermer si c'est un lien externe ou si on veut garder le menu ouvert
+            if (this.getAttribute('href').startsWith('http')) return;
+            
+            const menu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            setTimeout(() => {
+                if (window.innerWidth < 1024) {
+                    menu.classList.add('translate-x-full');
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                    document.body.style.overflow = 'auto';
+                }
+            }, 150); // Petit délai pour laisser le temps à la navigation
         });
     });
 
-
+    // Gérer le redimensionnement de la fenêtre
+    window.addEventListener('resize', function() {
+        const menu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        
+        if (window.innerWidth >= 1024) {
+            // Si on passe en desktop, fermer le menu mobile
+            if (menu && !menu.classList.contains('translate-x-full')) {
+                menu.classList.add('translate-x-full');
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    });
 
     // Active link highlighting
     document.addEventListener('DOMContentLoaded', function() {
         const currentPath = window.location.pathname;
-        document.querySelectorAll('a[href]').forEach(link => {
-            if (link.getAttribute('href') === currentPath) {
+        document.querySelectorAll('nav a[href]').forEach(link => {
+            const linkPath = link.getAttribute('href');
+            if (linkPath === currentPath || 
+                (currentPath === '/' && linkPath === '{{ route('home') }}')) {
                 link.classList.add('text-terracotta-500');
+                // Pour les liens avec l'effet de soulignement
+                link.classList.add('font-semibold');
             }
         });
+    });
+
+    // Navbar scroll effect (optionnel)
+    window.addEventListener('scroll', function() {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 50) {
+            nav.classList.add('shadow-md');
+        } else {
+            nav.classList.remove('shadow-md');
+        }
     });
 </script>
