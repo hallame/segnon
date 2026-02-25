@@ -1,7 +1,10 @@
+
 @extends('frontend.layouts.master')
-@section('title', 'L\'Élégance Africaine')
-@section('meta_description', 'Découvrez l\'histoire, les valeurs et l\'expertise derrière OMIZIX. Développeur passionné par Laravel, les architectures SaaS et les applications sur mesure.')
-@section('meta_image', asset('assets/images/ormiz_tech.png'))
+
+@section('title', 'Segnon Shop – L\'Élégance Africaine pour votre Intérieur')
+@section('meta_description', 'Rideaux premium, draps de luxe, quincaillerie design et décoration d\'exception. Découvrez des pièces uniques qui racontent une histoire.')
+@section('og_image', asset('assets/images/segnon.png'))
+
 @section('content')
 
     <!-- ===== HERO SECTION ===== -->
