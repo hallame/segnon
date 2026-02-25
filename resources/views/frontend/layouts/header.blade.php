@@ -1,61 +1,164 @@
 <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-sand-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  <!-- AJOUTER CECI -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
             <!-- Logo -->
-            <a href="/" class="text-3xl font-['Clash_Display'] font-bold tracking-tight">
+            <a href="{{ route('home') }}" class="text-3xl font-['Clash_Display'] font-bold tracking-tight">
                 SEGNON<span class="text-terracotta-500">.</span>
             </a>
 
             <!-- Desktop Menu -->
             <div class="hidden lg:flex items-center space-x-1">
-                <a href="#accueil" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
-                    Accueil
-                    <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
-                    <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
-                </a>
-                <a href="#collections" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                <a href="{{ route('shop.collections') }}" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
                     Collections
                     <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
                     <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
                 </a>
-                <a href="#produits" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                <a href="{{ route('shop.products.index') }}" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
                     Nouveautés
                     <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
                     <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
                 </a>
-                <a href="#promos" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                <a href="{{ route('shop.promo') }}" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
                     Promos
                     <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
                     <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
                 </a>
-                <a href="#contact" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                <a href="{{ route('about') }}" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
+                    Notre Histoire
+                    <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
+                    <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
+                </a>
+                <a href="{{ route('contact') }}" class="px-4 py-2 text-night-700 hover:text-terracotta-500 font-medium transition relative group">
                     Contact
                     <span class="absolute bottom-0 left-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:left-0 transition-all duration-300"></span>
                     <span class="absolute bottom-0 right-1/2 w-0 h-0.5 bg-terracotta-500 group-hover:w-1/2 group-hover:right-0 transition-all duration-300"></span>
                 </a>
             </div>
 
-            <!-- Actions -->
-            <div class="flex items-center gap-2">
-                <button class="p-2 hover:bg-sand-100 rounded-full transition">
-                    <i class="fas fa-search text-night-700"></i>
-                </button>
-                <button class="p-2 hover:bg-sand-100 rounded-full transition relative">
-                    <i class="far fa-heart text-night-700"></i>
-                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">3</span>
-                </button>
-                <button class="p-2 hover:bg-sand-100 rounded-full transition relative">
+            <!-- Actions Desktop -->
+            <div class="hidden lg:flex items-center gap-2">
+            
+                <a href="{{ route('shop.cart.index') }}" class="p-2 hover:bg-sand-100 rounded-full transition relative">
                     <i class="fas fa-shopping-bag text-night-700"></i>
-                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">2</span>
-                </button>
-                <a href="https://wa.me/22900000000" class="hidden md:flex items-center gap-2 bg-terracotta-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-terracotta-600 transition shadow-lg hover:shadow-xl ml-2">
+                    @auth
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">{{ Cart::count() }}</span>
+                    @else
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">0</span>
+                    @endauth
+                </a>
+                <a href="https://wa.me/2296940510" class="flex items-center gap-2 bg-terracotta-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-terracotta-600 transition shadow-lg hover:shadow-xl ml-2">
                     <i class="fab fa-whatsapp"></i>
                     WhatsApp
                 </a>
-                <button class="lg:hidden p-2 hover:bg-sand-100 rounded-full transition">
-                    <i class="fas fa-bars text-xl"></i>
+            </div>
+
+            <!-- Mobile Menu Button & Icons -->
+            <div class="flex lg:hidden items-center gap-1">
+                <a href="{{ route('shop.cart.index') }}" class="p-2 hover:bg-sand-100 rounded-full transition relative">
+                    <i class="fas fa-shopping-bag text-night-700"></i>
+                    @auth
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">{{ Cart::count() }}</span>
+                    @else
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">0</span>
+                    @endauth
+                </a>
+                <button id="menuToggle" class="p-2 hover:bg-sand-100 rounded-full transition" onclick="toggleMobileMenu()">
+                    <i id="menuIcon" class="fas fa-bars text-xl"></i>
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- Mobile Menu Panel -->
+    <div id="mobileMenu" class="lg:hidden fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="flex flex-col h-full">
+            <!-- Header mobile menu -->
+            <div class="flex items-center justify-between p-4 border-b border-sand-200">
+                <a href="{{ route('home') }}" class="text-2xl font-['Clash_Display'] font-bold">
+                    SEGNON<span class="text-terracotta-500">.</span>
+                </a>
+                <button onclick="toggleMobileMenu()" class="p-2 hover:bg-sand-100 rounded-full transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Menu links -->
+            <div class="flex-1 overflow-y-auto py-6 px-4">
+                <div class="space-y-4">
+                    <a href="{{ route('shop.collections') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                        Collections
+                    </a>
+                    <a href="{{ route('shop.products.index') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                        Nouveautés
+                    </a>
+                    <a href="{{ route('shop.promo') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                        Promos
+                    </a>
+                    <a href="{{ route('about') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                        Notre Histoire
+                    </a>
+                    <a href="{{ route('contact') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- WhatsApp Mobile -->
+                <div class="mt-8 pt-6 border-t border-sand-200">
+                    <a href="https://wa.me/2296940510" class="flex items-center justify-center gap-2 bg-terracotta-500 text-white px-5 py-4 rounded-xl text-base font-semibold hover:bg-terracotta-600 transition" onclick="toggleMobileMenu()">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                        WhatsApp direct
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </nav>
+
+<script>
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        
+        if (menu.classList.contains('translate-x-full')) {
+            menu.classList.remove('translate-x-full');
+            menuIcon.classList.remove('fa-bars');
+            menuIcon.classList.add('fa-times');
+            document.body.style.overflow = 'hidden';
+        } else {
+            menu.classList.add('translate-x-full');
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth < 1024) {
+                setTimeout(() => {
+                    document.getElementById('mobileMenu').classList.add('translate-x-full');
+                    document.getElementById('menuIcon').classList.remove('fa-times');
+                    document.getElementById('menuIcon').classList.add('fa-bars');
+                    document.body.style.overflow = 'auto';
+                }, 100);
+            }
+        });
+    });
+
+
+
+    // Active link highlighting
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('a[href]').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('text-terracotta-500');
+            }
+        });
+    });
+</script>

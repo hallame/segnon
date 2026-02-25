@@ -74,6 +74,12 @@ Route::prefix('shop')->name('shop.')->group(function () {
     Route::get('/products', [ShopController::class,'index'])->name('products.index');
     Route::get('/products/{product:slug}', [ShopController::class,'show'])->name('products.show');
     Route::get('/products/category/{slug}', [ShopController::class,'category'])->name('products.category');
+    Route::get('/promo', [ShopController::class,'promo'])->name('promo');
+    Route::get('/wishlist', [ShopController::class,'wishlist'])->name('wishlist');
+    Route::get('/collections', [ShopController::class,'collections'])->name('collections');
+
+    
+    
 
     Route::get('/cart', [ShopController::class,'cartIndex'])->name('cart.index');
     Route::post('/cart/add', [ShopController::class,'cartAdd'])->name('cart.add');

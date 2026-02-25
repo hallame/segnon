@@ -7,9 +7,6 @@
 
 @section('content')
 
-
-
-
     <!-- ===== HERO SECTION ===== -->
     <section id="accueil" class="relative bg-gradient-to-br from-sand-100 via-white to-saffron-50 overflow-hidden">
         <!-- Formes décoratives -->
@@ -906,7 +903,6 @@
         </div>
     </section>
 
-    
     <!-- ===== MARQUES PARTENAIRES ===== -->
     {{-- <section class="py-16 bg-sand-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
