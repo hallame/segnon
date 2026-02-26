@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            $appName = config('app.name', 'MYLMARK');
+            $appName = config('app.name', 'Omizix');
 
             $name = $notifiable->firstname
                 ?? $notifiable->name

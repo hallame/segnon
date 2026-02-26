@@ -33,35 +33,35 @@ class ViewServiceProvider extends ServiceProvider{
         View::composer('*', function ($view) {
 
              // Réseaux sociaux
-            if (Schema::hasTable('socials')) {
-                $footerSocials = Social::where('status', 1)
-                    ->select('name', 'url', 'icon', 'image')
-                    ->get();
+            // if (Schema::hasTable('socials')) {
+            //     $footerSocials = Social::where('status', 1)
+            //         ->select('name', 'url', 'icon', 'image')
+            //         ->get();
 
-                // Partager les données
-                $view->with([
-                    'footerSocials' => $footerSocials,
-                    'facebook' => $footerSocials->firstWhere('name', 'facebook'),
-                    'twitter' => $footerSocials->firstWhere('name', 'twitter'),
-                    'tiktok' => $footerSocials->firstWhere('name', 'tiktok'),
-                    'instagram' => $footerSocials->firstWhere('name', 'instagram'),
-                    'youtube' => $footerSocials->firstWhere('name', 'youtube'),
-                    'linkedin' => $footerSocials->firstWhere('name', 'linkedin'),
-                    'text' => $footerSocials->firstWhere('name', 'text'),
-                ]);
-            } else {
-                // Si la table n’existe pas, on partage une collection vide
-                $view->with([
-                    'footerSocials' => collect(),
-                    'facebook' => null,
-                    'twitter' => null,
-                    'tiktok' => null,
-                    'instagram' => null,
-                    'youtube' => null,
-                    'linkedin' => null,
-                    'text' => null,
-                ]);
-            }
+            //     // Partager les données
+            //     $view->with([
+            //         'footerSocials' => $footerSocials,
+            //         'facebook' => $footerSocials->firstWhere('name', 'facebook'),
+            //         'twitter' => $footerSocials->firstWhere('name', 'twitter'),
+            //         'tiktok' => $footerSocials->firstWhere('name', 'tiktok'),
+            //         'instagram' => $footerSocials->firstWhere('name', 'instagram'),
+            //         'youtube' => $footerSocials->firstWhere('name', 'youtube'),
+            //         'linkedin' => $footerSocials->firstWhere('name', 'linkedin'),
+            //         'text' => $footerSocials->firstWhere('name', 'text'),
+            //     ]);
+            // } else {
+            //     // Si la table n’existe pas, on partage une collection vide
+            //     $view->with([
+            //         'footerSocials' => collect(),
+            //         'facebook' => null,
+            //         'twitter' => null,
+            //         'tiktok' => null,
+            //         'instagram' => null,
+            //         'youtube' => null,
+            //         'linkedin' => null,
+            //         'text' => null,
+            //     ]);
+            // }
 
              // Contacts
              if (Schema::hasTable('contacts')) {
@@ -71,7 +71,7 @@ class ViewServiceProvider extends ServiceProvider{
                     Contact::where('status', 1)->where('name', 'address')->latest()->select('name', 'url', 'value')->first(),
                 ])->filter(); // enlever les null au cas où certains n'existent pas
 
-                $view->with('footerContacts', $footerContacts);
+            $view->with('footerContacts', $footerContacts);
             } else {
                 $view->with('footerContacts', collect());
             }
@@ -101,6 +101,7 @@ class ViewServiceProvider extends ServiceProvider{
             // user
             $user = Auth::user();
             $view->with('user', $user);
+
 
             //cart
             $clientId = $user->id ?? null;

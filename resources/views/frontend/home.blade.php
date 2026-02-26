@@ -13,7 +13,7 @@
         <div class="absolute top-20 left-10 w-72 h-72 bg-terracotta-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
         <div class="absolute bottom-20 right-10 w-96 h-96 bg-safari-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float-slow"></div>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-6 lg:py-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <!-- Left Content -->
                 <div class="space-y-8 text-center lg:text-left">
@@ -38,9 +38,8 @@
                             Explorer
                             <i class="fas fa-arrow-right"></i>
                         </a>
-                        
                         <!-- Bouton WhatsApp -->
-                        <a href="https://wa.me/22900000000" 
+                        <a href="https://wa.me/2296940510" 
                         class="bg-white text-night-900 px-6 py-3 rounded-full font-semibold border-2 border-sand-300 hover:border-terracotta-500 transition flex items-center gap-2 text-sm sm:text-base">
                             <i class="fab fa-whatsapp text-terracotta-500"></i>
                             WhatsApp
@@ -50,7 +49,7 @@
 
 
                     <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-sand-200 max-w-md mx-auto lg:mx-0">
+                    <div class="grid grid-cols-3 gap-4 pt-2 border-t border-sand-200 max-w-md mx-auto lg:mx-0">
                         <div>
                             <div class="text-2xl font-['Clash_Display'] font-bold text-terracotta-500">5000+</div>
                             <div class="text-xs text-night-500">Clients</div>
@@ -72,7 +71,7 @@
                     <div class="space-y-4">
                         <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
                             <img src="{{ asset('assets/images/hero/deco3.jpg') }}" 
-                                 alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
+                                 alt="Décoration" class="w-full h-56 object-cover hover:scale-110 transition duration-700">
                         </div>
                         <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
                             <img src="{{ asset('assets/images/hero/rideau.jpg') }}" 
@@ -87,7 +86,7 @@
                         </div>
                         <div class="overflow-hidden rounded-3xl shadow-xl hover-scale">
                             <img src="{{ asset('assets/images/hero/deco.jpg') }}" 
-                                 alt="Décoration" class="w-full h-64 object-cover hover:scale-110 transition duration-700">
+                                 alt="Décoration" class="w-full h-56 object-cover hover:scale-110 transition duration-700">
                         </div>
                     </div>
                     

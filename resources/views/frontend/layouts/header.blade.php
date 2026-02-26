@@ -1,7 +1,7 @@
 <!-- ===== NAVBAR (uniquement le header) ===== -->
 <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-sand-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
+        <div class="flex items-center justify-between h-16">
             <!-- Logo -->
             <a href="{{ route('home') }}" class="text-3xl font-['Clash_Display'] font-bold tracking-tight">
                 SEGNON<span class="text-terracotta-500">.</span>
@@ -34,13 +34,19 @@
 
             <!-- Actions Desktop -->
             <div class="hidden lg:flex items-center gap-2">
+
+              
+
+
                 <a href="{{ route('shop.cart.index') }}" class="p-2 hover:bg-sand-100 rounded-full transition relative">
                     <i class="fas fa-shopping-bag text-night-700"></i>
-                    @auth
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">{{ Cart::count() }}</span>
-                    @else
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">0</span>
-                    @endauth
+
+                    @if($cartCount > 0)
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">
+                            {{ $cartCount }}
+                        </span>
+                    @endif
+               
                 </a>
                 <a href="https://wa.me/2296940510" class="flex items-center gap-2 bg-terracotta-500 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-terracotta-600 transition shadow-lg hover:shadow-xl ml-2">
                     <i class="fab fa-whatsapp"></i>
@@ -52,11 +58,13 @@
             <div class="flex lg:hidden items-center gap-1">
                 <a href="{{ route('shop.cart.index') }}" class="p-2 hover:bg-sand-100 rounded-full transition relative">
                     <i class="fas fa-shopping-bag text-night-700"></i>
-                    @auth
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">{{ Cart::count() }}</span>
-                    @else
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">0</span>
-                    @endauth
+
+                    @if($cartCount > 0)
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta-500 rounded-full text-white text-[10px] flex items-center justify-center">
+                            {{ $cartCount }}
+                        </span>
+                    @endif
+
                 </a>
                 <button id="menuToggle" class="p-2 hover:bg-sand-100 rounded-full transition" onclick="toggleMobileMenu()">
                     <i id="menuIcon" class="fas fa-bars text-xl"></i>
@@ -85,25 +93,25 @@
             </div>
 
             <!-- Menu links -->
-            <div class="flex-1 overflow-y-auto py-6 px-4">
+            <div class="flex-1 overflow-y-auto py-4 px-4">
                 <div class="space-y-4">
-                    <a href="{{ route('shop.collections') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                    <a href="{{ route('shop.collections') }}" class="block py-2 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
                         Collections
                     </a>
-                    <a href="{{ route('shop.products.index') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                    <a href="{{ route('shop.products.index') }}" class="block py-2 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
                         Nouveautés
                     </a>
                    
-                    <a href="{{ route('about') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                    <a href="{{ route('about') }}" class="block py-2 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
                         Notre Histoire
                     </a>
-                    <a href="{{ route('contact') }}" class="block py-3 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
+                    <a href="{{ route('contact') }}" class="block py-2 text-night-700 hover:text-terracotta-500 font-medium text-lg border-b border-sand-100" onclick="toggleMobileMenu()">
                         Contact
                     </a>
                 </div>
 
                 <!-- WhatsApp Mobile -->
-                <div class="mt-8 pt-6 border-t border-sand-200">
+                <div class="mt-4 pt-3 border-t border-sand-200">
                     <a href="https://wa.me/2296940510" class="flex items-center justify-center gap-2 bg-terracotta-500 text-white px-5 py-4 rounded-xl text-base font-semibold hover:bg-terracotta-600 transition" onclick="toggleMobileMenu()">
                         <i class="fab fa-whatsapp text-xl"></i>
                         WhatsApp direct
