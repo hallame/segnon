@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider {
         $this->app->singleton(CurrentAccount::class, fn() => new CurrentAccount());
     }
 
+    
     public function boot(): void {
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {

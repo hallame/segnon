@@ -64,39 +64,39 @@ class ViewServiceProvider extends ServiceProvider{
             // }
 
              // Contacts
-             if (Schema::hasTable('contacts')) {
-                $footerContacts = collect([
-                    Contact::where('status', 1)->where('name', 'email')->latest()->select('name', 'url', 'value')->first(),
-                    Contact::where('status', 1)->where('name', 'phone')->latest()->select('name', 'url', 'value')->first(),
-                    Contact::where('status', 1)->where('name', 'address')->latest()->select('name', 'url', 'value')->first(),
-                ])->filter(); // enlever les null au cas où certains n'existent pas
+            //  if (Schema::hasTable('contacts')) {
+            //     $footerContacts = collect([
+            //         Contact::where('status', 1)->where('name', 'email')->latest()->select('name', 'url', 'value')->first(),
+            //         Contact::where('status', 1)->where('name', 'phone')->latest()->select('name', 'url', 'value')->first(),
+            //         Contact::where('status', 1)->where('name', 'address')->latest()->select('name', 'url', 'value')->first(),
+            //     ])->filter(); // enlever les null au cas où certains n'existent pas
 
-            $view->with('footerContacts', $footerContacts);
-            } else {
-                $view->with('footerContacts', collect());
-            }
+            // $view->with('footerContacts', $footerContacts);
+            // } else {
+            //     $view->with('footerContacts', collect());
+            // }
 
 
             // currency
-            $defaultCurrency = config('app.currency', 'XOF');
+            // $defaultCurrency = config('app.currency', 'XOF');
 
-            if (Schema::hasTable('settings')) {
-                $currency = cache()->remember('app.currency', 3600, function () use ($defaultCurrency) {
-                    return Setting::where('key', 'currency')->value('value') ?? $defaultCurrency;
-                });
-            } else {
-                $currency = $defaultCurrency;
-            }
-            $view->with('currency', $currency);
+            // if (Schema::hasTable('settings')) {
+            //     $currency = cache()->remember('app.currency', 3600, function () use ($defaultCurrency) {
+            //         return Setting::where('key', 'currency')->value('value') ?? $defaultCurrency;
+            //     });
+            // } else {
+            //     $currency = $defaultCurrency;
+            // }
+            // $view->with('currency', $currency);
 
 
             // email support
-            if (Schema::hasTable('settings')) {
-                $supportEmail = Setting::where('key', 'email')->value('value') ?? 'omizix@gmail.com';
-                $view->with('supportEmail', $supportEmail);
-            } else {
-                $view->with('supportEmail', 'omizix@gmail.com');
-            }
+            // if (Schema::hasTable('settings')) {
+            //     $supportEmail = Setting::where('key', 'email')->value('value') ?? 'omizix@gmail.com';
+            //     $view->with('supportEmail', $supportEmail);
+            // } else {
+            //     $view->with('supportEmail', 'omizix@gmail.com');
+            // }
 
             // user
             $user = Auth::user();
