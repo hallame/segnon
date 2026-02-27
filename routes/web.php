@@ -38,19 +38,6 @@ use App\Http\Controllers\Partners\PartnerOrderController;
 use App\Http\Controllers\Partners\PartnerProductController;
 use App\Http\Controllers\Partners\PartnerSubscriptionController;
 
-Route::post('/payments/moneroo/webhook', [MonerooWebhookController::class, 'handle'])->name('payments.moneroo.webhook');
-
-// ==========================
-// AUTH (VISITEURS / guest)
-// ==========================
-
-// Bot
-Route::middleware(['web', 'throttle:20,1'])->group(function () {
-    Route::view('/bot', 'frontend.bot')->name('bot');
-});
-
-
-Route::view('/mbot', 'frontend.bot')->name('mbot');
 ////// FRONTEND CONTROLLER
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/segnon', [FrontendController::class, 'segnon'])->name('segnon');
@@ -76,7 +63,6 @@ Route::prefix('shop')->name('shop.')->group(function () {
     Route::get('/products/category/{slug}', [ShopController::class,'category'])->name('products.category');
     Route::get('/collections', [ShopController::class,'collections'])->name('collections');
 
-
     Route::get('/cart', [ShopController::class,'cartIndex'])->name('cart.index');
     Route::post('/cart/add', [ShopController::class,'cartAdd'])->name('cart.add');
     Route::patch('/cart/items/{item}', [ShopController::class,'cartUpdate'])->name('cart.items.update');
@@ -96,6 +82,17 @@ Route::prefix('shop')->name('shop.')->group(function () {
 
 });
 
+// Moneroo
+Route::post('/payments/moneroo/webhook', [MonerooWebhookController::class, 'handle'])->name('payments.moneroo.webhook');
+// Bot
+Route::middleware(['web', 'throttle:20,1'])->group(function () {
+    Route::view('/bot', 'frontend.bot')->name('bot');
+});
+Route::view('/mbot', 'frontend.bot')->name('mbot');
+
+// ==========================
+// AUTH (VISITEURS / guest)
+// ==========================
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', fn () => view('auth.login'))->name('login');
@@ -103,16 +100,14 @@ Route::middleware('guest')->group(function () {
     Route::get('/spanel/login', fn () => view('backend.admin.auth.login'))->name('admin.login');
 });
 
+Route::get('/partners/register',  [PartnerRegisterController::class, 'create'])->name('partners.register');
+Route::get('/register', fn () => view('auth.register'))->name('register');
 Route::middleware(['throttle:3,10'])->group(function () {
-    Route::get('/partners/register',  [PartnerRegisterController::class, 'create'])->name('partners.register');
     Route::post('/partners/register', [PartnerRegisterController::class, 'store'])->name('partners.register.store');
-
-    Route::get('/register', fn () => view('auth.register'))->name('register');
     Route::post('/register', [ClientRegisterController::class, 'store'])->name('register.store');
 });
 
-Route::get('/forgot-password', fn () => view('auth.forgot-password'))->name('password.request');
-
+Route::get('/forgot-password', fn () => view('auth.forgot-password'))->name('password.request'); 
 Route::post('/forgot-password', [AuthenticatedSessionController::class, 'passwordResetLink'])->middleware('throttle:6,1')->name('password.email');
 
 // Réinitialisation (form avec token + enregistrement)
