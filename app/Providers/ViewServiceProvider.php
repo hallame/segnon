@@ -77,7 +77,6 @@ class ViewServiceProvider extends ServiceProvider{
 
             $user = Auth::user();
             $view->with('user', $user);
-
             $clientId = $user->id ?? null;
             $sessionId = session()->getId();
             $cart = app(CartService::class)->current($clientId, $sessionId);

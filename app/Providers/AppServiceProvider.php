@@ -88,7 +88,6 @@ class AppServiceProvider extends ServiceProvider {
         } catch (\Exception $e) {
             report($e);
         }
-        
         return $defaultCurrency;
     }
 
