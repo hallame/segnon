@@ -68,19 +68,6 @@ class ViewServiceProvider extends ServiceProvider{
                 $view->with('footerContacts', collect());
             }
 
-
-            $defaultCurrency = config('app.currency', 'XOF');
-
-            if (Schema::hasTable('settings')) {
-                $currency = cache()->remember('app.currency', 3600, function () use ($defaultCurrency) {
-                    return Setting::where('key', 'currency')->value('value') ?? $defaultCurrency;
-                });
-            } else {
-                $currency = $defaultCurrency;
-            }
-            $view->with('currency', $currency);
-
-
             if (Schema::hasTable('settings')) {
                 $supportEmail = Setting::where('key', 'email')->value('value') ?? 'omizix@gmail.com';
                 $view->with('supportEmail', $supportEmail);
@@ -90,7 +77,6 @@ class ViewServiceProvider extends ServiceProvider{
 
             $user = Auth::user();
             $view->with('user', $user);
-
 
             $clientId = $user->id ?? null;
             $sessionId = session()->getId();
